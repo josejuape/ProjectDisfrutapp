@@ -539,7 +539,7 @@ public class DialogPresComercialCarta extends javax.swing.JDialog {
                     .addComponent(btnNuevo)
                     .addComponent(btnCancelar))
                 .addGap(24, 24, 24)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 

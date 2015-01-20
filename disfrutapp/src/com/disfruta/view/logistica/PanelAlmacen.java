@@ -7,7 +7,6 @@ package com.disfruta.view.logistica;
 import com.disfruta.bean.logistica.Almacen;
 import com.disfruta.bean.xtbc.Ubigeo;
 import com.disfruta.gestion.logistica.GestionAlmacen;
-import com.disfruta.gestion.xtbc.GestionUbigeo;
 import com.mxrck.autocompleter.AutoCompleterCallback;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import java.awt.Color;
