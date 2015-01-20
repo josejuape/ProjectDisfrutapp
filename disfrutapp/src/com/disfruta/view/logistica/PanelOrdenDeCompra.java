@@ -4,10 +4,32 @@
  */
 package com.disfruta.view.logistica;
 
+import com.disfruta.bean.logistica.Almacen;
+import com.disfruta.bean.logistica.Insumo;
+import com.disfruta.bean.logistica.OrdenCompra;
+import com.disfruta.bean.logistica.OrdenCompraInsumo;
+import com.disfruta.gestion.logistica.GestionAlmacen;
+import com.disfruta.gestion.logistica.GestionFormaPago;
+import com.disfruta.gestion.logistica.GestionInsumo;
+import com.disfruta.gestion.logistica.GestionOrdenCompra;
+import com.disfruta.gestion.logistica.GestionOrdenCompraInsumo;
+import com.disfruta.gestion.logistica.GestionPresentacionInsumo;
+import com.disfruta.gestion.logistica.GestionProveedor;
+import com.disfruta.gestion.logistica.GestionUnidadMedida;
+import com.disfruta.gestion.xtbc.GestionMoneda;
+import com.mxrck.autocompleter.AutoCompleterCallback;
+import com.mxrck.autocompleter.TextAutoCompleter;
 import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import resources.auxiliar.PaddingLeft;
 
 /**
  *
@@ -15,14 +37,87 @@ import javax.swing.border.Border;
  */
 public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
+    private resources.comboboxmodel.CboModelProveedor modelCboProveedor;
+    private resources.comboboxmodel.CboModelFormaPago modelCboFormaPago;
+    private resources.comboboxmodel.CboModelMoneda modelCboMoneda;
+    private resources.comboboxmodel.CboModelUnidadMedida modelCboUnidad;
+    private resources.comboboxmodel.CboModelAlmacen modelCboAlmacen;
+    private resources.tablemodel.ModelTableOrdenCompra tblModelOrdenCompra;
+    protected resources.comboboxmodel.CboModelPresentacionCompra cboModelPresentacionInsumo;
+    protected resources.tablemodel.ModelTableOrdenCompraInsumo tableModelDetalle;
+    protected ArrayList listaAutoCompletar;
+    protected ArrayList listaInsumos;
+    protected Insumo insumoselected = null;
+    protected TextAutoCompleter autoCompleteInsumo;
+    protected ArrayList<OrdenCompraInsumo> listaDetalle;
+    protected int controlTab = 0;
+
     /**
      * Creates new form PanelOrdenDeCompra
      */
     public PanelOrdenDeCompra() {
+        init();
         initComponents();
+        this.cboProveedor.setModel(modelCboProveedor);
+        this.cboMoneda.setModel(modelCboMoneda);
+        this.cboFormaPago.setModel(modelCboFormaPago);
+        this.cboAlmacen.setModel(modelCboAlmacen);
+        this.cboUnidad.setModel(modelCboUnidad);
+        this.cboMonedaInsumo.setModel(modelCboMoneda);
+        this.tblOrdenCompra.setModel(tblModelOrdenCompra);
+        autoCompleteInsumo = new TextAutoCompleter(this.txtNombreInsumo, new AutoCompleterCallback() {
+            @Override
+            public void callback(Object selectedItem) {
+                String cad = selectedItem.toString();
+                for (int i = 0; i < listaInsumos.size(); i++) {
+                    if (cad.equals(((Insumo) listaInsumos.get(i)).getNombre())) {
+                        try {
+                            insumoselected = (Insumo) listaInsumos.get(i);
+                            txtCodigoInsumo.setText(insumoselected.getIdinsumo() + "");
+                            cboModelPresentacionInsumo = new resources.comboboxmodel.CboModelPresentacionCompra(new GestionPresentacionInsumo().listarPorInsumo(insumoselected));
+                            cboPresentacionInsumo.setModel(cboModelPresentacionInsumo);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(DialogPresComercialCarta.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (Exception ex) {
+                            Logger.getLogger(DialogPresComercialCarta.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
+        autoCompleteInsumo.addItems(this.listaInsumos);
+        setPaddingLeft();
     }
-    
-    public void activarCajaBuscar(JTextField campo){
+
+    private void init() {
+        try {
+            this.modelCboAlmacen = new resources.comboboxmodel.CboModelAlmacen(new GestionAlmacen().listar());
+            this.modelCboProveedor = new resources.comboboxmodel.CboModelProveedor(new GestionProveedor().listar());
+            this.modelCboFormaPago = new resources.comboboxmodel.CboModelFormaPago(new GestionFormaPago().listar());
+            this.modelCboUnidad = new resources.comboboxmodel.CboModelUnidadMedida(new GestionUnidadMedida().listar());
+            this.modelCboMoneda = new resources.comboboxmodel.CboModelMoneda(new GestionMoneda().listar());
+            this.tblModelOrdenCompra = new resources.tablemodel.ModelTableOrdenCompra(new GestionOrdenCompra().listar());
+            this.listaInsumos = new ArrayList();
+            this.listaInsumos = new GestionInsumo().listar();
+            this.listaDetalle = new ArrayList();
+            this.tableModelDetalle = new resources.tablemodel.ModelTableOrdenCompraInsumo(this.listaDetalle);
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void setPaddingLeft() {
+        PaddingLeft.agregarpadding(txtCodigoInsumo);
+        PaddingLeft.agregarpadding(txtNombreInsumo);
+        PaddingLeft.agregarpadding(txtCantidadInsumo);
+        PaddingLeft.agregarpadding(txtPrecioInsumo);
+        PaddingLeft.agregarpadding(txtLugarRecepcion);
+    }
+
+    public void activarCajaBuscar(JTextField campo) {
         campo.setSize(130, 22);
         campo.setBackground(Color.WHITE);
         Border border = BorderFactory.createLineBorder(Color.decode("#999999"));
@@ -30,11 +125,11 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         campo.setText("  ");
         campo.requestFocus(true);
     }
-    
-    public void desactivarCajaBuscar(JTextField campo,String name){
+
+    public void desactivarCajaBuscar(JTextField campo, String name) {
         campo.setBackground(null);
         campo.setBorder(null);
-        campo.setText("  "+name);
+        campo.setText("  " + name);
     }
 
     /**
@@ -48,32 +143,32 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
         paneltitlealmacen = new javax.swing.JPanel();
         logoalmacen = new javax.swing.JLabel();
-        btnNuevoAlmacen = new javax.swing.JButton();
-        btnNuevoAlmacen1 = new javax.swing.JButton();
-        btnNuevoAlmacen2 = new javax.swing.JButton();
+        btnNuevoOrden = new javax.swing.JButton();
+        btnGuardarOrden = new javax.swing.JButton();
+        btnEliminarOrden = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        lblFechaActual = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        cboProveedores = new javax.swing.JComboBox();
+        cboProveedor = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         cboMoneda = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         cboFormaPago = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
-        cboAlmacenEntrega = new javax.swing.JComboBox();
+        cboAlmacen = new javax.swing.JComboBox();
         jLabel8 = new javax.swing.JLabel();
-        txtFechaRecepcion = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        txtFechaRecepcion1 = new javax.swing.JTextField();
+        txtLugarRecepcion = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtReferencia = new javax.swing.JTextArea();
+        txtComentarioReferencia = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtObservaciones = new javax.swing.JTextArea();
+        txtFechaRecepcion = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -82,16 +177,16 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        txtCodigoProducto = new javax.swing.JTextField();
-        txtNombreProducto = new javax.swing.JTextField();
-        txtCantidadProducto = new javax.swing.JTextField();
-        txtPrecioProducto = new javax.swing.JTextField();
-        cboPresentacionproducto = new javax.swing.JComboBox();
-        cboUnidadProducto = new javax.swing.JComboBox();
-        cboMonedaProducto = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
+        txtCodigoInsumo = new javax.swing.JTextField();
+        txtNombreInsumo = new javax.swing.JTextField();
+        txtCantidadInsumo = new javax.swing.JTextField();
+        txtPrecioInsumo = new javax.swing.JTextField();
+        cboPresentacionInsumo = new javax.swing.JComboBox();
+        cboUnidad = new javax.swing.JComboBox();
+        cboMonedaInsumo = new javax.swing.JComboBox();
+        btnAddInsumo = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        tblProductos = new javax.swing.JTable();
+        tblDetalleInsumos = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         txtBuscarCodigo = new javax.swing.JTextField();
         btnBuscarCodigo = new javax.swing.JButton();
@@ -108,7 +203,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblOrdenes = new javax.swing.JTable();
+        tblOrdenCompra = new javax.swing.JTable();
 
         setMinimumSize(new java.awt.Dimension(960, 590));
         setName(""); // NOI18N
@@ -119,41 +214,46 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
         logoalmacen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/almacen.gif"))); // NOI18N
 
-        btnNuevoAlmacen.setBackground(new java.awt.Color(255, 255, 255));
-        btnNuevoAlmacen.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
-        btnNuevoAlmacen.setForeground(new java.awt.Color(229, 147, 35));
-        btnNuevoAlmacen.setText("Nuevo");
-        btnNuevoAlmacen.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
-        btnNuevoAlmacen.setBorderPainted(false);
-        btnNuevoAlmacen.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNuevoAlmacen.setFocusPainted(false);
-        btnNuevoAlmacen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnNuevoAlmacen.setOpaque(false);
-        btnNuevoAlmacen.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnNuevoOrden.setBackground(new java.awt.Color(255, 255, 255));
+        btnNuevoOrden.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
+        btnNuevoOrden.setForeground(new java.awt.Color(229, 147, 35));
+        btnNuevoOrden.setText("Nuevo");
+        btnNuevoOrden.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        btnNuevoOrden.setBorderPainted(false);
+        btnNuevoOrden.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNuevoOrden.setFocusPainted(false);
+        btnNuevoOrden.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNuevoOrden.setOpaque(false);
+        btnNuevoOrden.setPreferredSize(new java.awt.Dimension(92, 30));
 
-        btnNuevoAlmacen1.setBackground(new java.awt.Color(252, 242, 228));
-        btnNuevoAlmacen1.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
-        btnNuevoAlmacen1.setForeground(new java.awt.Color(83, 71, 65));
-        btnNuevoAlmacen1.setText("Guardar");
-        btnNuevoAlmacen1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
-        btnNuevoAlmacen1.setBorderPainted(false);
-        btnNuevoAlmacen1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNuevoAlmacen1.setFocusPainted(false);
-        btnNuevoAlmacen1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnNuevoAlmacen1.setOpaque(false);
-        btnNuevoAlmacen1.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnGuardarOrden.setBackground(new java.awt.Color(252, 242, 228));
+        btnGuardarOrden.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
+        btnGuardarOrden.setForeground(new java.awt.Color(83, 71, 65));
+        btnGuardarOrden.setText("Guardar");
+        btnGuardarOrden.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        btnGuardarOrden.setBorderPainted(false);
+        btnGuardarOrden.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGuardarOrden.setFocusPainted(false);
+        btnGuardarOrden.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGuardarOrden.setOpaque(false);
+        btnGuardarOrden.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnGuardarOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarOrdenActionPerformed(evt);
+            }
+        });
 
-        btnNuevoAlmacen2.setBackground(new java.awt.Color(229, 147, 35));
-        btnNuevoAlmacen2.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
-        btnNuevoAlmacen2.setForeground(new java.awt.Color(255, 255, 255));
-        btnNuevoAlmacen2.setText("Eliminar");
-        btnNuevoAlmacen2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
-        btnNuevoAlmacen2.setBorderPainted(false);
-        btnNuevoAlmacen2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNuevoAlmacen2.setFocusPainted(false);
-        btnNuevoAlmacen2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnNuevoAlmacen2.setOpaque(false);
-        btnNuevoAlmacen2.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnEliminarOrden.setBackground(new java.awt.Color(229, 147, 35));
+        btnEliminarOrden.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
+        btnEliminarOrden.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminarOrden.setText("Eliminar");
+        btnEliminarOrden.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        btnEliminarOrden.setBorderPainted(false);
+        btnEliminarOrden.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminarOrden.setFocusPainted(false);
+        btnEliminarOrden.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEliminarOrden.setOpaque(false);
+        btnEliminarOrden.setPreferredSize(new java.awt.Dimension(92, 30));
 
         jLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -173,11 +273,11 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
                 .addGap(102, 102, 102)
-                .addComponent(btnNuevoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNuevoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnNuevoAlmacen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnNuevoAlmacen2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnEliminarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         paneltitlealmacenLayout.setVerticalGroup(
@@ -188,9 +288,9 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paneltitlealmacenLayout.createSequentialGroup()
                 .addContainerGap(19, Short.MAX_VALUE)
                 .addGroup(paneltitlealmacenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNuevoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNuevoAlmacen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNuevoAlmacen2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNuevoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel9))
                 .addContainerGap())
@@ -198,14 +298,21 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(960, 300));
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(960, 300));
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
+            }
+        });
 
-        jLabel2.setText("03 de julio de 2014");
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblFechaActual.setText("03 de julio de 2014");
 
         jLabel3.setText("Proveedor:");
 
-        cboProveedores.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboProveedor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel4.setText("Referencia:");
+        jLabel4.setText("Comentario de referencia:");
 
         jLabel5.setText("Moneda:");
 
@@ -214,55 +321,49 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         jLabel6.setText("Forma de pago:");
 
         cboFormaPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel7.setText("Almacen de recepción:");
-
-        cboAlmacenEntrega.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel8.setText("Fecha de recepción:");
-
-        txtFechaRecepcion.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtFechaRecepcion.setForeground(new java.awt.Color(153, 153, 153));
-        txtFechaRecepcion.setText("   dia/mes/año");
-        txtFechaRecepcion.setToolTipText("");
-        txtFechaRecepcion.setAlignmentX(0.0F);
-        txtFechaRecepcion.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtFechaRecepcion.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtFechaRecepcion.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtFechaRecepcion.setName("txtusuario"); // NOI18N
-        txtFechaRecepcion.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtFechaRecepcion.addActionListener(new java.awt.event.ActionListener() {
+        cboFormaPago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaRecepcionActionPerformed(evt);
+                cboFormaPagoActionPerformed(evt);
             }
         });
 
+        jLabel7.setText("Almacen de recepción:");
+
+        cboAlmacen.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboAlmacen.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboAlmacenItemStateChanged(evt);
+            }
+        });
+
+        jLabel8.setText("Fecha de recepción:");
+
         jLabel10.setText("Lugar de recepción:");
 
-        txtFechaRecepcion1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtFechaRecepcion1.setForeground(new java.awt.Color(153, 153, 153));
-        txtFechaRecepcion1.setText("   Dirección del almacen");
-        txtFechaRecepcion1.setToolTipText("");
-        txtFechaRecepcion1.setAlignmentX(0.0F);
-        txtFechaRecepcion1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtFechaRecepcion1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtFechaRecepcion1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtFechaRecepcion1.setName("txtusuario"); // NOI18N
-        txtFechaRecepcion1.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtFechaRecepcion1.addActionListener(new java.awt.event.ActionListener() {
+        txtLugarRecepcion.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtLugarRecepcion.setForeground(new java.awt.Color(153, 153, 153));
+        txtLugarRecepcion.setText("   Dirección del almacen");
+        txtLugarRecepcion.setToolTipText("");
+        txtLugarRecepcion.setAlignmentX(0.0F);
+        txtLugarRecepcion.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtLugarRecepcion.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtLugarRecepcion.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtLugarRecepcion.setName("txtusuario"); // NOI18N
+        txtLugarRecepcion.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtLugarRecepcion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaRecepcion1ActionPerformed(evt);
+                txtLugarRecepcionActionPerformed(evt);
             }
         });
 
         jLabel11.setText("Observaciones:");
 
-        txtReferencia.setColumns(20);
-        txtReferencia.setForeground(new java.awt.Color(153, 153, 153));
-        txtReferencia.setLineWrap(true);
-        txtReferencia.setRows(5);
-        txtReferencia.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
-        jScrollPane1.setViewportView(txtReferencia);
+        txtComentarioReferencia.setColumns(20);
+        txtComentarioReferencia.setForeground(new java.awt.Color(153, 153, 153));
+        txtComentarioReferencia.setLineWrap(true);
+        txtComentarioReferencia.setRows(5);
+        txtComentarioReferencia.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        jScrollPane1.setViewportView(txtComentarioReferencia);
 
         txtObservaciones.setColumns(20);
         txtObservaciones.setForeground(new java.awt.Color(153, 153, 153));
@@ -279,28 +380,28 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(cboProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFechaActual)
+                    .addComponent(cboProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5)
+                    .addComponent(jLabel7)
+                    .addComponent(cboAlmacen, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addGap(28, 28, 28)
+                            .addComponent(cboMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboFormaPago, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)))
-                    .addComponent(cboAlmacenEntrega, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8)
-                    .addComponent(txtFechaRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel6)
+                            .addComponent(cboFormaPago, 0, 158, Short.MAX_VALUE)))
+                    .addComponent(txtFechaRecepcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel10)
-                    .addComponent(txtFechaRecepcion1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                    .addComponent(txtLugarRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                     .addComponent(jLabel11)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
                 .addGap(55, 55, 55))
@@ -309,17 +410,19 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel10))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblFechaActual)
+                            .addComponent(jLabel10)))
+                    .addComponent(jLabel6))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cboProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cboProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -328,8 +431,8 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cboMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboFormaPago, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtFechaRecepcion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cboFormaPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtLugarRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
@@ -337,16 +440,19 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cboAlmacenEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtFechaRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtFechaRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Orden de compra", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel12.setText("Código:");
 
@@ -362,79 +468,82 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
         jLabel18.setText("Moneda");
 
-        txtCodigoProducto.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto.setToolTipText("");
-        txtCodigoProducto.setAlignmentX(0.0F);
-        txtCodigoProducto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto.setName("txtusuario"); // NOI18N
-        txtCodigoProducto.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto.addActionListener(new java.awt.event.ActionListener() {
+        txtCodigoInsumo.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtCodigoInsumo.setForeground(new java.awt.Color(153, 153, 153));
+        txtCodigoInsumo.setToolTipText("");
+        txtCodigoInsumo.setAlignmentX(0.0F);
+        txtCodigoInsumo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtCodigoInsumo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCodigoInsumo.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtCodigoInsumo.setName("txtusuario"); // NOI18N
+        txtCodigoInsumo.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtCodigoInsumo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProductoActionPerformed(evt);
+                txtCodigoInsumoActionPerformed(evt);
             }
         });
 
-        txtNombreProducto.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtNombreProducto.setForeground(new java.awt.Color(153, 153, 153));
-        txtNombreProducto.setToolTipText("");
-        txtNombreProducto.setAlignmentX(0.0F);
-        txtNombreProducto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtNombreProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtNombreProducto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtNombreProducto.setName("txtusuario"); // NOI18N
-        txtNombreProducto.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtNombreProducto.addActionListener(new java.awt.event.ActionListener() {
+        txtNombreInsumo.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtNombreInsumo.setForeground(new java.awt.Color(153, 153, 153));
+        txtNombreInsumo.setToolTipText("");
+        txtNombreInsumo.setAlignmentX(0.0F);
+        txtNombreInsumo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtNombreInsumo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtNombreInsumo.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtNombreInsumo.setName("txtusuario"); // NOI18N
+        txtNombreInsumo.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtNombreInsumo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreProductoActionPerformed(evt);
+                txtNombreInsumoActionPerformed(evt);
             }
         });
 
-        txtCantidadProducto.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCantidadProducto.setForeground(new java.awt.Color(153, 153, 153));
-        txtCantidadProducto.setToolTipText("");
-        txtCantidadProducto.setAlignmentX(0.0F);
-        txtCantidadProducto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCantidadProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCantidadProducto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCantidadProducto.setName("txtusuario"); // NOI18N
-        txtCantidadProducto.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCantidadProducto.addActionListener(new java.awt.event.ActionListener() {
+        txtCantidadInsumo.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtCantidadInsumo.setForeground(new java.awt.Color(153, 153, 153));
+        txtCantidadInsumo.setToolTipText("");
+        txtCantidadInsumo.setAlignmentX(0.0F);
+        txtCantidadInsumo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtCantidadInsumo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCantidadInsumo.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtCantidadInsumo.setName("txtusuario"); // NOI18N
+        txtCantidadInsumo.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtCantidadInsumo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCantidadProductoActionPerformed(evt);
+                txtCantidadInsumoActionPerformed(evt);
             }
         });
 
-        txtPrecioProducto.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtPrecioProducto.setForeground(new java.awt.Color(153, 153, 153));
-        txtPrecioProducto.setToolTipText("");
-        txtPrecioProducto.setAlignmentX(0.0F);
-        txtPrecioProducto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtPrecioProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtPrecioProducto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtPrecioProducto.setName("txtusuario"); // NOI18N
-        txtPrecioProducto.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtPrecioProducto.addActionListener(new java.awt.event.ActionListener() {
+        txtPrecioInsumo.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtPrecioInsumo.setForeground(new java.awt.Color(153, 153, 153));
+        txtPrecioInsumo.setToolTipText("");
+        txtPrecioInsumo.setAlignmentX(0.0F);
+        txtPrecioInsumo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtPrecioInsumo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtPrecioInsumo.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtPrecioInsumo.setName("txtusuario"); // NOI18N
+        txtPrecioInsumo.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtPrecioInsumo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPrecioProductoActionPerformed(evt);
+                txtPrecioInsumoActionPerformed(evt);
             }
         });
 
-        cboPresentacionproducto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboUnidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        cboUnidadProducto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboMonedaInsumo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        cboMonedaProducto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jButton1.setText("Add");
+        btnAddInsumo.setText("Add");
+        btnAddInsumo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddInsumoActionPerformed(evt);
+            }
+        });
 
         jScrollPane4.setOpaque(false);
         jScrollPane4.setPreferredSize(new java.awt.Dimension(450, 220));
 
-        tblProductos.setForeground(new java.awt.Color(128, 128, 128));
-        tblProductos.setModel(new javax.swing.table.DefaultTableModel(
+        tblDetalleInsumos.setForeground(new java.awt.Color(128, 128, 128));
+        tblDetalleInsumos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -461,28 +570,28 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblProductos.setToolTipText("");
-        tblProductos.setAlignmentX(0.0F);
-        tblProductos.setAlignmentY(0.0F);
-        tblProductos.setAutoscrolls(false);
-        tblProductos.setColumnSelectionAllowed(true);
-        tblProductos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tblProductos.setGridColor(new java.awt.Color(204, 204, 255));
-        tblProductos.setMinimumSize(new java.awt.Dimension(900, 150));
-        tblProductos.setRowHeight(30);
-        tblProductos.setRowMargin(3);
-        tblProductos.setShowHorizontalLines(false);
-        tblProductos.setShowVerticalLines(false);
-        tblProductos.getTableHeader().setReorderingAllowed(false);
-        jScrollPane4.setViewportView(tblProductos);
-        tblProductos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblProductos.getColumnModel().getColumn(0).setResizable(false);
-        tblProductos.getColumnModel().getColumn(1).setResizable(false);
-        tblProductos.getColumnModel().getColumn(2).setResizable(false);
-        tblProductos.getColumnModel().getColumn(3).setResizable(false);
-        tblProductos.getColumnModel().getColumn(4).setResizable(false);
-        tblProductos.getColumnModel().getColumn(5).setResizable(false);
-        tblProductos.getColumnModel().getColumn(6).setResizable(false);
+        tblDetalleInsumos.setToolTipText("");
+        tblDetalleInsumos.setAlignmentX(0.0F);
+        tblDetalleInsumos.setAlignmentY(0.0F);
+        tblDetalleInsumos.setAutoscrolls(false);
+        tblDetalleInsumos.setColumnSelectionAllowed(true);
+        tblDetalleInsumos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tblDetalleInsumos.setGridColor(new java.awt.Color(204, 204, 255));
+        tblDetalleInsumos.setMinimumSize(new java.awt.Dimension(900, 150));
+        tblDetalleInsumos.setRowHeight(30);
+        tblDetalleInsumos.setRowMargin(3);
+        tblDetalleInsumos.setShowHorizontalLines(false);
+        tblDetalleInsumos.setShowVerticalLines(false);
+        tblDetalleInsumos.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(tblDetalleInsumos);
+        tblDetalleInsumos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblDetalleInsumos.getColumnModel().getColumn(0).setResizable(false);
+        tblDetalleInsumos.getColumnModel().getColumn(1).setResizable(false);
+        tblDetalleInsumos.getColumnModel().getColumn(2).setResizable(false);
+        tblDetalleInsumos.getColumnModel().getColumn(3).setResizable(false);
+        tblDetalleInsumos.getColumnModel().getColumn(4).setResizable(false);
+        tblDetalleInsumos.getColumnModel().getColumn(5).setResizable(false);
+        tblDetalleInsumos.getColumnModel().getColumn(6).setResizable(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -495,34 +604,34 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel12)
-                            .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(22, 22, 22)
+                            .addComponent(txtCodigoInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13)
-                            .addComponent(txtNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
+                            .addComponent(txtNombreInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel14)
-                            .addComponent(cboPresentacionproducto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cboPresentacionInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(34, 34, 34)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCantidadProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCantidadInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15))
                         .addGap(30, 30, 30)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel16)
-                            .addComponent(cboUnidadProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel17)
-                            .addComponent(txtPrecioProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPrecioInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(34, 34, 34)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel18)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(cboMonedaProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboMonedaInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1)))))
+                                .addComponent(btnAddInsumo)))))
                 .addContainerGap(11, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -539,14 +648,14 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                     .addComponent(jLabel18))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCantidadProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPrecioProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboPresentacionproducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboUnidadProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboMonedaProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(txtCodigoInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombreInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCantidadInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboPresentacionInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboMonedaInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddInsumo))
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(38, Short.MAX_VALUE))
@@ -715,8 +824,8 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         jScrollPane3.setOpaque(false);
         jScrollPane3.setPreferredSize(new java.awt.Dimension(450, 220));
 
-        tblOrdenes.setForeground(new java.awt.Color(128, 128, 128));
-        tblOrdenes.setModel(new javax.swing.table.DefaultTableModel(
+        tblOrdenCompra.setForeground(new java.awt.Color(128, 128, 128));
+        tblOrdenCompra.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -746,19 +855,24 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                 return types [columnIndex];
             }
         });
-        tblOrdenes.setToolTipText("");
-        tblOrdenes.setAlignmentX(0.0F);
-        tblOrdenes.setAlignmentY(0.0F);
-        tblOrdenes.setAutoscrolls(false);
-        tblOrdenes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tblOrdenes.setGridColor(new java.awt.Color(204, 204, 255));
-        tblOrdenes.setMinimumSize(new java.awt.Dimension(900, 150));
-        tblOrdenes.setRowHeight(30);
-        tblOrdenes.setRowMargin(3);
-        tblOrdenes.setShowHorizontalLines(false);
-        tblOrdenes.setShowVerticalLines(false);
-        tblOrdenes.setTableHeader(null);
-        jScrollPane3.setViewportView(tblOrdenes);
+        tblOrdenCompra.setToolTipText("");
+        tblOrdenCompra.setAlignmentX(0.0F);
+        tblOrdenCompra.setAlignmentY(0.0F);
+        tblOrdenCompra.setAutoscrolls(false);
+        tblOrdenCompra.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tblOrdenCompra.setGridColor(new java.awt.Color(204, 204, 255));
+        tblOrdenCompra.setMinimumSize(new java.awt.Dimension(900, 150));
+        tblOrdenCompra.setRowHeight(30);
+        tblOrdenCompra.setRowMargin(3);
+        tblOrdenCompra.setShowHorizontalLines(false);
+        tblOrdenCompra.setShowVerticalLines(false);
+        tblOrdenCompra.setTableHeader(null);
+        tblOrdenCompra.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblOrdenCompraMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblOrdenCompra);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -822,9 +936,9 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnBuscarFechaRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtBuscarFechaRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(80, 80, 80))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -851,13 +965,9 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtFechaRecepcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaRecepcionActionPerformed
+    private void txtLugarRecepcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLugarRecepcionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaRecepcionActionPerformed
-
-    private void txtFechaRecepcion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaRecepcion1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaRecepcion1ActionPerformed
+    }//GEN-LAST:event_txtLugarRecepcionActionPerformed
 
     private void txtBuscarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarCodigoActionPerformed
         // TODO add your handling code here:
@@ -870,7 +980,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
     private void txtBuscarCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarCodigoFocusLost
         // TODO add your handling code here:
-        desactivarCajaBuscar(this.txtBuscarCodigo,"Código");
+        desactivarCajaBuscar(this.txtBuscarCodigo, "Código");
     }//GEN-LAST:event_txtBuscarCodigoFocusLost
 
     private void btnBuscarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCodigoActionPerformed
@@ -888,7 +998,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
     private void txtBuscarProveedorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarProveedorFocusLost
         // TODO add your handling code here:
-        desactivarCajaBuscar(this.txtBuscarProveedor,"Proveedor");
+        desactivarCajaBuscar(this.txtBuscarProveedor, "Proveedor");
     }//GEN-LAST:event_txtBuscarProveedorFocusLost
 
     private void txtBuscarReferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarReferenciaActionPerformed
@@ -902,7 +1012,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
     private void txtBuscarReferenciaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarReferenciaFocusLost
         // TODO add your handling code here:
-        desactivarCajaBuscar(this.txtBuscarReferencia,"Referencia");
+        desactivarCajaBuscar(this.txtBuscarReferencia, "Referencia");
     }//GEN-LAST:event_txtBuscarReferenciaFocusLost
 
     private void txtBuscarFechaEmisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarFechaEmisionActionPerformed
@@ -916,7 +1026,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
     private void txtBuscarFechaEmisionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarFechaEmisionFocusLost
         // TODO add your handling code here:
-        desactivarCajaBuscar(this.txtBuscarFechaEmision,"Fecha de emisión");
+        desactivarCajaBuscar(this.txtBuscarFechaEmision, "Fecha de emisión");
     }//GEN-LAST:event_txtBuscarFechaEmisionFocusLost
 
     private void txtBuscarFechaRecepcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarFechaRecepcionActionPerformed
@@ -930,42 +1040,148 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
     private void txtBuscarFechaRecepcionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscarFechaRecepcionFocusLost
         // TODO add your handling code here:
-        desactivarCajaBuscar(this.txtBuscarFechaRecepcion,"Fecha de recepción");
+        desactivarCajaBuscar(this.txtBuscarFechaRecepcion, "Fecha de recepción");
     }//GEN-LAST:event_txtBuscarFechaRecepcionFocusLost
 
-    private void txtCodigoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProductoActionPerformed
+    private void txtCodigoInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoInsumoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProductoActionPerformed
+    }//GEN-LAST:event_txtCodigoInsumoActionPerformed
 
-    private void txtNombreProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreProductoActionPerformed
+    private void txtNombreInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreInsumoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreProductoActionPerformed
+    }//GEN-LAST:event_txtNombreInsumoActionPerformed
 
-    private void txtCantidadProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadProductoActionPerformed
+    private void txtCantidadInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadInsumoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCantidadProductoActionPerformed
+    }//GEN-LAST:event_txtCantidadInsumoActionPerformed
 
-    private void txtPrecioProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioProductoActionPerformed
+    private void txtPrecioInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioInsumoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtPrecioProductoActionPerformed
+    }//GEN-LAST:event_txtPrecioInsumoActionPerformed
 
+    private void cboFormaPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFormaPagoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboFormaPagoActionPerformed
+
+    private void btnGuardarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarOrdenActionPerformed
+        // TODO add your handling code here:
+        if (this.controlTab == 0) { //aqui entramos a registrar un nuevo orden de compra
+            String comentario = this.txtComentarioReferencia.getText();
+            Date date = this.txtFechaRecepcion.getDate();
+            String lugar = this.txtLugarRecepcion.getText();
+            int pos_prov = this.cboProveedor.getSelectedIndex();
+            int pos_mon = this.cboMoneda.getSelectedIndex();
+            int pos_forma = this.cboFormaPago.getSelectedIndex();
+            int pos_almacen = this.cboAlmacen.getSelectedIndex();
+            if (!(comentario.equals("")) && date != null && !(lugar.equals("")) && pos_prov >= 0 && pos_mon >= 0 && pos_forma >= 0 && pos_almacen >= 0) {
+                try {
+                    OrdenCompra orden = new OrdenCompra();
+                    orden.setComentario(comentario);
+                    SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
+                    orden.setFechaRecepcion("" + formato.format(date));
+                    orden.setLugarRecepcion(lugar);
+                    orden.setProveedor(this.modelCboProveedor.getElement(pos_prov));
+                    orden.setMoneda(this.modelCboMoneda.getElement(pos_mon));
+                    orden.setAlmacen(this.modelCboAlmacen.getElement(pos_almacen));
+                    orden.setFormaPago(this.modelCboFormaPago.getElement(pos_forma));
+                    orden.setTipoOperacion("i");
+                    GestionOrdenCompra gestionOrden = new GestionOrdenCompra();
+                    String r = gestionOrden.registrar(orden);
+                    JOptionPane.showMessageDialog(this, r);
+                    this.tblModelOrdenCompra.setData(new GestionOrdenCompra().listar());
+                    this.tblModelOrdenCompra.fireTableDataChanged();
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        } else {
+            if (this.controlTab == 1) {
+                //aqui entramos a registrar la lista de productos de una orden de compra
+            }
+        }
+
+    }//GEN-LAST:event_btnGuardarOrdenActionPerformed
+
+    private void cboAlmacenItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboAlmacenItemStateChanged
+        // TODO add your handling code here:
+        int pos = this.cboAlmacen.getSelectedIndex();
+        if (pos >= 0) {
+            Almacen almacen = this.modelCboAlmacen.getElement(pos);
+            this.txtLugarRecepcion.setText(almacen.getDireccion1());
+        }
+    }//GEN-LAST:event_cboAlmacenItemStateChanged
+
+    private void btnAddInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInsumoActionPerformed
+        // TODO add your handling code here:
+        int fila = this.tblOrdenCompra.getSelectedRow();
+        if (fila >= 0 && !(this.txtNombreInsumo.getText().equals("")) && !(this.txtCantidadInsumo.getText().equals(""))) {
+            OrdenCompraInsumo detalle = new OrdenCompraInsumo();
+            detalle.setInsumo(insumoselected);
+            OrdenCompra orden = this.tblModelOrdenCompra.getValue(this.tblOrdenCompra.getSelectedRow());
+            detalle.setOrden(orden);
+            detalle.setCantidad(Double.parseDouble(this.txtCantidadInsumo.getText()));
+            detalle.setPrecio(Double.parseDouble(this.txtPrecioInsumo.getText()));
+            detalle.setUnidad(this.modelCboUnidad.getElement(cboUnidad.getSelectedIndex()));
+            detalle.setMoneda(this.modelCboMoneda.getElement(cboMonedaInsumo.getSelectedIndex()));
+            this.listaDetalle.add(detalle);
+            this.tableModelDetalle.setData(listaDetalle);
+            this.tableModelDetalle.fireTableDataChanged();
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione una orden de compra registrada y/o llene todos los campos!");
+        }
+    }//GEN-LAST:event_btnAddInsumoActionPerformed
+
+    private void tblOrdenCompraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdenCompraMouseClicked
+        // TODO add your handling code here:
+        int fila = this.tblOrdenCompra.getSelectedRow();
+        if (fila >= 0) {
+            try {
+                OrdenCompra orden = this.tblModelOrdenCompra.getValue(fila);
+                this.txtLugarRecepcion.setText(orden.getLugarRecepcion());
+                this.txtComentarioReferencia.setText(orden.getComentario());
+                Date date = new Date(orden.getFechaRecepcion());
+                this.txtFechaRecepcion.setDate(date);
+                this.txtObservaciones.setText(orden.getObservaciones());
+                this.cboProveedor.setSelectedItem(orden.getProveedor().getNombres() + " " + orden.getProveedor().getApellidos());
+                this.cboMoneda.setSelectedItem(orden.getMoneda().getV_moneda());
+                this.cboFormaPago.setSelectedItem(orden.getFormaPago().getDescripcion());
+                this.cboAlmacen.setSelectedItem(orden.getAlmacen().getDescripcion());
+                
+                this.listaDetalle = new GestionOrdenCompraInsumo().listar(orden);
+                
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_tblOrdenCompraMouseClicked
+
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+        // TODO add your handling code here:
+        System.out.println("idtab: " + jTabbedPane1.getSelectedIndex());
+        this.controlTab = jTabbedPane1.getSelectedIndex();
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddInsumo;
     private javax.swing.JButton btnBuscarCodigo;
     private javax.swing.JButton btnBuscarFechaEmision;
     private javax.swing.JButton btnBuscarFechaRecepcion;
     private javax.swing.JButton btnBuscarProveedor;
     private javax.swing.JButton btnBuscarReferencia;
-    private javax.swing.JButton btnNuevoAlmacen;
-    private javax.swing.JButton btnNuevoAlmacen1;
-    private javax.swing.JButton btnNuevoAlmacen2;
-    private javax.swing.JComboBox cboAlmacenEntrega;
+    private javax.swing.JButton btnEliminarOrden;
+    private javax.swing.JButton btnGuardarOrden;
+    private javax.swing.JButton btnNuevoOrden;
+    private javax.swing.JComboBox cboAlmacen;
     private javax.swing.JComboBox cboFormaPago;
     private javax.swing.JComboBox cboMoneda;
-    private javax.swing.JComboBox cboMonedaProducto;
-    private javax.swing.JComboBox cboPresentacionproducto;
-    private javax.swing.JComboBox cboProveedores;
-    private javax.swing.JComboBox cboUnidadProducto;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox cboMonedaInsumo;
+    private javax.swing.JComboBox cboPresentacionInsumo;
+    private javax.swing.JComboBox cboProveedor;
+    private javax.swing.JComboBox cboUnidad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -976,7 +1192,6 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -996,22 +1211,23 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lblFechaActual;
     private javax.swing.JLabel logoalmacen;
     private javax.swing.JPanel paneltitlealmacen;
-    private javax.swing.JTable tblOrdenes;
-    private javax.swing.JTable tblProductos;
+    private javax.swing.JTable tblDetalleInsumos;
+    private javax.swing.JTable tblOrdenCompra;
     private javax.swing.JTextField txtBuscarCodigo;
     private javax.swing.JTextField txtBuscarFechaEmision;
     private javax.swing.JTextField txtBuscarFechaRecepcion;
     private javax.swing.JTextField txtBuscarProveedor;
     private javax.swing.JTextField txtBuscarReferencia;
-    private javax.swing.JTextField txtCantidadProducto;
-    private javax.swing.JTextField txtCodigoProducto;
-    private javax.swing.JTextField txtFechaRecepcion;
-    private javax.swing.JTextField txtFechaRecepcion1;
-    private javax.swing.JTextField txtNombreProducto;
+    private javax.swing.JTextField txtCantidadInsumo;
+    private javax.swing.JTextField txtCodigoInsumo;
+    private javax.swing.JTextArea txtComentarioReferencia;
+    private com.toedter.calendar.JDateChooser txtFechaRecepcion;
+    private javax.swing.JTextField txtLugarRecepcion;
+    private javax.swing.JTextField txtNombreInsumo;
     private javax.swing.JTextArea txtObservaciones;
-    private javax.swing.JTextField txtPrecioProducto;
-    private javax.swing.JTextArea txtReferencia;
+    private javax.swing.JTextField txtPrecioInsumo;
     // End of variables declaration//GEN-END:variables
 }

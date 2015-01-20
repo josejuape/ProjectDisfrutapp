@@ -16,7 +16,6 @@ import com.disfruta.gestion.logistica.GestionEntidadBancaria;
 import com.disfruta.gestion.logistica.GestionProveedor;
 import com.disfruta.gestion.logistica.GestionTipoPersona;
 import com.disfruta.gestion.xtbc.GestionMoneda;
-import com.disfruta.gestion.xtbc.GestionUbigeo;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import java.awt.Color;
 import java.util.ArrayList;
