@@ -4,8 +4,11 @@
  */
 package com.disfruta.gestion.logistica;
 
+import com.disfruta.bean.logistica.Insumo;
 import com.disfruta.bean.logistica.OrdenCompra;
 import com.disfruta.bean.logistica.OrdenCompraInsumo;
+import com.disfruta.bean.logistica.UnidadMedida;
+import com.disfruta.bean.xtbc.Moneda;
 import com.disfruta.conexion.ObjConexion;
 import com.disfruta.logic.logistica.LogicOrdenCompraInsumo;
 import java.sql.SQLException;
@@ -108,15 +111,30 @@ public class GestionOrdenCompraInsumo {
         
     }
     
-     public String eliminar(OrdenCompraInsumo beanOrdenCompraInsumo) {
+     public String eliminar(OrdenCompra beanOrdenCompra) {
         String mensaje = "Operacion incorrecta";
         try {
             
             LogicOrdenCompraInsumo logicOrdenCompraInsumo = new LogicOrdenCompraInsumo(objCnx);
             
             
-            if (beanOrdenCompraInsumo.getTipoOperacion().equalsIgnoreCase("e")) {
-                mensaje = logicOrdenCompraInsumo.mantenimiento(beanOrdenCompraInsumo);
+            if (beanOrdenCompra.getTipoOperacion().equalsIgnoreCase("e")) {
+                OrdenCompraInsumo bean=new OrdenCompraInsumo();
+                bean.setCantidad(0);
+                bean.setPrecio(0);
+                bean.setSubtotal(0);
+                Insumo insumo=new Insumo();
+                insumo.setIdinsumo(0);
+                Moneda moneda=new Moneda();
+                moneda.setN_idmon(0);
+                UnidadMedida medida=new UnidadMedida();
+                medida.setN_idum(0);
+                bean.setInsumo(insumo);
+                bean.setMoneda(moneda);
+                bean.setUnidad(medida);
+                bean.setOrden(beanOrdenCompra);
+                bean.setTipoOperacion("e");
+                mensaje = logicOrdenCompraInsumo.mantenimiento(bean);
             }else{
                 return mensaje;
             }

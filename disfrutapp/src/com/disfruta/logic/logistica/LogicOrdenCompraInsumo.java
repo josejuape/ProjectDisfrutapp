@@ -81,6 +81,7 @@ public class LogicOrdenCompraInsumo {
         rs.beforeFirst();
         while(rs.next()){
             OrdenCompraInsumo obj=new OrdenCompraInsumo();
+            obj.setId(rs.getInt("n_idorden_compra_insumo"));
             Insumo insumo=new Insumo();
             obj.setCantidad(rs.getDouble("n_cantidad"));
             obj.setPrecio(rs.getDouble("n_precio_compra"));

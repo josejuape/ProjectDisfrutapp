@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import resources.auxiliar.FechaActual;
 import resources.auxiliar.PaddingLeft;
 
 /**
@@ -51,6 +52,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
     protected TextAutoCompleter autoCompleteInsumo;
     protected ArrayList<OrdenCompraInsumo> listaDetalle;
     protected int controlTab = 0;
+    protected String controlRegister = "registrar";
 
     /**
      * Creates new form PanelOrdenDeCompra
@@ -65,6 +67,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         this.cboUnidad.setModel(modelCboUnidad);
         this.cboMonedaInsumo.setModel(modelCboMoneda);
         this.tblOrdenCompra.setModel(tblModelOrdenCompra);
+        this.tblDetalleInsumos.setModel(tableModelDetalle);
         autoCompleteInsumo = new TextAutoCompleter(this.txtNombreInsumo, new AutoCompleterCallback() {
             @Override
             public void callback(Object selectedItem) {
@@ -87,6 +90,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         });
         autoCompleteInsumo.addItems(this.listaInsumos);
         setPaddingLeft();
+        this.lblFechaActual.setText(FechaActual.fechactual());
     }
 
     private void init() {
@@ -147,7 +151,6 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         btnGuardarOrden = new javax.swing.JButton();
         btnEliminarOrden = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         lblFechaActual = new javax.swing.JLabel();
@@ -187,6 +190,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         btnAddInsumo = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblDetalleInsumos = new javax.swing.JTable();
+        btnQuitarInsumo = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         txtBuscarCodigo = new javax.swing.JTextField();
         btnBuscarCodigo = new javax.swing.JButton();
@@ -225,6 +229,11 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         btnNuevoOrden.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNuevoOrden.setOpaque(false);
         btnNuevoOrden.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnNuevoOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoOrdenActionPerformed(evt);
+            }
+        });
 
         btnGuardarOrden.setBackground(new java.awt.Color(252, 242, 228));
         btnGuardarOrden.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
@@ -254,12 +263,15 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         btnEliminarOrden.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEliminarOrden.setOpaque(false);
         btnEliminarOrden.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnEliminarOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarOrdenActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Orden de compra: ");
-
-        jLabel9.setText("7008-1245");
+        jLabel1.setText("Orden de compra ");
 
         javax.swing.GroupLayout paneltitlealmacenLayout = new javax.swing.GroupLayout(paneltitlealmacen);
         paneltitlealmacen.setLayout(paneltitlealmacenLayout);
@@ -270,15 +282,13 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                 .addComponent(logoalmacen)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addGap(102, 102, 102)
+                .addGap(160, 160, 160)
                 .addComponent(btnNuevoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnEliminarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(272, Short.MAX_VALUE))
         );
         paneltitlealmacenLayout.setVerticalGroup(
             paneltitlealmacenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -291,8 +301,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                     .addComponent(btnNuevoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel9))
+                    .addComponent(jLabel1))
                 .addContainerGap())
         );
 
@@ -447,7 +456,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                                 .addComponent(txtFechaRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(4, 4, 4))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Orden de compra", jPanel1);
@@ -468,6 +477,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
         jLabel18.setText("Moneda");
 
+        txtCodigoInsumo.setEditable(false);
         txtCodigoInsumo.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
         txtCodigoInsumo.setForeground(new java.awt.Color(153, 153, 153));
         txtCodigoInsumo.setToolTipText("");
@@ -532,7 +542,8 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
         cboMonedaInsumo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        btnAddInsumo.setText("Add");
+        btnAddInsumo.setText("+");
+        btnAddInsumo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddInsumo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddInsumoActionPerformed(evt);
@@ -593,6 +604,14 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         tblDetalleInsumos.getColumnModel().getColumn(5).setResizable(false);
         tblDetalleInsumos.getColumnModel().getColumn(6).setResizable(false);
 
+        btnQuitarInsumo.setText("-");
+        btnQuitarInsumo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnQuitarInsumo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuitarInsumoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -600,7 +619,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 831, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel12)
@@ -613,26 +632,32 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel14)
                             .addComponent(cboPresentacionInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(34, 34, 34)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCantidadInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel16)
-                            .addComponent(cboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel15)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel16))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(txtCantidadInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel17)
-                            .addComponent(txtPrecioInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel18)
                             .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel17)
+                                .addGap(27, 27, 27)
+                                .addComponent(jLabel18)
+                                .addGap(0, 169, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(txtPrecioInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cboMonedaInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAddInsumo)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnAddInsumo)))))
-                .addContainerGap(11, Short.MAX_VALUE))
+                                .addComponent(btnQuitarInsumo)))))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -655,10 +680,11 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                     .addComponent(cboPresentacionInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboMonedaInsumo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddInsumo))
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(38, Short.MAX_VALUE))
+                    .addComponent(btnAddInsumo)
+                    .addComponent(btnQuitarInsumo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Productos", jPanel2);
@@ -958,8 +984,8 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(paneltitlealmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
         );
@@ -1065,44 +1091,106 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
     private void btnGuardarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarOrdenActionPerformed
         // TODO add your handling code here:
-        if (this.controlTab == 0) { //aqui entramos a registrar un nuevo orden de compra
-            String comentario = this.txtComentarioReferencia.getText();
-            Date date = this.txtFechaRecepcion.getDate();
-            String lugar = this.txtLugarRecepcion.getText();
-            int pos_prov = this.cboProveedor.getSelectedIndex();
-            int pos_mon = this.cboMoneda.getSelectedIndex();
-            int pos_forma = this.cboFormaPago.getSelectedIndex();
-            int pos_almacen = this.cboAlmacen.getSelectedIndex();
-            if (!(comentario.equals("")) && date != null && !(lugar.equals("")) && pos_prov >= 0 && pos_mon >= 0 && pos_forma >= 0 && pos_almacen >= 0) {
-                try {
-                    OrdenCompra orden = new OrdenCompra();
-                    orden.setComentario(comentario);
-                    SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
-                    orden.setFechaRecepcion("" + formato.format(date));
-                    orden.setLugarRecepcion(lugar);
-                    orden.setProveedor(this.modelCboProveedor.getElement(pos_prov));
-                    orden.setMoneda(this.modelCboMoneda.getElement(pos_mon));
-                    orden.setAlmacen(this.modelCboAlmacen.getElement(pos_almacen));
-                    orden.setFormaPago(this.modelCboFormaPago.getElement(pos_forma));
-                    orden.setTipoOperacion("i");
-                    GestionOrdenCompra gestionOrden = new GestionOrdenCompra();
-                    String r = gestionOrden.registrar(orden);
-                    JOptionPane.showMessageDialog(this, r);
-                    this.tblModelOrdenCompra.setData(new GestionOrdenCompra().listar());
-                    this.tblModelOrdenCompra.fireTableDataChanged();
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
-                    Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        if (this.controlRegister.equals("registrar")) {
+            if (this.controlTab == 0) { //aqui entramos a registrar un nuevo orden de compra
+                String comentario = this.txtComentarioReferencia.getText();
+                Date date = this.txtFechaRecepcion.getDate();
+                String lugar = this.txtLugarRecepcion.getText();
+                int pos_prov = this.cboProveedor.getSelectedIndex();
+                int pos_mon = this.cboMoneda.getSelectedIndex();
+                int pos_forma = this.cboFormaPago.getSelectedIndex();
+                int pos_almacen = this.cboAlmacen.getSelectedIndex();
+                if (!(comentario.equals("")) && date != null && !(lugar.equals("")) && pos_prov >= 0 && pos_mon >= 0 && pos_forma >= 0 && pos_almacen >= 0) {
+                    try {
+                        OrdenCompra orden = new OrdenCompra();
+                        orden.setComentario(comentario);
+                        SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
+                        orden.setFechaRecepcion("" + formato.format(date));
+                        orden.setLugarRecepcion(lugar);
+                        orden.setProveedor(this.modelCboProveedor.getElement(pos_prov));
+                        orden.setMoneda(this.modelCboMoneda.getElement(pos_mon));
+                        orden.setAlmacen(this.modelCboAlmacen.getElement(pos_almacen));
+                        orden.setFormaPago(this.modelCboFormaPago.getElement(pos_forma));
+                        orden.setObservaciones(this.txtObservaciones.getText());
+                        orden.setTipoOperacion("i");
+                        GestionOrdenCompra gestionOrden = new GestionOrdenCompra();
+                        String r = gestionOrden.registrar(orden);
+                        JOptionPane.showMessageDialog(this, r);
+                        this.tblModelOrdenCompra.setData(new GestionOrdenCompra().listar());
+                        this.tblModelOrdenCompra.fireTableDataChanged();
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (Exception ex) {
+                        Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
+                }
+            } else {
+                if (this.controlTab == 1) {
+                    //aqui entramos a registrar la lista de insumos de una orden de compra
+                    GestionOrdenCompraInsumo gestionoc = new GestionOrdenCompraInsumo();
+                    for (int i = 0; i < this.listaDetalle.size(); i++) {
+                        OrdenCompraInsumo objd = this.listaDetalle.get(i);
+                        objd.setTipoOperacion("i");
+                        String r = gestionoc.registrar(objd);
+                    }
+                    JOptionPane.showMessageDialog(this, "Registrado correctamente!");
+                }
             }
         } else {
-            if (this.controlTab == 1) {
-                //aqui entramos a registrar la lista de productos de una orden de compra
+            if (this.controlRegister.equals("modificar")) {
+                if (this.controlTab == 0) { //aqui entramos a registrar un nuevo orden de compra
+                    String comentario = this.txtComentarioReferencia.getText();
+                    Date date = this.txtFechaRecepcion.getDate();
+                    String lugar = this.txtLugarRecepcion.getText();
+                    int pos_prov = this.cboProveedor.getSelectedIndex();
+                    int pos_mon = this.cboMoneda.getSelectedIndex();
+                    int pos_forma = this.cboFormaPago.getSelectedIndex();
+                    int pos_almacen = this.cboAlmacen.getSelectedIndex();
+                    int select=this.tblOrdenCompra.getSelectedRow();
+                    if (select>=0 &&!(comentario.equals("")) && date != null && !(lugar.equals("")) && pos_prov >= 0 && pos_mon >= 0 && pos_forma >= 0 && pos_almacen >= 0) {
+                        try {
+                            OrdenCompra orden = this.tblModelOrdenCompra.getValue(select);
+                            orden.setComentario(comentario);
+                            SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
+                            orden.setFechaRecepcion("" + formato.format(date));
+                            orden.setLugarRecepcion(lugar);
+                            orden.setProveedor(this.modelCboProveedor.getElement(pos_prov));
+                            orden.setMoneda(this.modelCboMoneda.getElement(pos_mon));
+                            orden.setAlmacen(this.modelCboAlmacen.getElement(pos_almacen));
+                            orden.setFormaPago(this.modelCboFormaPago.getElement(pos_forma));
+                            orden.setObservaciones(this.txtObservaciones.getText());
+                            orden.setTipoOperacion("a");
+                            GestionOrdenCompra gestionOrden = new GestionOrdenCompra();
+                            String r = gestionOrden.actualizar(orden);
+                            JOptionPane.showMessageDialog(this, "Actualizado correctamente!");
+                            this.tblModelOrdenCompra.setData(new GestionOrdenCompra().listar());
+                            this.tblModelOrdenCompra.fireTableDataChanged();
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (Exception ex) {
+                            Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+                } else {
+                    if (this.controlTab == 1) {
+                        //aqui entramos a registrar la lista de insumos de una orden de compra
+                        GestionOrdenCompraInsumo gestionoc = new GestionOrdenCompraInsumo();
+                        OrdenCompra orden = this.tblModelOrdenCompra.getValue(tblOrdenCompra.getSelectedRow());
+                        orden.setTipoOperacion("e");
+                        gestionoc.eliminar(orden);
+                        for (int i = 0; i < this.listaDetalle.size(); i++) {
+                            OrdenCompraInsumo objd = this.listaDetalle.get(i);
+                            objd.setOrden(orden);
+                            objd.setTipoOperacion("i");
+                            String r = gestionoc.registrar(objd);
+                        }
+                        JOptionPane.showMessageDialog(this, "Actualizado correctamente!");                        
+                    }
+                }
             }
         }
-
     }//GEN-LAST:event_btnGuardarOrdenActionPerformed
 
     private void cboAlmacenItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboAlmacenItemStateChanged
@@ -1122,8 +1210,12 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
             detalle.setInsumo(insumoselected);
             OrdenCompra orden = this.tblModelOrdenCompra.getValue(this.tblOrdenCompra.getSelectedRow());
             detalle.setOrden(orden);
-            detalle.setCantidad(Double.parseDouble(this.txtCantidadInsumo.getText()));
-            detalle.setPrecio(Double.parseDouble(this.txtPrecioInsumo.getText()));
+            double cantidad = Double.parseDouble(this.txtCantidadInsumo.getText());
+            detalle.setCantidad(cantidad);
+            double precio = Double.parseDouble(this.txtPrecioInsumo.getText());
+            detalle.setPrecio(precio);
+            double subtotal = cantidad * precio;
+            detalle.setSubtotal(subtotal);
             detalle.setUnidad(this.modelCboUnidad.getElement(cboUnidad.getSelectedIndex()));
             detalle.setMoneda(this.modelCboMoneda.getElement(cboMonedaInsumo.getSelectedIndex()));
             this.listaDetalle.add(detalle);
@@ -1149,9 +1241,11 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                 this.cboMoneda.setSelectedItem(orden.getMoneda().getV_moneda());
                 this.cboFormaPago.setSelectedItem(orden.getFormaPago().getDescripcion());
                 this.cboAlmacen.setSelectedItem(orden.getAlmacen().getDescripcion());
-                
+                this.controlRegister = "modificar";
                 this.listaDetalle = new GestionOrdenCompraInsumo().listar(orden);
-                
+                this.tableModelDetalle.setData(listaDetalle);
+                this.tableModelDetalle.fireTableDataChanged();
+
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
@@ -1165,6 +1259,57 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         System.out.println("idtab: " + jTabbedPane1.getSelectedIndex());
         this.controlTab = jTabbedPane1.getSelectedIndex();
     }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    private void btnQuitarInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarInsumoActionPerformed
+        // TODO add your handling code here:
+        int pos = this.tblDetalleInsumos.getSelectedRow();
+        if (pos >= 0) {
+            this.listaDetalle.remove(pos);
+            this.tableModelDetalle.setData(listaDetalle);
+            this.tableModelDetalle.fireTableDataChanged();
+        }
+    }//GEN-LAST:event_btnQuitarInsumoActionPerformed
+
+    private void btnNuevoOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoOrdenActionPerformed
+        // TODO add your handling code here:
+        this.controlRegister="registrar";
+        this.txtComentarioReferencia.setText("");
+        this.txtObservaciones.setText("");
+        this.txtLugarRecepcion.setText("");
+        this.txtCodigoInsumo.setText("");
+        this.txtCantidadInsumo.setText("");
+        this.txtPrecioInsumo.setText("");
+        this.txtNombreInsumo.setText("");
+        this.tblOrdenCompra.clearSelection();
+        this.listaDetalle=new ArrayList();
+        this.tableModelDetalle.setData(listaDetalle);
+        this.tableModelDetalle.fireTableDataChanged();
+        
+    }//GEN-LAST:event_btnNuevoOrdenActionPerformed
+
+    private void btnEliminarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarOrdenActionPerformed
+        // TODO add your handling code here:
+        int pos=this.tblOrdenCompra.getSelectedRow();
+        if (pos>=0) {
+            try {
+                OrdenCompra orden=this.tblModelOrdenCompra.getValue(pos);
+                orden.setTipoOperacion("e");
+                GestionOrdenCompraInsumo goc=new GestionOrdenCompraInsumo();
+                System.out.println("Orde id: "+orden.getId());
+                goc.eliminar(orden);
+                GestionOrdenCompra g=new GestionOrdenCompra();
+                String r=g.eliminar(orden);
+                JOptionPane.showMessageDialog(this,r);
+                this.tblModelOrdenCompra.setData(new GestionOrdenCompra().listar());
+                this.tblModelOrdenCompra.fireTableDataChanged();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnEliminarOrdenActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddInsumo;
     private javax.swing.JButton btnBuscarCodigo;
@@ -1175,6 +1320,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
     private javax.swing.JButton btnEliminarOrden;
     private javax.swing.JButton btnGuardarOrden;
     private javax.swing.JButton btnNuevoOrden;
+    private javax.swing.JButton btnQuitarInsumo;
     private javax.swing.JComboBox cboAlmacen;
     private javax.swing.JComboBox cboFormaPago;
     private javax.swing.JComboBox cboMoneda;
@@ -1198,7 +1344,6 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

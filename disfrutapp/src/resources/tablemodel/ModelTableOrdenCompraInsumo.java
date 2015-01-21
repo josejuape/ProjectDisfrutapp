@@ -74,7 +74,7 @@ public class ModelTableOrdenCompraInsumo extends AbstractTableModel {
             case 4:
                 return data.get(rowIndex).getPrecio();
             case 5:
-                return data.get(rowIndex).getMoneda().getN_idmon();
+                return data.get(rowIndex).getMoneda().getV_moneda();
             case 6:
                 return data.get(rowIndex).getSubtotal();
             default:

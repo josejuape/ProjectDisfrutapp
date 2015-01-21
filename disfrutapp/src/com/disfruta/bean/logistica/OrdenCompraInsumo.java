@@ -11,6 +11,7 @@ import com.disfruta.bean.xtbc.Moneda;
  * @author Juape
  */
 public class OrdenCompraInsumo {
+    protected int id;
     protected Insumo insumo;
     protected OrdenCompra orden;
     protected double cantidad;
@@ -19,6 +20,16 @@ public class OrdenCompraInsumo {
     protected Moneda moneda;
     protected UnidadMedida unidad;
     protected String tipoOperacion;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    
 
     public Insumo getInsumo() {
         return insumo;
