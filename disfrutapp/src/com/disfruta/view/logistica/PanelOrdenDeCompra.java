@@ -46,7 +46,6 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
     private resources.tablemodel.ModelTableOrdenCompra tblModelOrdenCompra;
     protected resources.comboboxmodel.CboModelPresentacionCompra cboModelPresentacionInsumo;
     protected resources.tablemodel.ModelTableOrdenCompraInsumo tableModelDetalle;
-    protected ArrayList listaAutoCompletar;
     protected ArrayList listaInsumos;
     protected Insumo insumoselected = null;
     protected TextAutoCompleter autoCompleteInsumo;
@@ -151,6 +150,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         btnGuardarOrden = new javax.swing.JButton();
         btnEliminarOrden = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        lblnumeroOrden = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         lblFechaActual = new javax.swing.JLabel();
@@ -271,7 +271,11 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Orden de compra ");
+        jLabel1.setText("Orden de compra: ");
+
+        lblnumeroOrden.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblnumeroOrden.setForeground(new java.awt.Color(255, 255, 255));
+        lblnumeroOrden.setText("OC-125");
 
         javax.swing.GroupLayout paneltitlealmacenLayout = new javax.swing.GroupLayout(paneltitlealmacen);
         paneltitlealmacen.setLayout(paneltitlealmacenLayout);
@@ -282,13 +286,15 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                 .addComponent(logoalmacen)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
-                .addGap(160, 160, 160)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblnumeroOrden)
+                .addGap(120, 120, 120)
                 .addComponent(btnNuevoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnEliminarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(272, Short.MAX_VALUE))
+                .addContainerGap(264, Short.MAX_VALUE))
         );
         paneltitlealmacenLayout.setVerticalGroup(
             paneltitlealmacenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,7 +307,8 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                     .addComponent(btnNuevoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGuardarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(lblnumeroOrden))
                 .addContainerGap())
         );
 
@@ -1105,6 +1112,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                         OrdenCompra orden = new OrdenCompra();
                         orden.setComentario(comentario);
                         SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
+                        orden.setNumero(this.lblnumeroOrden.getText());
                         orden.setFechaRecepcion("" + formato.format(date));
                         orden.setLugarRecepcion(lugar);
                         orden.setProveedor(this.modelCboProveedor.getElement(pos_prov));
@@ -1118,6 +1126,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                         JOptionPane.showMessageDialog(this, r);
                         this.tblModelOrdenCompra.setData(new GestionOrdenCompra().listar());
                         this.tblModelOrdenCompra.fireTableDataChanged();
+                        limpiar();
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (Exception ex) {
@@ -1135,6 +1144,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                         String r = gestionoc.registrar(objd);
                     }
                     JOptionPane.showMessageDialog(this, "Registrado correctamente!");
+                    limpiar();
                 }
             }
         } else {
@@ -1150,22 +1160,30 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                     int select=this.tblOrdenCompra.getSelectedRow();
                     if (select>=0 &&!(comentario.equals("")) && date != null && !(lugar.equals("")) && pos_prov >= 0 && pos_mon >= 0 && pos_forma >= 0 && pos_almacen >= 0) {
                         try {
-                            OrdenCompra orden = this.tblModelOrdenCompra.getValue(select);
+                            OrdenCompra originalorden = this.tblModelOrdenCompra.getValue(select);
+                            
+                            OrdenCompra orden=new OrdenCompra();
                             orden.setComentario(comentario);
                             SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
                             orden.setFechaRecepcion("" + formato.format(date));
+                            orden.setNumero(this.lblnumeroOrden.getText());
                             orden.setLugarRecepcion(lugar);
                             orden.setProveedor(this.modelCboProveedor.getElement(pos_prov));
                             orden.setMoneda(this.modelCboMoneda.getElement(pos_mon));
                             orden.setAlmacen(this.modelCboAlmacen.getElement(pos_almacen));
                             orden.setFormaPago(this.modelCboFormaPago.getElement(pos_forma));
                             orden.setObservaciones(this.txtObservaciones.getText());
-                            orden.setTipoOperacion("a");
+                            orden.setTipoOperacion("i");
                             GestionOrdenCompra gestionOrden = new GestionOrdenCompra();
-                            String r = gestionOrden.actualizar(orden);
+                            String r = gestionOrden.registrar(orden);
+                            OrdenCompra ultimo=gestionOrden.getUltimoObject();
+                            originalorden.setIdactualizado(ultimo.getId());
+                            originalorden.setTipoOperacion("a");
+                            gestionOrden.actualizar(originalorden);
                             JOptionPane.showMessageDialog(this, "Actualizado correctamente!");
                             this.tblModelOrdenCompra.setData(new GestionOrdenCompra().listar());
                             this.tblModelOrdenCompra.fireTableDataChanged();
+                            limpiar();
                         } catch (ClassNotFoundException ex) {
                             Logger.getLogger(PanelOrdenDeCompra.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (Exception ex) {
@@ -1186,7 +1204,8 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
                             objd.setTipoOperacion("i");
                             String r = gestionoc.registrar(objd);
                         }
-                        JOptionPane.showMessageDialog(this, "Actualizado correctamente!");                        
+                        JOptionPane.showMessageDialog(this, "Actualizado correctamente!"); 
+                        limpiar();
                     }
                 }
             }
@@ -1232,6 +1251,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         if (fila >= 0) {
             try {
                 OrdenCompra orden = this.tblModelOrdenCompra.getValue(fila);
+                this.lblnumeroOrden.setText(orden.getNumero());
                 this.txtLugarRecepcion.setText(orden.getLugarRecepcion());
                 this.txtComentarioReferencia.setText(orden.getComentario());
                 Date date = new Date(orden.getFechaRecepcion());
@@ -1272,18 +1292,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
 
     private void btnNuevoOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoOrdenActionPerformed
         // TODO add your handling code here:
-        this.controlRegister="registrar";
-        this.txtComentarioReferencia.setText("");
-        this.txtObservaciones.setText("");
-        this.txtLugarRecepcion.setText("");
-        this.txtCodigoInsumo.setText("");
-        this.txtCantidadInsumo.setText("");
-        this.txtPrecioInsumo.setText("");
-        this.txtNombreInsumo.setText("");
-        this.tblOrdenCompra.clearSelection();
-        this.listaDetalle=new ArrayList();
-        this.tableModelDetalle.setData(listaDetalle);
-        this.tableModelDetalle.fireTableDataChanged();
+        limpiar();
         
     }//GEN-LAST:event_btnNuevoOrdenActionPerformed
 
@@ -1310,6 +1319,22 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnEliminarOrdenActionPerformed
 
+    private void limpiar(){
+        this.controlRegister="registrar";
+        this.txtComentarioReferencia.setText("");
+        this.txtObservaciones.setText("");
+        this.txtLugarRecepcion.setText("");
+        this.txtCodigoInsumo.setText("");
+        this.txtCantidadInsumo.setText("");
+        this.txtPrecioInsumo.setText("");
+        this.txtNombreInsumo.setText("");
+        this.tblOrdenCompra.clearSelection();
+        this.listaDetalle=new ArrayList();
+        this.tableModelDetalle.setData(listaDetalle);
+        this.tableModelDetalle.fireTableDataChanged();
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddInsumo;
     private javax.swing.JButton btnBuscarCodigo;
@@ -1357,6 +1382,7 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblFechaActual;
+    private javax.swing.JLabel lblnumeroOrden;
     private javax.swing.JLabel logoalmacen;
     private javax.swing.JPanel paneltitlealmacen;
     private javax.swing.JTable tblDetalleInsumos;

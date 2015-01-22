@@ -154,4 +154,8 @@ public class Proveedor {
         this.tipoOperacion = tipoOperacion;
     }
     
+    @Override
+    public String toString(){
+        return this.nombres+" "+this.apellidos;
+    }
 }

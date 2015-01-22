@@ -12,11 +12,14 @@ import com.disfruta.bean.xtbc.Moneda;
  */
 public class OrdenCompra {
     protected int id;
+    protected String numero;
     protected String fechaRegistro;
     protected String comentario;
     protected String fechaRecepcion;
     protected String lugarRecepcion;
     protected String observaciones;
+    protected String estado;
+    protected int idactualizado;
     protected Proveedor proveedor;
     protected Moneda moneda;
     protected Almacen almacen;
@@ -30,6 +33,23 @@ public class OrdenCompra {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
 
     public String getFechaRegistro() {
         return fechaRegistro;
@@ -70,6 +90,16 @@ public class OrdenCompra {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
+    public int getIdactualizado() {
+        return idactualizado;
+    }
+
+    public void setIdactualizado(int idactualizado) {
+        this.idactualizado = idactualizado;
+    }
+    
+    
 
     public Proveedor getProveedor() {
         return proveedor;

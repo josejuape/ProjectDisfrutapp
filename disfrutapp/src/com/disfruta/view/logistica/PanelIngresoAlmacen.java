@@ -4,19 +4,273 @@
  */
 package com.disfruta.view.logistica;
 
+import com.disfruta.bean.logistica.Almacen;
+import com.disfruta.bean.logistica.IngresoAlmacenInsumo;
+import com.disfruta.bean.logistica.Insumo;
+import com.disfruta.bean.logistica.OrdenCompra;
+import com.disfruta.bean.logistica.OrdenCompraInsumo;
+import com.disfruta.bean.logistica.Proveedor;
+import com.disfruta.bean.logistica.UnidadMedida;
+import com.disfruta.bean.xtbc.Moneda;
+import com.disfruta.bean.xtbc.TipoComprobante;
+import com.disfruta.gestion.logistica.GestionAlmacen;
+import com.disfruta.gestion.logistica.GestionFormaPago;
+import com.disfruta.gestion.logistica.GestionInsumo;
+import com.disfruta.gestion.logistica.GestionOrdenCompra;
+import com.disfruta.gestion.logistica.GestionOrdenCompraInsumo;
+import com.disfruta.gestion.logistica.GestionPresentacionInsumo;
+import com.disfruta.gestion.logistica.GestionProveedor;
+import com.disfruta.gestion.logistica.GestionUnidadMedida;
+import com.disfruta.gestion.xtbc.GestionMoneda;
+import com.disfruta.gestion.xtbc.GestionTipoComprobante;
+import com.mxrck.autocompleter.AutoCompleterCallback;
+import com.mxrck.autocompleter.TextAutoCompleter;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import resources.auxiliar.FechaActual;
+import resources.auxiliar.PaddingLeft;
+
 /**
  *
  * @author Juape
  */
 public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
+    private resources.comboboxmodel.CboModelAlmacen modelCboAlmacen;
+    private resources.comboboxmodel.CboModelAlmacen modelCboAlmacen2;
+    private resources.comboboxmodel.CboModelAlmacen modelCboAlmacen3;
+    private resources.comboboxmodel.CboModelAlmacen modelCboAlmacen4;
+    private resources.comboboxmodel.CboModelTipoComprobante modelCboTipoDocumento;
+    private resources.comboboxmodel.CboModelTipoComprobante modelCboTipoDocumento3;
+    private resources.comboboxmodel.CboModelTipoComprobante modelCboTipoDocumento4;
+    private resources.comboboxmodel.CboModelFormaPago modelCboFormaPago;
+    private resources.comboboxmodel.CboModelMoneda modelCboMoneda;
+    private resources.comboboxmodel.CboModelMoneda modelCboMonedaInsumo2;
+    private resources.comboboxmodel.CboModelMoneda modelCboMonedaInsumo3;
+    private resources.comboboxmodel.CboModelMoneda modelCboMonedaInsumo4;
+    private resources.comboboxmodel.CboModelUnidadMedida modelCboUnidad2;
+    private resources.comboboxmodel.CboModelUnidadMedida modelCboUnidad3;
+    private resources.comboboxmodel.CboModelUnidadMedida modelCboUnidad4;
+    private resources.tablemodel.ModelTableIngresoAlmacenOC modelProductosPedidos1;
+    private resources.tablemodel.ModelTableIngresoAlmacenInsumo modelDetalle2;
+    private resources.tablemodel.ModelTableIngresoAlmacenInsumo modelDetalle3;
+    private resources.tablemodel.ModelTableIngresoAlmacenInsumo modelDetalle4;
+    protected resources.comboboxmodel.CboModelPresentacionCompra cboModelPresentacionInsumo2;
+    protected resources.comboboxmodel.CboModelPresentacionCompra cboModelPresentacionInsumo3;
+    protected resources.comboboxmodel.CboModelPresentacionCompra cboModelPresentacionInsumo4;
+    protected ArrayList listaInsumos;
+    protected ArrayList listaProveedores;
+    protected Proveedor proveedorselected3 = null;
+    protected Insumo insumoselected2 = null;
+    protected Insumo insumoselected3 = null;
+    protected Insumo insumoselected4 = null;
+    protected TextAutoCompleter autoCompleteProveedor;
+    protected TextAutoCompleter autoCompleteInsumo2;
+    protected TextAutoCompleter autoCompleteInsumo3;
+    protected TextAutoCompleter autoCompleteInsumo4;
+    protected ArrayList<IngresoAlmacenInsumo> listaDetalle1;
+    protected ArrayList<IngresoAlmacenInsumo> listaDetalle2;
+    protected ArrayList<IngresoAlmacenInsumo> listaDetalle3;
+    protected ArrayList<IngresoAlmacenInsumo> listaDetalle4;
+
     /**
      * Creates new form PanelIngresoAlmacen
      */
     public PanelIngresoAlmacen() {
+        init();
         initComponents();
+        this.cboAlmacen1.setModel(modelCboAlmacen);
+        this.cboAlmacen2.setModel(modelCboAlmacen2);
+        this.cboAlmacen3.setModel(modelCboAlmacen3);
+        this.cboAlmacen4.setModel(modelCboAlmacen4);
+        this.cboTipoDocumento2.setModel(modelCboTipoDocumento);
+        this.cboTipoDocumento3.setModel(modelCboTipoDocumento3);
+        this.cboTipoDocumento4.setModel(modelCboTipoDocumento4);
+        this.tblProductosPedidos1.setModel(modelProductosPedidos1);
+        this.cboFormaPago.setModel(modelCboFormaPago);
+        this.cboMoneda.setModel(modelCboMoneda);
+        this.cboMonedaInsumo2.setModel(modelCboMonedaInsumo2);
+        this.cboMonedaInsumo3.setModel(modelCboMonedaInsumo3);
+        this.cboMonedaInsumo4.setModel(modelCboMonedaInsumo4);
+        this.cboUnidad2.setModel(modelCboUnidad2);
+        this.cboUnidad3.setModel(modelCboUnidad3);
+        this.cboUnidad4.setModel(modelCboUnidad4);
+        this.tblProductosPedidos2.setModel(modelDetalle2);
+        this.tblProductosPedidos3.setModel(modelDetalle3);
+        this.tblProductosPedidos4.setModel(modelDetalle4);
+        setPadding();
+        this.lblFechaActual.setText(FechaActual.fechactualNumerico());
+        this.lblFecha2.setText(FechaActual.fechactualNumerico());
+        this.lblFecha3.setText(FechaActual.fechactualNumerico());
+        this.lblFecha4.setText(FechaActual.fechactualNumerico());
+        cargarListaInsumo();
     }
 
+    private void init() {
+        try {
+            ArrayList<Almacen> listaAlamcenes = new GestionAlmacen().listar();
+            this.modelCboAlmacen = new resources.comboboxmodel.CboModelAlmacen(listaAlamcenes);
+            this.modelCboAlmacen2 = new resources.comboboxmodel.CboModelAlmacen(listaAlamcenes);
+            this.modelCboAlmacen3 = new resources.comboboxmodel.CboModelAlmacen(listaAlamcenes);
+            this.modelCboAlmacen4 = new resources.comboboxmodel.CboModelAlmacen(listaAlamcenes);
+            this.modelProductosPedidos1 = new resources.tablemodel.ModelTableIngresoAlmacenOC();
+            ArrayList<TipoComprobante> listaComprobantes = new GestionTipoComprobante().listar();
+            this.modelCboTipoDocumento = new resources.comboboxmodel.CboModelTipoComprobante(listaComprobantes);
+            this.modelCboTipoDocumento3 = new resources.comboboxmodel.CboModelTipoComprobante(listaComprobantes);
+            this.modelCboTipoDocumento4 = new resources.comboboxmodel.CboModelTipoComprobante(listaComprobantes);
+            this.modelCboFormaPago=new resources.comboboxmodel.CboModelFormaPago(new GestionFormaPago().listar());
+            ArrayList<Moneda> listaMoneda = new GestionMoneda().listar();
+            this.modelCboMoneda=new resources.comboboxmodel.CboModelMoneda(listaMoneda);
+            this.modelCboMonedaInsumo2=new resources.comboboxmodel.CboModelMoneda(listaMoneda);
+            this.modelCboMonedaInsumo3=new resources.comboboxmodel.CboModelMoneda(listaMoneda);
+            this.modelCboMonedaInsumo4=new resources.comboboxmodel.CboModelMoneda(listaMoneda);
+            ArrayList<UnidadMedida> listaUnidades = new GestionUnidadMedida().listar();
+            this.modelCboUnidad2=new resources.comboboxmodel.CboModelUnidadMedida(listaUnidades);
+            this.modelCboUnidad3=new resources.comboboxmodel.CboModelUnidadMedida(listaUnidades);
+            this.modelCboUnidad4=new resources.comboboxmodel.CboModelUnidadMedida(listaUnidades);
+            this.listaInsumos = new ArrayList();
+            this.listaInsumos = new GestionInsumo().listar();
+            this.listaDetalle1=new ArrayList();
+            this.listaDetalle2=new ArrayList();
+            modelDetalle2=new resources.tablemodel.ModelTableIngresoAlmacenInsumo(this.listaDetalle2);
+            this.listaDetalle3=new ArrayList();
+            modelDetalle3=new resources.tablemodel.ModelTableIngresoAlmacenInsumo(this.listaDetalle3);
+            this.listaDetalle4=new ArrayList();
+            modelDetalle4=new resources.tablemodel.ModelTableIngresoAlmacenInsumo(this.listaDetalle4);
+            this.listaProveedores=new ArrayList();
+            this.listaProveedores=new GestionProveedor().listar();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PanelIngresoAlmacen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(PanelIngresoAlmacen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void setPadding() {
+        this.cboAlmacen1.setBackground(Color.WHITE);
+        this.cboAlmacen2.setBackground(Color.WHITE);
+        this.cboAlmacen3.setBackground(Color.WHITE);
+        this.cboAlmacen4.setBackground(Color.WHITE);
+        this.cboFormaPago.setBackground(Color.WHITE);
+        this.cboMoneda.setBackground(Color.WHITE);
+        this.cboTipoDocumento2.setBackground(Color.WHITE);
+        this.cboTipoDocumento3.setBackground(Color.WHITE);
+        this.cboTipoDocumento4.setBackground(Color.WHITE);
+        this.cboPresentacion2.setBackground(Color.WHITE);
+        this.cboPresentacion3.setBackground(Color.WHITE);
+        this.cboPresentacion4.setBackground(Color.WHITE);
+        this.cboUnidad2.setBackground(Color.WHITE);
+        this.cboUnidad3.setBackground(Color.WHITE);
+        this.cboUnidad4.setBackground(Color.WHITE);
+        this.cboMonedaInsumo2.setBackground(Color.WHITE);
+        this.cboMonedaInsumo3.setBackground(Color.WHITE);
+        this.cboMonedaInsumo4.setBackground(Color.WHITE);
+        PaddingLeft.agregarpadding(this.txtCodigoOC);
+        PaddingLeft.agregarpadding(this.txtNumeroDoc2);
+        PaddingLeft.agregarpadding(this.txtNumeroDoc3);
+        PaddingLeft.agregarpadding(this.txtNumeroDoc4);
+        PaddingLeft.agregarpadding(this.txtCodigoInsumo2);
+        PaddingLeft.agregarpadding(this.txtCodigoInsumo3);
+        PaddingLeft.agregarpadding(this.txtCodigoInsumo4);
+        PaddingLeft.agregarpadding(this.txtNombreInsumo2);
+        PaddingLeft.agregarpadding(this.txtNombreInsumo3);
+        PaddingLeft.agregarpadding(this.txtNombreInsumo4);
+        PaddingLeft.agregarpadding(this.txtCantidadInsumo2);
+        PaddingLeft.agregarpadding(this.txtCantidadInsumo3);
+        PaddingLeft.agregarpadding(this.txtCantidadInsumo4);
+        PaddingLeft.agregarpadding(this.txtPrecioInsumo2);
+        PaddingLeft.agregarpadding(this.txtPrecioInsumo3);
+        PaddingLeft.agregarpadding(this.txtPrecioInsumo4);
+        PaddingLeft.agregarpadding(this.txtProveedor3);
+    }
+
+    
+    
+    private void cargarListaInsumo(){
+        autoCompleteInsumo2 = new TextAutoCompleter(this.txtNombreInsumo2, new AutoCompleterCallback() {
+            @Override
+            public void callback(Object selectedItem) {
+                String cad = selectedItem.toString();
+                for (int i = 0; i < listaInsumos.size(); i++) {
+                    if (cad.equals(((Insumo) listaInsumos.get(i)).getNombre())) {
+                        try {
+                            insumoselected2 = (Insumo) listaInsumos.get(i);
+                            txtCodigoInsumo2.setText(insumoselected2.getIdinsumo() + "");
+                            cboModelPresentacionInsumo2 = new resources.comboboxmodel.CboModelPresentacionCompra(new GestionPresentacionInsumo().listarPorInsumo(insumoselected2));
+                            cboPresentacion2.setModel(cboModelPresentacionInsumo2);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(DialogPresComercialCarta.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (Exception ex) {
+                            Logger.getLogger(DialogPresComercialCarta.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
+        autoCompleteInsumo2.addItems(this.listaInsumos);
+        autoCompleteInsumo3 = new TextAutoCompleter(this.txtNombreInsumo3, new AutoCompleterCallback() {
+            @Override
+            public void callback(Object selectedItem) {
+                String cad = selectedItem.toString();
+                for (int i = 0; i < listaInsumos.size(); i++) {
+                    if (cad.equals(((Insumo) listaInsumos.get(i)).getNombre())) {
+                        try {
+                            insumoselected3 = (Insumo) listaInsumos.get(i);
+                            txtCodigoInsumo3.setText(insumoselected3.getIdinsumo() + "");
+                            cboModelPresentacionInsumo3 = new resources.comboboxmodel.CboModelPresentacionCompra(new GestionPresentacionInsumo().listarPorInsumo(insumoselected3));
+                            cboPresentacion3.setModel(cboModelPresentacionInsumo3);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(DialogPresComercialCarta.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (Exception ex) {
+                            Logger.getLogger(DialogPresComercialCarta.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
+        autoCompleteInsumo3.addItems(this.listaInsumos);
+        autoCompleteInsumo4 = new TextAutoCompleter(this.txtNombreInsumo4, new AutoCompleterCallback() {
+            @Override
+            public void callback(Object selectedItem) {
+                String cad = selectedItem.toString();
+                for (int i = 0; i < listaInsumos.size(); i++) {
+                    if (cad.equals(((Insumo) listaInsumos.get(i)).getNombre())) {
+                        try {
+                            insumoselected4 = (Insumo) listaInsumos.get(i);
+                            txtCodigoInsumo4.setText(insumoselected4.getIdinsumo() + "");
+                            cboModelPresentacionInsumo4 = new resources.comboboxmodel.CboModelPresentacionCompra(new GestionPresentacionInsumo().listarPorInsumo(insumoselected4));
+                            cboPresentacion4.setModel(cboModelPresentacionInsumo4);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(DialogPresComercialCarta.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (Exception ex) {
+                            Logger.getLogger(DialogPresComercialCarta.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
+        autoCompleteInsumo4.addItems(this.listaInsumos);  
+        
+        autoCompleteProveedor = new TextAutoCompleter(this.txtProveedor3, new AutoCompleterCallback() {
+            @Override
+            public void callback(Object selectedItem) {
+                String cad = selectedItem.toString();
+                for (int i = 0; i < listaProveedores.size(); i++) {
+                    if (cad.equals(((Insumo) listaProveedores.get(i)).getNombre())) {
+                        try {
+                            proveedorselected3 = (Proveedor) listaProveedores.get(i);
+                        } catch (Exception ex) {
+                            Logger.getLogger(DialogPresComercialCarta.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
+        autoCompleteProveedor.addItems(this.listaProveedores);  
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,11 +291,11 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         txtCodigoParte1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtFecha1 = new javax.swing.JLabel();
+        lblFechaActual = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        cboAlmacen = new javax.swing.JComboBox();
+        cboAlmacen1 = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
-        txtCapacidad1 = new javax.swing.JTextField();
+        txtCodigoOC = new javax.swing.JTextField();
         btnCargarOC = new javax.swing.JButton();
         btnAdjuntarOrdenCompra = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -49,12 +303,12 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        txtProveedor = new javax.swing.JLabel();
-        txtRuc = new javax.swing.JLabel();
-        txtFechaOC = new javax.swing.JLabel();
+        lblProveedor = new javax.swing.JLabel();
+        lblRuc = new javax.swing.JLabel();
+        lblFechaOC = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblProductosPedidos = new javax.swing.JTable();
+        tblProductosPedidos1 = new javax.swing.JTable();
         jCheckBox1 = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -62,113 +316,113 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         txtCodigoParte2 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        txtFecha2 = new javax.swing.JLabel();
+        lblFecha2 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        cboAlmacen1 = new javax.swing.JComboBox();
+        cboAlmacen2 = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        cboDocumento = new javax.swing.JComboBox();
+        cboTipoDocumento2 = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
-        txtCapacidad = new javax.swing.JTextField();
+        txtNumeroDoc2 = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        txtCapacidad2 = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtComentario2 = new javax.swing.JTextArea();
+        txtFechaEmisionDoc2 = new com.toedter.calendar.JDateChooser();
         jLabel18 = new javax.swing.JLabel();
-        txtCodigoProducto = new javax.swing.JTextField();
+        txtCodigoInsumo2 = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
-        txtCodigoProducto1 = new javax.swing.JTextField();
+        txtNombreInsumo2 = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        cboPresentacion2 = new javax.swing.JComboBox();
         jLabel21 = new javax.swing.JLabel();
-        txtCodigoProducto2 = new javax.swing.JTextField();
+        txtPrecioInsumo2 = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
+        cboUnidad2 = new javax.swing.JComboBox();
         jLabel23 = new javax.swing.JLabel();
-        txtCodigoProducto3 = new javax.swing.JTextField();
+        txtCantidadInsumo2 = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
+        cboMonedaInsumo2 = new javax.swing.JComboBox();
+        btnAddInsumo2 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblProductosPorStock = new javax.swing.JTable();
+        tblProductosPedidos2 = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
         txtCodigoParte3 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
-        txtFecha3 = new javax.swing.JLabel();
+        lblFecha3 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
-        cboAlmacen2 = new javax.swing.JComboBox();
+        cboAlmacen3 = new javax.swing.JComboBox();
         jLabel28 = new javax.swing.JLabel();
-        cboDocumento1 = new javax.swing.JComboBox();
+        cboTipoDocumento3 = new javax.swing.JComboBox();
         jLabel29 = new javax.swing.JLabel();
-        txtCapacidad3 = new javax.swing.JTextField();
+        txtNumeroDoc3 = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
-        txtCapacidad4 = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        txtComentario3 = new javax.swing.JTextArea();
         jLabel32 = new javax.swing.JLabel();
-        txtProveedorExt = new javax.swing.JTextField();
+        txtProveedor3 = new javax.swing.JTextField();
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox();
-        jComboBox5 = new javax.swing.JComboBox();
+        cboMoneda = new javax.swing.JComboBox();
+        cboFormaPago = new javax.swing.JComboBox();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel37 = new javax.swing.JLabel();
-        txtCodigoProducto4 = new javax.swing.JTextField();
+        txtCodigoInsumo3 = new javax.swing.JTextField();
         jLabel38 = new javax.swing.JLabel();
-        txtCodigoProducto5 = new javax.swing.JTextField();
+        txtNombreInsumo3 = new javax.swing.JTextField();
         jLabel39 = new javax.swing.JLabel();
-        jComboBox6 = new javax.swing.JComboBox();
+        cboPresentacion3 = new javax.swing.JComboBox();
         jLabel40 = new javax.swing.JLabel();
-        txtCodigoProducto6 = new javax.swing.JTextField();
-        jComboBox7 = new javax.swing.JComboBox();
+        txtCantidadInsumo3 = new javax.swing.JTextField();
+        cboUnidad3 = new javax.swing.JComboBox();
         jLabel41 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
-        txtCodigoProducto7 = new javax.swing.JTextField();
-        jComboBox8 = new javax.swing.JComboBox();
+        txtPrecioInsumo3 = new javax.swing.JTextField();
+        cboMonedaInsumo3 = new javax.swing.JComboBox();
         jLabel43 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnAddInsumo3 = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
-        tblProductosExterno = new javax.swing.JTable();
+        tblProductosPedidos3 = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
         txtCodigoParte4 = new javax.swing.JLabel();
         jLabel45 = new javax.swing.JLabel();
-        txtFecha4 = new javax.swing.JLabel();
+        lblFecha4 = new javax.swing.JLabel();
         jLabel46 = new javax.swing.JLabel();
         jLabel47 = new javax.swing.JLabel();
-        cboDocumento2 = new javax.swing.JComboBox();
+        cboTipoDocumento4 = new javax.swing.JComboBox();
         jLabel48 = new javax.swing.JLabel();
-        txtCapacidad5 = new javax.swing.JTextField();
+        txtNumeroDoc4 = new javax.swing.JTextField();
         jLabel49 = new javax.swing.JLabel();
-        txtCapacidad6 = new javax.swing.JTextField();
+        txtFechaEmisionDocInterno = new javax.swing.JTextField();
         jLabel50 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
-        txtProveedorExt1 = new javax.swing.JTextField();
+        txtComentario4 = new javax.swing.JTextArea();
+        cboAlmacen4 = new javax.swing.JComboBox();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel51 = new javax.swing.JLabel();
-        txtCodigoProducto8 = new javax.swing.JTextField();
-        txtCodigoProducto9 = new javax.swing.JTextField();
+        txtCodigoInsumo4 = new javax.swing.JTextField();
+        txtNombreInsumo4 = new javax.swing.JTextField();
         jLabel52 = new javax.swing.JLabel();
         jLabel53 = new javax.swing.JLabel();
-        jComboBox9 = new javax.swing.JComboBox();
-        txtCodigoProducto10 = new javax.swing.JTextField();
+        cboPresentacion4 = new javax.swing.JComboBox();
+        txtCantidadInsumo4 = new javax.swing.JTextField();
         jLabel54 = new javax.swing.JLabel();
         jLabel55 = new javax.swing.JLabel();
-        jComboBox10 = new javax.swing.JComboBox();
-        txtCodigoProducto11 = new javax.swing.JTextField();
+        cboUnidad4 = new javax.swing.JComboBox();
+        txtPrecioInsumo4 = new javax.swing.JTextField();
         jLabel56 = new javax.swing.JLabel();
-        jComboBox11 = new javax.swing.JComboBox();
+        cboMonedaInsumo4 = new javax.swing.JComboBox();
         jLabel57 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btncAddInsumo4 = new javax.swing.JButton();
         jScrollPane7 = new javax.swing.JScrollPane();
-        tblProductosExterno1 = new javax.swing.JTable();
+        tblProductosPedidos4 = new javax.swing.JTable();
 
         setMinimumSize(new java.awt.Dimension(960, 590));
 
@@ -251,6 +505,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setText("Parte de entrada:");
@@ -259,33 +515,40 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jLabel4.setText("Fecha de parte de entrada:");
 
-        txtFecha1.setText("25/06/2014");
+        lblFechaActual.setText("25/06/2014");
 
         jLabel6.setText("Nombre de almacén:");
 
-        cboAlmacen.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboAlmacen1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel7.setText("Orden de compra (OC):");
 
-        txtCapacidad1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCapacidad1.setForeground(new java.awt.Color(153, 153, 153));
-        txtCapacidad1.setText("   Ingresa código OC");
-        txtCapacidad1.setToolTipText("");
-        txtCapacidad1.setAlignmentX(0.0F);
-        txtCapacidad1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCapacidad1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCapacidad1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCapacidad1.setName("txtusuario"); // NOI18N
-        txtCapacidad1.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCapacidad1.addActionListener(new java.awt.event.ActionListener() {
+        txtCodigoOC.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtCodigoOC.setForeground(new java.awt.Color(153, 153, 153));
+        txtCodigoOC.setText("Ingresa código OC");
+        txtCodigoOC.setToolTipText("");
+        txtCodigoOC.setAlignmentX(0.0F);
+        txtCodigoOC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtCodigoOC.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCodigoOC.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtCodigoOC.setName("txtusuario"); // NOI18N
+        txtCodigoOC.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtCodigoOC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCapacidad1ActionPerformed(evt);
+                txtCodigoOCActionPerformed(evt);
             }
         });
 
         btnCargarOC.setText("Cargar OC");
+        btnCargarOC.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCargarOC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarOCActionPerformed(evt);
+            }
+        });
 
         btnAdjuntarOrdenCompra.setText("Adjuntar Orden de compra");
+        btnAdjuntarOrdenCompra.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
@@ -303,11 +566,11 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         jLabel11.setForeground(new java.awt.Color(51, 51, 51));
         jLabel11.setText("Fecha de OC:");
 
-        txtProveedor.setText("Empresa x EIRL");
+        lblProveedor.setText("Empresa x EIRL");
 
-        txtRuc.setText("10458525418");
+        lblRuc.setText("10458525418");
 
-        txtFechaOC.setText("12/10/2014");
+        lblFechaOC.setText("12/10/2014");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -315,22 +578,22 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addGap(18, 18, 18)
-                        .addComponent(txtFechaOC))
+                        .addComponent(lblFechaOC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel10)
                             .addComponent(jLabel9))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtProveedor)
-                            .addComponent(txtRuc))))
-                .addContainerGap(77, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+                            .addComponent(lblRuc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -340,21 +603,23 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(txtProveedor))
+                    .addComponent(lblProveedor))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(txtRuc))
+                    .addComponent(lblRuc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(txtFechaOC))
+                    .addComponent(lblFechaOC))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel12.setText("Productos de orden de compra");
 
-        tblProductosPedidos.setModel(new javax.swing.table.DefaultTableModel(
+        tblProductosPedidos1.setAutoCreateRowSorter(true);
+        tblProductosPedidos1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        tblProductosPedidos1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -380,19 +645,24 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblProductosPedidos.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblProductosPedidos);
-        tblProductosPedidos.getColumnModel().getColumn(0).setResizable(false);
-        tblProductosPedidos.getColumnModel().getColumn(1).setResizable(false);
-        tblProductosPedidos.getColumnModel().getColumn(2).setResizable(false);
-        tblProductosPedidos.getColumnModel().getColumn(3).setResizable(false);
-        tblProductosPedidos.getColumnModel().getColumn(4).setResizable(false);
-        tblProductosPedidos.getColumnModel().getColumn(5).setResizable(false);
-        tblProductosPedidos.getColumnModel().getColumn(6).setResizable(false);
-        tblProductosPedidos.getColumnModel().getColumn(7).setResizable(false);
-        tblProductosPedidos.getColumnModel().getColumn(8).setResizable(false);
+        tblProductosPedidos1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tblProductosPedidos1.setEditingColumn(0);
+        tblProductosPedidos1.setEditingRow(0);
+        tblProductosPedidos1.setSelectionBackground(new java.awt.Color(238, 189, 122));
+        tblProductosPedidos1.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblProductosPedidos1);
+        tblProductosPedidos1.getColumnModel().getColumn(0).setResizable(false);
+        tblProductosPedidos1.getColumnModel().getColumn(1).setResizable(false);
+        tblProductosPedidos1.getColumnModel().getColumn(2).setResizable(false);
+        tblProductosPedidos1.getColumnModel().getColumn(3).setResizable(false);
+        tblProductosPedidos1.getColumnModel().getColumn(4).setResizable(false);
+        tblProductosPedidos1.getColumnModel().getColumn(5).setResizable(false);
+        tblProductosPedidos1.getColumnModel().getColumn(6).setResizable(false);
+        tblProductosPedidos1.getColumnModel().getColumn(7).setResizable(false);
+        tblProductosPedidos1.getColumnModel().getColumn(8).setResizable(false);
 
         jCheckBox1.setText("Atender orden de compra completa");
+        jCheckBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -401,34 +671,36 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
-                                    .addComponent(cboAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cboAlmacen1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel2)
-                                        .addGap(18, 18, 18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(txtCodigoParte1))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtFecha1)))
+                                        .addComponent(lblFechaActual)))
                                 .addGap(43, 43, 43)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel7)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(txtCapacidad1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtCodigoOC, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(37, 37, 37)
                                         .addComponent(btnCargarOC))
                                     .addComponent(btnAdjuntarOrdenCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(jLabel12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox1)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jCheckBox1)
+                                .addGap(38, 38, 38))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1))
                 .addGap(37, 37, 37))
         );
         jPanel1Layout.setVerticalGroup(
@@ -445,7 +717,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel4)
-                                    .addComponent(txtFecha1)))
+                                    .addComponent(lblFechaActual)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(28, 28, 28)
                                 .addComponent(btnAdjuntarOrdenCompra)))
@@ -455,8 +727,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cboAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCapacidad1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cboAlmacen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCodigoOC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnCargarOC)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
@@ -466,13 +738,15 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(jCheckBox1)
                     .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(188, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ingreso con orden de compra", jPanel1);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel13.setText("Parte de entrada:");
 
@@ -480,57 +754,46 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jLabel14.setText("Fecha de parte de entrada:");
 
-        txtFecha2.setText("25/06/2014");
+        lblFecha2.setText("25/06/2014");
 
         jLabel15.setText("Nombre de almacén:");
 
-        cboAlmacen1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboAlmacen2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboAlmacen2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboAlmacen2ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Tipo de documento:");
 
-        cboDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboTipoDocumento2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboTipoDocumento2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel5.setText("Número de documento:");
 
-        txtCapacidad.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCapacidad.setForeground(new java.awt.Color(153, 153, 153));
-        txtCapacidad.setText("  Núm. de documento");
-        txtCapacidad.setToolTipText("");
-        txtCapacidad.setAlignmentX(0.0F);
-        txtCapacidad.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCapacidad.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCapacidad.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCapacidad.setName("txtusuario"); // NOI18N
-        txtCapacidad.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCapacidad.addActionListener(new java.awt.event.ActionListener() {
+        txtNumeroDoc2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtNumeroDoc2.setForeground(new java.awt.Color(153, 153, 153));
+        txtNumeroDoc2.setToolTipText("");
+        txtNumeroDoc2.setAlignmentX(0.0F);
+        txtNumeroDoc2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtNumeroDoc2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtNumeroDoc2.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtNumeroDoc2.setName("txtusuario"); // NOI18N
+        txtNumeroDoc2.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtNumeroDoc2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCapacidadActionPerformed(evt);
+                txtNumeroDoc2ActionPerformed(evt);
             }
         });
 
         jLabel16.setText("Fecha emisión de documento:");
 
-        txtCapacidad2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCapacidad2.setForeground(new java.awt.Color(153, 153, 153));
-        txtCapacidad2.setText("  dd//mm/yy");
-        txtCapacidad2.setToolTipText("");
-        txtCapacidad2.setAlignmentX(0.0F);
-        txtCapacidad2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCapacidad2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCapacidad2.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCapacidad2.setName("txtusuario"); // NOI18N
-        txtCapacidad2.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCapacidad2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCapacidad2ActionPerformed(evt);
-            }
-        });
-
         jLabel17.setText("Comentario:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        txtComentario2.setColumns(20);
+        txtComentario2.setRows(5);
+        jScrollPane2.setViewportView(txtComentario2);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -546,24 +809,24 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addGap(18, 18, 18)
-                        .addComponent(txtFecha2))
-                    .addComponent(cboAlmacen1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblFecha2))
+                    .addComponent(cboAlmacen2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
                 .addGap(41, 41, 41)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(cboDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboTipoDocumento2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(txtCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNumeroDoc2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addComponent(txtCapacidad2, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel17)
                             .addComponent(jLabel16))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txtFechaEmisionDoc2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(17, 17, 17))
         );
         jPanel4Layout.setVerticalGroup(
@@ -580,13 +843,14 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(jLabel16))))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(txtFecha2)
-                    .addComponent(cboDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCapacidad2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGap(7, 7, 7)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel14)
+                        .addComponent(lblFecha2)
+                        .addComponent(cboTipoDocumento2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFechaEmisionDoc2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel15)
@@ -594,96 +858,100 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cboAlmacen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cboAlmacen2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNumeroDoc2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel18.setText("Código ");
 
-        txtCodigoProducto.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto.setToolTipText("");
-        txtCodigoProducto.setAlignmentX(0.0F);
-        txtCodigoProducto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto.setName("txtusuario"); // NOI18N
-        txtCodigoProducto.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto.addActionListener(new java.awt.event.ActionListener() {
+        txtCodigoInsumo2.setEditable(false);
+        txtCodigoInsumo2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtCodigoInsumo2.setForeground(new java.awt.Color(153, 153, 153));
+        txtCodigoInsumo2.setToolTipText("");
+        txtCodigoInsumo2.setAlignmentX(0.0F);
+        txtCodigoInsumo2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtCodigoInsumo2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCodigoInsumo2.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtCodigoInsumo2.setName("txtusuario"); // NOI18N
+        txtCodigoInsumo2.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtCodigoInsumo2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProductoActionPerformed(evt);
+                txtCodigoInsumo2ActionPerformed(evt);
             }
         });
 
         jLabel19.setText("Nombre de Producto");
 
-        txtCodigoProducto1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto1.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto1.setToolTipText("");
-        txtCodigoProducto1.setAlignmentX(0.0F);
-        txtCodigoProducto1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto1.setName("txtusuario"); // NOI18N
-        txtCodigoProducto1.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto1.addActionListener(new java.awt.event.ActionListener() {
+        txtNombreInsumo2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtNombreInsumo2.setForeground(new java.awt.Color(153, 153, 153));
+        txtNombreInsumo2.setToolTipText("");
+        txtNombreInsumo2.setAlignmentX(0.0F);
+        txtNombreInsumo2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtNombreInsumo2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtNombreInsumo2.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtNombreInsumo2.setName("txtusuario"); // NOI18N
+        txtNombreInsumo2.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtNombreInsumo2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto1ActionPerformed(evt);
+                txtNombreInsumo2ActionPerformed(evt);
             }
         });
 
         jLabel20.setText("Presentación comercial");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel21.setText("Cantidad");
 
-        txtCodigoProducto2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto2.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto2.setToolTipText("");
-        txtCodigoProducto2.setAlignmentX(0.0F);
-        txtCodigoProducto2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto2.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto2.setName("txtusuario"); // NOI18N
-        txtCodigoProducto2.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto2.addActionListener(new java.awt.event.ActionListener() {
+        txtPrecioInsumo2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtPrecioInsumo2.setForeground(new java.awt.Color(153, 153, 153));
+        txtPrecioInsumo2.setToolTipText("");
+        txtPrecioInsumo2.setAlignmentX(0.0F);
+        txtPrecioInsumo2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtPrecioInsumo2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtPrecioInsumo2.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtPrecioInsumo2.setName("txtusuario"); // NOI18N
+        txtPrecioInsumo2.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtPrecioInsumo2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto2ActionPerformed(evt);
+                txtPrecioInsumo2ActionPerformed(evt);
             }
         });
 
         jLabel22.setText("Unidad");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboUnidad2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel23.setText("Precio de compra");
 
-        txtCodigoProducto3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto3.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto3.setToolTipText("");
-        txtCodigoProducto3.setAlignmentX(0.0F);
-        txtCodigoProducto3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto3.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto3.setName("txtusuario"); // NOI18N
-        txtCodigoProducto3.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto3.addActionListener(new java.awt.event.ActionListener() {
+        txtCantidadInsumo2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtCantidadInsumo2.setForeground(new java.awt.Color(153, 153, 153));
+        txtCantidadInsumo2.setToolTipText("");
+        txtCantidadInsumo2.setAlignmentX(0.0F);
+        txtCantidadInsumo2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtCantidadInsumo2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCantidadInsumo2.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtCantidadInsumo2.setName("txtusuario"); // NOI18N
+        txtCantidadInsumo2.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtCantidadInsumo2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto3ActionPerformed(evt);
+                txtCantidadInsumo2ActionPerformed(evt);
             }
         });
 
         jLabel24.setText("Moneda");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox3.setPreferredSize(new java.awt.Dimension(80, 20));
+        cboMonedaInsumo2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboMonedaInsumo2.setPreferredSize(new java.awt.Dimension(80, 20));
 
-        jButton1.setText("+");
+        btnAddInsumo2.setText("+");
+        btnAddInsumo2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddInsumo2ActionPerformed(evt);
+            }
+        });
 
-        tblProductosPorStock.setModel(new javax.swing.table.DefaultTableModel(
+        tblProductosPedidos2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -709,17 +977,17 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblProductosPorStock.getTableHeader().setReorderingAllowed(false);
-        jScrollPane3.setViewportView(tblProductosPorStock);
-        tblProductosPorStock.getColumnModel().getColumn(0).setResizable(false);
-        tblProductosPorStock.getColumnModel().getColumn(1).setResizable(false);
-        tblProductosPorStock.getColumnModel().getColumn(2).setResizable(false);
-        tblProductosPorStock.getColumnModel().getColumn(3).setResizable(false);
-        tblProductosPorStock.getColumnModel().getColumn(4).setResizable(false);
-        tblProductosPorStock.getColumnModel().getColumn(5).setResizable(false);
-        tblProductosPorStock.getColumnModel().getColumn(6).setResizable(false);
-        tblProductosPorStock.getColumnModel().getColumn(7).setResizable(false);
-        tblProductosPorStock.getColumnModel().getColumn(8).setResizable(false);
+        tblProductosPedidos2.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(tblProductosPedidos2);
+        tblProductosPedidos2.getColumnModel().getColumn(0).setResizable(false);
+        tblProductosPedidos2.getColumnModel().getColumn(1).setResizable(false);
+        tblProductosPedidos2.getColumnModel().getColumn(2).setResizable(false);
+        tblProductosPedidos2.getColumnModel().getColumn(3).setResizable(false);
+        tblProductosPedidos2.getColumnModel().getColumn(4).setResizable(false);
+        tblProductosPedidos2.getColumnModel().getColumn(5).setResizable(false);
+        tblProductosPedidos2.getColumnModel().getColumn(6).setResizable(false);
+        tblProductosPedidos2.getColumnModel().getColumn(7).setResizable(false);
+        tblProductosPedidos2.getColumnModel().getColumn(8).setResizable(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -731,23 +999,23 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel18)
+                            .addComponent(txtCodigoInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel19)
-                            .addComponent(txtCodigoProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNombreInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cboPresentacion2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(9, 9, 9)
                                 .addComponent(jLabel20)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel21)
-                            .addComponent(txtCodigoProducto3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCantidadInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -757,17 +1025,17 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel24))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboUnidad2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCodigoProducto2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtPrecioInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton1)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane3))
+                                .addComponent(cboMonedaInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAddInsumo2)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1)
+            .addComponent(jScrollPane3)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -787,14 +1055,14 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(jLabel24))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigoProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigoProducto2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(txtCodigoProducto3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCodigoInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombreInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboPresentacion2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboUnidad2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboMonedaInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddInsumo2)
+                    .addComponent(txtCantidadInsumo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
@@ -804,78 +1072,63 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel25.setText("Parte de entrada:");
 
         txtCodigoParte3.setText("12014-1245");
 
         jLabel26.setText("Fecha de parte de entrada:");
 
-        txtFecha3.setText("25/06/2014");
+        lblFecha3.setText("25/06/2014");
 
         jLabel27.setText("Nombre de almacén:");
 
-        cboAlmacen2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboAlmacen3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel28.setText("Tipo de documento:");
 
-        cboDocumento1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboTipoDocumento3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel29.setText("Número de documento:");
 
-        txtCapacidad3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCapacidad3.setForeground(new java.awt.Color(153, 153, 153));
-        txtCapacidad3.setText("  Núm. de documento");
-        txtCapacidad3.setToolTipText("");
-        txtCapacidad3.setAlignmentX(0.0F);
-        txtCapacidad3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCapacidad3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCapacidad3.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCapacidad3.setName("txtusuario"); // NOI18N
-        txtCapacidad3.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCapacidad3.addActionListener(new java.awt.event.ActionListener() {
+        txtNumeroDoc3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtNumeroDoc3.setForeground(new java.awt.Color(153, 153, 153));
+        txtNumeroDoc3.setToolTipText("");
+        txtNumeroDoc3.setAlignmentX(0.0F);
+        txtNumeroDoc3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtNumeroDoc3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtNumeroDoc3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtNumeroDoc3.setName("txtusuario"); // NOI18N
+        txtNumeroDoc3.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtNumeroDoc3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCapacidad3ActionPerformed(evt);
+                txtNumeroDoc3ActionPerformed(evt);
             }
         });
 
         jLabel30.setText("Fecha emisión de documento:");
 
-        txtCapacidad4.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCapacidad4.setForeground(new java.awt.Color(153, 153, 153));
-        txtCapacidad4.setText("  dd//mm/yy");
-        txtCapacidad4.setToolTipText("");
-        txtCapacidad4.setAlignmentX(0.0F);
-        txtCapacidad4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCapacidad4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCapacidad4.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCapacidad4.setName("txtusuario"); // NOI18N
-        txtCapacidad4.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCapacidad4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCapacidad4ActionPerformed(evt);
-            }
-        });
-
         jLabel31.setText("Comentario:");
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane4.setViewportView(jTextArea2);
+        txtComentario3.setColumns(20);
+        txtComentario3.setRows(5);
+        jScrollPane4.setViewportView(txtComentario3);
 
         jLabel32.setText("Proveedor:");
 
-        txtProveedorExt.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtProveedorExt.setForeground(new java.awt.Color(153, 153, 153));
-        txtProveedorExt.setToolTipText("");
-        txtProveedorExt.setAlignmentX(0.0F);
-        txtProveedorExt.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtProveedorExt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtProveedorExt.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtProveedorExt.setName("txtusuario"); // NOI18N
-        txtProveedorExt.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtProveedorExt.addActionListener(new java.awt.event.ActionListener() {
+        txtProveedor3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtProveedor3.setForeground(new java.awt.Color(153, 153, 153));
+        txtProveedor3.setToolTipText("");
+        txtProveedor3.setAlignmentX(0.0F);
+        txtProveedor3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtProveedor3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtProveedor3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtProveedor3.setName("txtusuario"); // NOI18N
+        txtProveedor3.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtProveedor3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtProveedorExtActionPerformed(evt);
+                txtProveedor3ActionPerformed(evt);
             }
         });
 
@@ -883,9 +1136,9 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jLabel34.setText("Forma de pago:");
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboMoneda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboFormaPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel35.setText("Fecha limite de cancelación:");
 
@@ -905,30 +1158,30 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jLabel26)
                         .addGap(18, 18, 18)
-                        .addComponent(txtFecha3))
-                    .addComponent(cboAlmacen2, 0, 240, Short.MAX_VALUE)
+                        .addComponent(lblFecha3))
+                    .addComponent(cboAlmacen3, 0, 240, Short.MAX_VALUE)
                     .addComponent(jLabel27)
                     .addComponent(jLabel32)
-                    .addComponent(txtProveedorExt, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                    .addComponent(txtProveedor3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(41, 41, 41)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel28)
                     .addComponent(jLabel29)
-                    .addComponent(txtCapacidad3, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                    .addComponent(txtNumeroDoc3, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addComponent(jLabel30)
-                    .addComponent(txtCapacidad4, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                    .addComponent(cboDocumento1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cboTipoDocumento3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(42, 42, 42)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel33)
-                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cboMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(40, 40, 40)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel34)
-                            .addComponent(jComboBox5, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(cboFormaPago, 0, 161, Short.MAX_VALUE)))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel31)
@@ -957,10 +1210,10 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 .addGap(7, 7, 7)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel26)
-                    .addComponent(txtFecha3)
-                    .addComponent(cboDocumento1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblFecha3)
+                    .addComponent(cboTipoDocumento3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboFormaPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27)
@@ -970,16 +1223,16 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cboAlmacen2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCapacidad3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cboAlmacen3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNumeroDoc3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel32)
                             .addComponent(jLabel30))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtProveedorExt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCapacidad4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtProveedor3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -991,88 +1244,92 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jLabel37.setText("Código ");
 
-        txtCodigoProducto4.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto4.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto4.setToolTipText("");
-        txtCodigoProducto4.setAlignmentX(0.0F);
-        txtCodigoProducto4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto4.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto4.setName("txtusuario"); // NOI18N
-        txtCodigoProducto4.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto4.addActionListener(new java.awt.event.ActionListener() {
+        txtCodigoInsumo3.setEditable(false);
+        txtCodigoInsumo3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtCodigoInsumo3.setForeground(new java.awt.Color(153, 153, 153));
+        txtCodigoInsumo3.setToolTipText("");
+        txtCodigoInsumo3.setAlignmentX(0.0F);
+        txtCodigoInsumo3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtCodigoInsumo3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCodigoInsumo3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtCodigoInsumo3.setName("txtusuario"); // NOI18N
+        txtCodigoInsumo3.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtCodigoInsumo3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto4ActionPerformed(evt);
+                txtCodigoInsumo3ActionPerformed(evt);
             }
         });
 
         jLabel38.setText("Nombre de Producto");
 
-        txtCodigoProducto5.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto5.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto5.setToolTipText("");
-        txtCodigoProducto5.setAlignmentX(0.0F);
-        txtCodigoProducto5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto5.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto5.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto5.setName("txtusuario"); // NOI18N
-        txtCodigoProducto5.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto5.addActionListener(new java.awt.event.ActionListener() {
+        txtNombreInsumo3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtNombreInsumo3.setForeground(new java.awt.Color(153, 153, 153));
+        txtNombreInsumo3.setToolTipText("");
+        txtNombreInsumo3.setAlignmentX(0.0F);
+        txtNombreInsumo3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtNombreInsumo3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtNombreInsumo3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtNombreInsumo3.setName("txtusuario"); // NOI18N
+        txtNombreInsumo3.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtNombreInsumo3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto5ActionPerformed(evt);
+                txtNombreInsumo3ActionPerformed(evt);
             }
         });
 
         jLabel39.setText("Presentación comercial");
 
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel40.setText("Cantidad");
 
-        txtCodigoProducto6.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto6.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto6.setToolTipText("");
-        txtCodigoProducto6.setAlignmentX(0.0F);
-        txtCodigoProducto6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto6.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto6.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto6.setName("txtusuario"); // NOI18N
-        txtCodigoProducto6.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto6.addActionListener(new java.awt.event.ActionListener() {
+        txtCantidadInsumo3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtCantidadInsumo3.setForeground(new java.awt.Color(153, 153, 153));
+        txtCantidadInsumo3.setToolTipText("");
+        txtCantidadInsumo3.setAlignmentX(0.0F);
+        txtCantidadInsumo3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtCantidadInsumo3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCantidadInsumo3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtCantidadInsumo3.setName("txtusuario"); // NOI18N
+        txtCantidadInsumo3.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtCantidadInsumo3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto6ActionPerformed(evt);
+                txtCantidadInsumo3ActionPerformed(evt);
             }
         });
 
-        jComboBox7.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboUnidad3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel41.setText("Unidad");
 
         jLabel42.setText("Precio de compra");
 
-        txtCodigoProducto7.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto7.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto7.setToolTipText("");
-        txtCodigoProducto7.setAlignmentX(0.0F);
-        txtCodigoProducto7.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto7.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto7.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto7.setName("txtusuario"); // NOI18N
-        txtCodigoProducto7.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto7.addActionListener(new java.awt.event.ActionListener() {
+        txtPrecioInsumo3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtPrecioInsumo3.setForeground(new java.awt.Color(153, 153, 153));
+        txtPrecioInsumo3.setToolTipText("");
+        txtPrecioInsumo3.setAlignmentX(0.0F);
+        txtPrecioInsumo3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtPrecioInsumo3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtPrecioInsumo3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtPrecioInsumo3.setName("txtusuario"); // NOI18N
+        txtPrecioInsumo3.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtPrecioInsumo3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto7ActionPerformed(evt);
+                txtPrecioInsumo3ActionPerformed(evt);
             }
         });
 
-        jComboBox8.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox8.setPreferredSize(new java.awt.Dimension(80, 20));
+        cboMonedaInsumo3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboMonedaInsumo3.setPreferredSize(new java.awt.Dimension(80, 20));
 
         jLabel43.setText("Moneda");
 
-        jButton2.setText("+");
+        btnAddInsumo3.setText("+");
+        btnAddInsumo3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddInsumo3ActionPerformed(evt);
+            }
+        });
 
-        tblProductosExterno.setModel(new javax.swing.table.DefaultTableModel(
+        tblProductosPedidos3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -1098,17 +1355,17 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblProductosExterno.getTableHeader().setReorderingAllowed(false);
-        jScrollPane5.setViewportView(tblProductosExterno);
-        tblProductosExterno.getColumnModel().getColumn(0).setResizable(false);
-        tblProductosExterno.getColumnModel().getColumn(1).setResizable(false);
-        tblProductosExterno.getColumnModel().getColumn(2).setResizable(false);
-        tblProductosExterno.getColumnModel().getColumn(3).setResizable(false);
-        tblProductosExterno.getColumnModel().getColumn(4).setResizable(false);
-        tblProductosExterno.getColumnModel().getColumn(5).setResizable(false);
-        tblProductosExterno.getColumnModel().getColumn(6).setResizable(false);
-        tblProductosExterno.getColumnModel().getColumn(7).setResizable(false);
-        tblProductosExterno.getColumnModel().getColumn(8).setResizable(false);
+        tblProductosPedidos3.getTableHeader().setReorderingAllowed(false);
+        jScrollPane5.setViewportView(tblProductosPedidos3);
+        tblProductosPedidos3.getColumnModel().getColumn(0).setResizable(false);
+        tblProductosPedidos3.getColumnModel().getColumn(1).setResizable(false);
+        tblProductosPedidos3.getColumnModel().getColumn(2).setResizable(false);
+        tblProductosPedidos3.getColumnModel().getColumn(3).setResizable(false);
+        tblProductosPedidos3.getColumnModel().getColumn(4).setResizable(false);
+        tblProductosPedidos3.getColumnModel().getColumn(5).setResizable(false);
+        tblProductosPedidos3.getColumnModel().getColumn(6).setResizable(false);
+        tblProductosPedidos3.getColumnModel().getColumn(7).setResizable(false);
+        tblProductosPedidos3.getColumnModel().getColumn(8).setResizable(false);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1121,23 +1378,23 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCodigoProducto4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCodigoInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel37))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel38)
-                            .addComponent(txtCodigoProducto5, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNombreInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cboPresentacion3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(9, 9, 9)
                                 .addComponent(jLabel39)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel40)
-                            .addComponent(txtCodigoProducto6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCantidadInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
@@ -1147,14 +1404,14 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel43))
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboUnidad3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCodigoProducto7, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtPrecioInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton2)))
-                        .addGap(0, 53, Short.MAX_VALUE))
+                                .addComponent(cboMonedaInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAddInsumo3)))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane5))
                 .addContainerGap())
         );
@@ -1176,14 +1433,14 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(jLabel43))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCodigoProducto4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigoProducto5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigoProducto7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
-                    .addComponent(txtCodigoProducto6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCodigoInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombreInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboPresentacion3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboUnidad3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboMonedaInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddInsumo3)
+                    .addComponent(txtCantidadInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(13, Short.MAX_VALUE))
@@ -1193,76 +1450,64 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel44.setText("Parte de entrada:");
 
         txtCodigoParte4.setText("12014-1245");
 
         jLabel45.setText("Fecha de parte de entrada:");
 
-        txtFecha4.setText("25/06/2014");
+        lblFecha4.setText("25/06/2014");
 
         jLabel46.setText("Nombre de almacén:");
 
         jLabel47.setText("Tipo de documento:");
 
-        cboDocumento2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboTipoDocumento4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel48.setText("Número de documento:");
 
-        txtCapacidad5.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCapacidad5.setForeground(new java.awt.Color(153, 153, 153));
-        txtCapacidad5.setText("  Núm. de documento");
-        txtCapacidad5.setToolTipText("");
-        txtCapacidad5.setAlignmentX(0.0F);
-        txtCapacidad5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCapacidad5.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCapacidad5.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCapacidad5.setName("txtusuario"); // NOI18N
-        txtCapacidad5.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCapacidad5.addActionListener(new java.awt.event.ActionListener() {
+        txtNumeroDoc4.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtNumeroDoc4.setForeground(new java.awt.Color(153, 153, 153));
+        txtNumeroDoc4.setToolTipText("");
+        txtNumeroDoc4.setAlignmentX(0.0F);
+        txtNumeroDoc4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtNumeroDoc4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtNumeroDoc4.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtNumeroDoc4.setName("txtusuario"); // NOI18N
+        txtNumeroDoc4.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtNumeroDoc4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCapacidad5ActionPerformed(evt);
+                txtNumeroDoc4ActionPerformed(evt);
             }
         });
 
         jLabel49.setText("Fecha emisión de documento:");
 
-        txtCapacidad6.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCapacidad6.setForeground(new java.awt.Color(153, 153, 153));
-        txtCapacidad6.setText("  dd//mm/yy");
-        txtCapacidad6.setToolTipText("");
-        txtCapacidad6.setAlignmentX(0.0F);
-        txtCapacidad6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCapacidad6.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCapacidad6.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCapacidad6.setName("txtusuario"); // NOI18N
-        txtCapacidad6.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCapacidad6.addActionListener(new java.awt.event.ActionListener() {
+        txtFechaEmisionDocInterno.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtFechaEmisionDocInterno.setForeground(new java.awt.Color(153, 153, 153));
+        txtFechaEmisionDocInterno.setText("  dd//mm/yy");
+        txtFechaEmisionDocInterno.setToolTipText("");
+        txtFechaEmisionDocInterno.setAlignmentX(0.0F);
+        txtFechaEmisionDocInterno.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtFechaEmisionDocInterno.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtFechaEmisionDocInterno.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtFechaEmisionDocInterno.setName("txtusuario"); // NOI18N
+        txtFechaEmisionDocInterno.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtFechaEmisionDocInterno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCapacidad6ActionPerformed(evt);
+                txtFechaEmisionDocInternoActionPerformed(evt);
             }
         });
 
         jLabel50.setText("Comentario:");
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane6.setViewportView(jTextArea3);
+        txtComentario4.setColumns(20);
+        txtComentario4.setRows(5);
+        jScrollPane6.setViewportView(txtComentario4);
 
-        txtProveedorExt1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtProveedorExt1.setForeground(new java.awt.Color(153, 153, 153));
-        txtProveedorExt1.setToolTipText("");
-        txtProveedorExt1.setAlignmentX(0.0F);
-        txtProveedorExt1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtProveedorExt1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtProveedorExt1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtProveedorExt1.setName("txtusuario"); // NOI18N
-        txtProveedorExt1.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtProveedorExt1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtProveedorExt1ActionPerformed(evt);
-            }
-        });
+        cboAlmacen4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1278,15 +1523,15 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jLabel45)
                         .addGap(18, 18, 18)
-                        .addComponent(txtFecha4))
+                        .addComponent(lblFecha4))
                     .addComponent(jLabel46)
-                    .addComponent(txtProveedorExt1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                    .addComponent(cboAlmacen4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel47)
                     .addComponent(jLabel48)
-                    .addComponent(txtCapacidad5, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                    .addComponent(cboDocumento2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtNumeroDoc4, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                    .addComponent(cboTipoDocumento4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(42, 42, 42)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
@@ -1296,7 +1541,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jLabel49)
                         .addGap(18, 18, 18)
-                        .addComponent(txtCapacidad6, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
+                        .addComponent(txtFechaEmisionDocInterno, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -1318,54 +1563,55 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel45)
-                            .addComponent(txtFecha4)
-                            .addComponent(cboDocumento2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblFecha4)
+                            .addComponent(cboTipoDocumento4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel46)
                             .addComponent(jLabel48))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCapacidad5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtProveedorExt1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtNumeroDoc4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cboAlmacen4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCapacidad6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFechaEmisionDocInterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel49))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel51.setText("Código ");
 
-        txtCodigoProducto8.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto8.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto8.setToolTipText("");
-        txtCodigoProducto8.setAlignmentX(0.0F);
-        txtCodigoProducto8.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto8.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto8.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto8.setName("txtusuario"); // NOI18N
-        txtCodigoProducto8.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto8.addActionListener(new java.awt.event.ActionListener() {
+        txtCodigoInsumo4.setEditable(false);
+        txtCodigoInsumo4.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtCodigoInsumo4.setForeground(new java.awt.Color(153, 153, 153));
+        txtCodigoInsumo4.setToolTipText("");
+        txtCodigoInsumo4.setAlignmentX(0.0F);
+        txtCodigoInsumo4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtCodigoInsumo4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCodigoInsumo4.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtCodigoInsumo4.setName("txtusuario"); // NOI18N
+        txtCodigoInsumo4.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtCodigoInsumo4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto8ActionPerformed(evt);
+                txtCodigoInsumo4ActionPerformed(evt);
             }
         });
 
-        txtCodigoProducto9.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto9.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto9.setToolTipText("");
-        txtCodigoProducto9.setAlignmentX(0.0F);
-        txtCodigoProducto9.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto9.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto9.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto9.setName("txtusuario"); // NOI18N
-        txtCodigoProducto9.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto9.addActionListener(new java.awt.event.ActionListener() {
+        txtNombreInsumo4.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtNombreInsumo4.setForeground(new java.awt.Color(153, 153, 153));
+        txtNombreInsumo4.setToolTipText("");
+        txtNombreInsumo4.setAlignmentX(0.0F);
+        txtNombreInsumo4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtNombreInsumo4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtNombreInsumo4.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtNombreInsumo4.setName("txtusuario"); // NOI18N
+        txtNombreInsumo4.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtNombreInsumo4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto9ActionPerformed(evt);
+                txtNombreInsumo4ActionPerformed(evt);
             }
         });
 
@@ -1373,20 +1619,18 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jLabel53.setText("Presentación comercial");
 
-        jComboBox9.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        txtCodigoProducto10.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto10.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto10.setToolTipText("");
-        txtCodigoProducto10.setAlignmentX(0.0F);
-        txtCodigoProducto10.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto10.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto10.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto10.setName("txtusuario"); // NOI18N
-        txtCodigoProducto10.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto10.addActionListener(new java.awt.event.ActionListener() {
+        txtCantidadInsumo4.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtCantidadInsumo4.setForeground(new java.awt.Color(153, 153, 153));
+        txtCantidadInsumo4.setToolTipText("");
+        txtCantidadInsumo4.setAlignmentX(0.0F);
+        txtCantidadInsumo4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtCantidadInsumo4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCantidadInsumo4.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtCantidadInsumo4.setName("txtusuario"); // NOI18N
+        txtCantidadInsumo4.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtCantidadInsumo4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto10ActionPerformed(evt);
+                txtCantidadInsumo4ActionPerformed(evt);
             }
         });
 
@@ -1394,33 +1638,38 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jLabel55.setText("Unidad");
 
-        jComboBox10.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboUnidad4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        txtCodigoProducto11.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtCodigoProducto11.setForeground(new java.awt.Color(153, 153, 153));
-        txtCodigoProducto11.setToolTipText("");
-        txtCodigoProducto11.setAlignmentX(0.0F);
-        txtCodigoProducto11.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtCodigoProducto11.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtCodigoProducto11.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtCodigoProducto11.setName("txtusuario"); // NOI18N
-        txtCodigoProducto11.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtCodigoProducto11.addActionListener(new java.awt.event.ActionListener() {
+        txtPrecioInsumo4.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
+        txtPrecioInsumo4.setForeground(new java.awt.Color(153, 153, 153));
+        txtPrecioInsumo4.setToolTipText("");
+        txtPrecioInsumo4.setAlignmentX(0.0F);
+        txtPrecioInsumo4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
+        txtPrecioInsumo4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtPrecioInsumo4.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        txtPrecioInsumo4.setName("txtusuario"); // NOI18N
+        txtPrecioInsumo4.setPreferredSize(new java.awt.Dimension(280, 24));
+        txtPrecioInsumo4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoProducto11ActionPerformed(evt);
+                txtPrecioInsumo4ActionPerformed(evt);
             }
         });
 
         jLabel56.setText("Precio de compra");
 
-        jComboBox11.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox11.setPreferredSize(new java.awt.Dimension(80, 20));
+        cboMonedaInsumo4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboMonedaInsumo4.setPreferredSize(new java.awt.Dimension(80, 20));
 
         jLabel57.setText("Moneda");
 
-        jButton3.setText("+");
+        btncAddInsumo4.setText("+");
+        btncAddInsumo4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncAddInsumo4ActionPerformed(evt);
+            }
+        });
 
-        tblProductosExterno1.setModel(new javax.swing.table.DefaultTableModel(
+        tblProductosPedidos4.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -1446,17 +1695,17 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblProductosExterno1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane7.setViewportView(tblProductosExterno1);
-        tblProductosExterno1.getColumnModel().getColumn(0).setResizable(false);
-        tblProductosExterno1.getColumnModel().getColumn(1).setResizable(false);
-        tblProductosExterno1.getColumnModel().getColumn(2).setResizable(false);
-        tblProductosExterno1.getColumnModel().getColumn(3).setResizable(false);
-        tblProductosExterno1.getColumnModel().getColumn(4).setResizable(false);
-        tblProductosExterno1.getColumnModel().getColumn(5).setResizable(false);
-        tblProductosExterno1.getColumnModel().getColumn(6).setResizable(false);
-        tblProductosExterno1.getColumnModel().getColumn(7).setResizable(false);
-        tblProductosExterno1.getColumnModel().getColumn(8).setResizable(false);
+        tblProductosPedidos4.getTableHeader().setReorderingAllowed(false);
+        jScrollPane7.setViewportView(tblProductosPedidos4);
+        tblProductosPedidos4.getColumnModel().getColumn(0).setResizable(false);
+        tblProductosPedidos4.getColumnModel().getColumn(1).setResizable(false);
+        tblProductosPedidos4.getColumnModel().getColumn(2).setResizable(false);
+        tblProductosPedidos4.getColumnModel().getColumn(3).setResizable(false);
+        tblProductosPedidos4.getColumnModel().getColumn(4).setResizable(false);
+        tblProductosPedidos4.getColumnModel().getColumn(5).setResizable(false);
+        tblProductosPedidos4.getColumnModel().getColumn(6).setResizable(false);
+        tblProductosPedidos4.getColumnModel().getColumn(7).setResizable(false);
+        tblProductosPedidos4.getColumnModel().getColumn(8).setResizable(false);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -1469,23 +1718,23 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCodigoProducto8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCodigoInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel51))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel52)
-                            .addComponent(txtCodigoProducto9, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNombreInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jComboBox9, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cboPresentacion4, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGap(9, 9, 9)
                                 .addComponent(jLabel53)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel54)
-                            .addComponent(txtCodigoProducto10, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCantidadInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
@@ -1495,13 +1744,13 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel57))
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jComboBox10, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboUnidad4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCodigoProducto11, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtPrecioInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBox11, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3)))
+                                .addComponent(cboMonedaInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btncAddInsumo4)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane7))
                 .addContainerGap())
@@ -1524,14 +1773,14 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(jLabel57))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCodigoProducto8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigoProducto9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigoProducto11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3)
-                    .addComponent(txtCodigoProducto10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCodigoInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombreInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboPresentacion4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboUnidad4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboMonedaInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btncAddInsumo4)
+                    .addComponent(txtCantidadInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(46, Short.MAX_VALUE))
@@ -1561,117 +1810,188 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtCapacidad1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCapacidad1ActionPerformed
+    private void txtCodigoOCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoOCActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCapacidad1ActionPerformed
+    }//GEN-LAST:event_txtCodigoOCActionPerformed
 
-    private void txtCapacidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCapacidadActionPerformed
+    private void txtNumeroDoc2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroDoc2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCapacidadActionPerformed
+    }//GEN-LAST:event_txtNumeroDoc2ActionPerformed
 
-    private void txtCapacidad2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCapacidad2ActionPerformed
+    private void txtCodigoInsumo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoInsumo2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCapacidad2ActionPerformed
+    }//GEN-LAST:event_txtCodigoInsumo2ActionPerformed
 
-    private void txtCodigoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProductoActionPerformed
+    private void txtNombreInsumo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreInsumo2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProductoActionPerformed
+    }//GEN-LAST:event_txtNombreInsumo2ActionPerformed
 
-    private void txtCodigoProducto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto1ActionPerformed
+    private void txtPrecioInsumo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioInsumo2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto1ActionPerformed
+    }//GEN-LAST:event_txtPrecioInsumo2ActionPerformed
 
-    private void txtCodigoProducto2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto2ActionPerformed
+    private void txtCantidadInsumo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadInsumo2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto2ActionPerformed
+    }//GEN-LAST:event_txtCantidadInsumo2ActionPerformed
 
-    private void txtCodigoProducto3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto3ActionPerformed
+    private void txtNumeroDoc3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroDoc3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto3ActionPerformed
+    }//GEN-LAST:event_txtNumeroDoc3ActionPerformed
 
-    private void txtCapacidad3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCapacidad3ActionPerformed
+    private void txtProveedor3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProveedor3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCapacidad3ActionPerformed
+    }//GEN-LAST:event_txtProveedor3ActionPerformed
 
-    private void txtCapacidad4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCapacidad4ActionPerformed
+    private void txtCodigoInsumo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoInsumo3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCapacidad4ActionPerformed
+    }//GEN-LAST:event_txtCodigoInsumo3ActionPerformed
 
-    private void txtProveedorExtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProveedorExtActionPerformed
+    private void txtNombreInsumo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreInsumo3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtProveedorExtActionPerformed
+    }//GEN-LAST:event_txtNombreInsumo3ActionPerformed
 
-    private void txtCodigoProducto4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto4ActionPerformed
+    private void txtCantidadInsumo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadInsumo3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto4ActionPerformed
+    }//GEN-LAST:event_txtCantidadInsumo3ActionPerformed
 
-    private void txtCodigoProducto5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto5ActionPerformed
+    private void txtPrecioInsumo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioInsumo3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto5ActionPerformed
+    }//GEN-LAST:event_txtPrecioInsumo3ActionPerformed
 
-    private void txtCodigoProducto6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto6ActionPerformed
+    private void txtNumeroDoc4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroDoc4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto6ActionPerformed
+    }//GEN-LAST:event_txtNumeroDoc4ActionPerformed
 
-    private void txtCodigoProducto7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto7ActionPerformed
+    private void txtFechaEmisionDocInternoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaEmisionDocInternoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto7ActionPerformed
+    }//GEN-LAST:event_txtFechaEmisionDocInternoActionPerformed
 
-    private void txtCapacidad5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCapacidad5ActionPerformed
+    private void txtCodigoInsumo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoInsumo4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCapacidad5ActionPerformed
+    }//GEN-LAST:event_txtCodigoInsumo4ActionPerformed
 
-    private void txtCapacidad6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCapacidad6ActionPerformed
+    private void txtNombreInsumo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreInsumo4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCapacidad6ActionPerformed
+    }//GEN-LAST:event_txtNombreInsumo4ActionPerformed
 
-    private void txtProveedorExt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProveedorExt1ActionPerformed
+    private void txtCantidadInsumo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadInsumo4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtProveedorExt1ActionPerformed
+    }//GEN-LAST:event_txtCantidadInsumo4ActionPerformed
 
-    private void txtCodigoProducto8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto8ActionPerformed
+    private void txtPrecioInsumo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioInsumo4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto8ActionPerformed
+    }//GEN-LAST:event_txtPrecioInsumo4ActionPerformed
 
-    private void txtCodigoProducto9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto9ActionPerformed
+    private void btnCargarOCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarOCActionPerformed
+        try {
+            // TODO add your handling code here:
+            GestionOrdenCompra gestionOC = new GestionOrdenCompra();
+            OrdenCompra orden = new OrdenCompra();
+            orden.setNumero(this.txtCodigoOC.getText());
+            orden.setEstado("I");
+            OrdenCompra obj = gestionOC.buscarOC(orden);
+            if (obj != null) {
+                GestionOrdenCompraInsumo gestionOCInsumo = new GestionOrdenCompraInsumo();
+                ArrayList<OrdenCompraInsumo> listaDetalle = gestionOCInsumo.listar(obj);
+                lblProveedor.setText(obj.getProveedor().getNombres() + " " + obj.getProveedor().getApellidos());
+                lblRuc.setText(obj.getProveedor().getRuc());
+                lblFechaOC.setText(obj.getFechaRegistro());
+                this.modelProductosPedidos1.setData(listaDetalle);
+                this.modelProductosPedidos1.fireTableDataChanged();
+                System.out.println("encontrado: " + obj.getId());
+            }
 
-    private void txtCodigoProducto10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto10ActionPerformed
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PanelIngresoAlmacen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(PanelIngresoAlmacen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCargarOCActionPerformed
 
-    private void txtCodigoProducto11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProducto11ActionPerformed
+    private void cboAlmacen2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAlmacen2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoProducto11ActionPerformed
+    }//GEN-LAST:event_cboAlmacen2ActionPerformed
+
+    private void btnAddInsumo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInsumo2ActionPerformed
+        // TODO add your handling code here:
+        IngresoAlmacenInsumo obj=new IngresoAlmacenInsumo();
+        obj.setInsumo(insumoselected2);
+        double cantidad=Double.parseDouble(this.txtCantidadInsumo2.getText());
+        obj.setCantidad(cantidad);
+        double precio=Double.parseDouble(this.txtPrecioInsumo2.getText());
+        obj.setPrecio(precio);
+        obj.setSubtotal((cantidad*precio));
+        obj.setTipoOperacion("i");
+        obj.setMoneda(this.modelCboMonedaInsumo2.getElement(this.cboMonedaInsumo2.getSelectedIndex()));
+        obj.setUnidad(this.modelCboUnidad2.getElement(this.cboUnidad2.getSelectedIndex()));
+        this.listaDetalle2.add(obj);
+        this.modelDetalle2.setData(listaDetalle2);
+        this.modelDetalle2.fireTableDataChanged();
+    }//GEN-LAST:event_btnAddInsumo2ActionPerformed
+
+    private void btnAddInsumo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInsumo3ActionPerformed
+        // TODO add your handling code here:
+        IngresoAlmacenInsumo obj=new IngresoAlmacenInsumo();
+        obj.setInsumo(insumoselected3);
+        double cantidad=Double.parseDouble(this.txtCantidadInsumo3.getText());
+        obj.setCantidad(cantidad);
+        double precio=Double.parseDouble(this.txtPrecioInsumo3.getText());
+        obj.setPrecio(precio);
+        obj.setSubtotal((cantidad*precio));
+        obj.setTipoOperacion("i");
+        obj.setMoneda(this.modelCboMonedaInsumo3.getElement(this.cboMonedaInsumo3.getSelectedIndex()));
+        obj.setUnidad(this.modelCboUnidad3.getElement(this.cboUnidad3.getSelectedIndex()));
+        this.listaDetalle3.add(obj);
+        this.modelDetalle3.setData(listaDetalle3);
+        this.modelDetalle3.fireTableDataChanged();
+    }//GEN-LAST:event_btnAddInsumo3ActionPerformed
+
+    private void btncAddInsumo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncAddInsumo4ActionPerformed
+        // TODO add your handling code here:
+        IngresoAlmacenInsumo obj=new IngresoAlmacenInsumo();
+        obj.setInsumo(insumoselected4);
+        double cantidad=Double.parseDouble(this.txtCantidadInsumo4.getText());
+        obj.setCantidad(cantidad);
+        double precio=Double.parseDouble(this.txtPrecioInsumo4.getText());
+        obj.setPrecio(precio);
+        obj.setSubtotal((cantidad*precio));
+        obj.setTipoOperacion("i");
+        obj.setMoneda(this.modelCboMonedaInsumo4.getElement(this.cboMonedaInsumo4.getSelectedIndex()));
+        obj.setUnidad(this.modelCboUnidad4.getElement(this.cboUnidad4.getSelectedIndex()));
+        this.listaDetalle4.add(obj);
+        this.modelDetalle4.setData(listaDetalle4);
+        this.modelDetalle4.fireTableDataChanged();
+    }//GEN-LAST:event_btncAddInsumo4ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddInsumo2;
+    private javax.swing.JButton btnAddInsumo3;
     private javax.swing.JButton btnAdjuntarOrdenCompra;
     private javax.swing.JButton btnCargarOC;
     private javax.swing.JButton btnNuevoAlmacen;
     private javax.swing.JButton btnNuevoAlmacen1;
     private javax.swing.JButton btnNuevoAlmacen2;
-    private javax.swing.JComboBox cboAlmacen;
+    private javax.swing.JButton btncAddInsumo4;
     private javax.swing.JComboBox cboAlmacen1;
     private javax.swing.JComboBox cboAlmacen2;
-    private javax.swing.JComboBox cboDocumento;
-    private javax.swing.JComboBox cboDocumento1;
-    private javax.swing.JComboBox cboDocumento2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox cboAlmacen3;
+    private javax.swing.JComboBox cboAlmacen4;
+    private javax.swing.JComboBox cboFormaPago;
+    private javax.swing.JComboBox cboMoneda;
+    private javax.swing.JComboBox cboMonedaInsumo2;
+    private javax.swing.JComboBox cboMonedaInsumo3;
+    private javax.swing.JComboBox cboMonedaInsumo4;
+    private javax.swing.JComboBox cboPresentacion2;
+    private javax.swing.JComboBox cboPresentacion3;
+    private javax.swing.JComboBox cboPresentacion4;
+    private javax.swing.JComboBox cboTipoDocumento2;
+    private javax.swing.JComboBox cboTipoDocumento3;
+    private javax.swing.JComboBox cboTipoDocumento4;
+    private javax.swing.JComboBox cboUnidad2;
+    private javax.swing.JComboBox cboUnidad3;
+    private javax.swing.JComboBox cboUnidad4;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox10;
-    private javax.swing.JComboBox jComboBox11;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBox4;
-    private javax.swing.JComboBox jComboBox5;
-    private javax.swing.JComboBox jComboBox6;
-    private javax.swing.JComboBox jComboBox7;
-    private javax.swing.JComboBox jComboBox8;
-    private javax.swing.JComboBox jComboBox9;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1748,46 +2068,44 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
+    private javax.swing.JLabel lblFecha2;
+    private javax.swing.JLabel lblFecha3;
+    private javax.swing.JLabel lblFecha4;
+    private javax.swing.JLabel lblFechaActual;
+    private javax.swing.JLabel lblFechaOC;
+    private javax.swing.JLabel lblProveedor;
+    private javax.swing.JLabel lblRuc;
     private javax.swing.JLabel logoalmacen;
     private javax.swing.JPanel paneltitlealmacen;
-    private javax.swing.JTable tblProductosExterno;
-    private javax.swing.JTable tblProductosExterno1;
-    private javax.swing.JTable tblProductosPedidos;
-    private javax.swing.JTable tblProductosPorStock;
-    private javax.swing.JTextField txtCapacidad;
-    private javax.swing.JTextField txtCapacidad1;
-    private javax.swing.JTextField txtCapacidad2;
-    private javax.swing.JTextField txtCapacidad3;
-    private javax.swing.JTextField txtCapacidad4;
-    private javax.swing.JTextField txtCapacidad5;
-    private javax.swing.JTextField txtCapacidad6;
+    private javax.swing.JTable tblProductosPedidos1;
+    private javax.swing.JTable tblProductosPedidos2;
+    private javax.swing.JTable tblProductosPedidos3;
+    private javax.swing.JTable tblProductosPedidos4;
+    private javax.swing.JTextField txtCantidadInsumo2;
+    private javax.swing.JTextField txtCantidadInsumo3;
+    private javax.swing.JTextField txtCantidadInsumo4;
+    private javax.swing.JTextField txtCodigoInsumo2;
+    private javax.swing.JTextField txtCodigoInsumo3;
+    private javax.swing.JTextField txtCodigoInsumo4;
+    private javax.swing.JTextField txtCodigoOC;
     private javax.swing.JLabel txtCodigoParte1;
     private javax.swing.JLabel txtCodigoParte2;
     private javax.swing.JLabel txtCodigoParte3;
     private javax.swing.JLabel txtCodigoParte4;
-    private javax.swing.JTextField txtCodigoProducto;
-    private javax.swing.JTextField txtCodigoProducto1;
-    private javax.swing.JTextField txtCodigoProducto10;
-    private javax.swing.JTextField txtCodigoProducto11;
-    private javax.swing.JTextField txtCodigoProducto2;
-    private javax.swing.JTextField txtCodigoProducto3;
-    private javax.swing.JTextField txtCodigoProducto4;
-    private javax.swing.JTextField txtCodigoProducto5;
-    private javax.swing.JTextField txtCodigoProducto6;
-    private javax.swing.JTextField txtCodigoProducto7;
-    private javax.swing.JTextField txtCodigoProducto8;
-    private javax.swing.JTextField txtCodigoProducto9;
-    private javax.swing.JLabel txtFecha1;
-    private javax.swing.JLabel txtFecha2;
-    private javax.swing.JLabel txtFecha3;
-    private javax.swing.JLabel txtFecha4;
-    private javax.swing.JLabel txtFechaOC;
-    private javax.swing.JLabel txtProveedor;
-    private javax.swing.JTextField txtProveedorExt;
-    private javax.swing.JTextField txtProveedorExt1;
-    private javax.swing.JLabel txtRuc;
+    private javax.swing.JTextArea txtComentario2;
+    private javax.swing.JTextArea txtComentario3;
+    private javax.swing.JTextArea txtComentario4;
+    private com.toedter.calendar.JDateChooser txtFechaEmisionDoc2;
+    private javax.swing.JTextField txtFechaEmisionDocInterno;
+    private javax.swing.JTextField txtNombreInsumo2;
+    private javax.swing.JTextField txtNombreInsumo3;
+    private javax.swing.JTextField txtNombreInsumo4;
+    private javax.swing.JTextField txtNumeroDoc2;
+    private javax.swing.JTextField txtNumeroDoc3;
+    private javax.swing.JTextField txtNumeroDoc4;
+    private javax.swing.JTextField txtPrecioInsumo2;
+    private javax.swing.JTextField txtPrecioInsumo3;
+    private javax.swing.JTextField txtPrecioInsumo4;
+    private javax.swing.JTextField txtProveedor3;
     // End of variables declaration//GEN-END:variables
 }

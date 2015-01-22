@@ -62,7 +62,7 @@ public class ModelTableOrdenCompra extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return data.get(rowIndex).getId();
+                return data.get(rowIndex).getNumero();
             case 1:
                 return data.get(rowIndex).getProveedor().getNombres()+" "+data.get(rowIndex).getProveedor().getApellidos();
             case 2:

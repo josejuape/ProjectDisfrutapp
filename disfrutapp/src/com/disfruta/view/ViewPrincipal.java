@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import resources.MenuBar.*;
 import resources.auxiliar.ListaUbigeo;
 
@@ -43,10 +44,10 @@ public final class ViewPrincipal extends javax.swing.JFrame {
      */
     public ViewPrincipal(UsuarioDesktop usuario, ArrayList<MenuPerfil> listaMenus) throws ClassNotFoundException, Exception {
         this.setUndecorated(true);
-//        if(usuario!=null){
+        if(usuario!=null){
         initComponents();
-        usuario = new UsuarioDesktop();
-        usuario.setIdUser(1);
+//        usuario = new UsuarioDesktop();
+//        usuario.setIdUser(1);
         this.menuList = new GestionLogin().listarMenuLogin(usuario);
         this.btnMenuStaff.setEnabled(false);
         this.btnMenuLogistica.setEnabled(false);
@@ -84,9 +85,9 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         pos.anchor = GridBagConstraints.NORTHEAST;
         pos.insets = new Insets(0, 0, 0, 10);
         PanelTitulo.add(btnclose, pos);
-//        }else{
-//            JOptionPane.showMessageDialog(this, "Debe iniciar sesión!");
-//        }
+        }else{
+            JOptionPane.showMessageDialog(this, "Debe iniciar sesión!");
+        }
     }
 
     private void init() {

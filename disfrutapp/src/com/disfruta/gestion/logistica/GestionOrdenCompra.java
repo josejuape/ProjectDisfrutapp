@@ -218,4 +218,37 @@ public class GestionOrdenCompra {
             }
         }
     }
+    
+    public OrdenCompra buscarOC(OrdenCompra orden) throws ClassNotFoundException, Exception {        
+        try {
+            LogicOrdenCompra logicOrdenCompra = new LogicOrdenCompra(objCnx);
+            OrdenCompra obj=logicOrdenCompra.buscarOC(orden);
+            
+            return obj;
+             
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestionProveedor.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GestionProveedor.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GestionProveedor.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionProveedor.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (Exception ex) {
+            Logger.getLogger(GestionProveedor.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
+            try {
+                objCnx.getMysql().desconectarBD();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionProveedor.class.getName()).log(Level.SEVERE, null, ex);
+               
+            }
+        }
+    }
 }

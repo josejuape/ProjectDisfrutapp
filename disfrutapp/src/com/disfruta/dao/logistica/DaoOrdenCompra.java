@@ -18,7 +18,7 @@ public class DaoOrdenCompra {
     public ArrayList mantenimiento(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
         ArrayList result = new ArrayList();
         if (objCnx.conectarMysqlLocal()) {
-            String fun = "{? = call mant_orden_compra(?,?,?,?,?,?,?,?,?,?)}";
+            String fun = "{? = call mant_orden_compra(?,?,?,?,?,?,?,?,?,?,?,?)}";
             Consultas query = new Consultas();
             result = query.funcion(fun, param, objCnx.getMysql().getCnx());
             result.add(objCnx);
@@ -41,6 +41,17 @@ public class DaoOrdenCompra {
         ArrayList result = new ArrayList();
         if (objCnx.conectarMysqlLocal()) {
             String proc = "{call ultimo_orden_compra()}";
+            Consultas query = new Consultas();
+            result = query.procedimiento(proc, param, objCnx.getMysql().getCnx());
+            result.add(objCnx);
+        }
+        return result;
+    }
+    
+    public ArrayList buscarOC(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
+        ArrayList result = new ArrayList();
+        if (objCnx.conectarMysqlLocal()) {
+            String proc = "{call buscar_orden_compra(?,?)}";
             Consultas query = new Consultas();
             result = query.procedimiento(proc, param, objCnx.getMysql().getCnx());
             result.add(objCnx);

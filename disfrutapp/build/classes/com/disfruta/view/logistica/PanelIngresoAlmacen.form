@@ -209,6 +209,11 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
+      <Properties>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Cursor de Mano"/>
+        </Property>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -232,29 +237,28 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="cboAlmacen" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
+                                          <Component id="cboAlmacen1" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                               <Component id="txtCodigoParte1" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="txtFecha1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblFechaActual" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                                           <Group type="102" attributes="0">
-                                              <Component id="txtCapacidad1" min="-2" pref="131" max="-2" attributes="0"/>
+                                              <Component id="txtCodigoOC" min="-2" pref="131" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                                               <Component id="btnCargarOC" min="-2" max="-2" attributes="0"/>
                                           </Group>
@@ -263,12 +267,16 @@
                                   </Group>
                                   <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="73" max="32767" attributes="0"/>
+                              <EmptySpace pref="27" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jPanel3" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                   </Group>
@@ -289,7 +297,7 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="txtFecha1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblFechaActual" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -304,8 +312,8 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="cboAlmacen" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtCapacidad1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cboAlmacen1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtCodigoOC" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnCargarOC" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -320,8 +328,8 @@
                           <Component id="jLabel12" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" pref="108" max="-2" attributes="0"/>
-                      <EmptySpace pref="188" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" min="-2" pref="232" max="-2" attributes="0"/>
+                      <EmptySpace pref="64" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -342,7 +350,7 @@
                 <Property name="text" type="java.lang.String" value="Fecha de parte de entrada:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="txtFecha1">
+            <Component class="javax.swing.JLabel" name="lblFechaActual">
               <Properties>
                 <Property name="text" type="java.lang.String" value="25/06/2014"/>
               </Properties>
@@ -352,7 +360,7 @@
                 <Property name="text" type="java.lang.String" value="Nombre de almac&#xe9;n:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="cboAlmacen">
+            <Component class="javax.swing.JComboBox" name="cboAlmacen1">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -369,7 +377,7 @@
                 <Property name="text" type="java.lang.String" value="Orden de compra (OC):"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCapacidad1">
+            <Component class="javax.swing.JTextField" name="txtCodigoOC">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -377,7 +385,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="99" green="99" red="99" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="   Ingresa c&#xf3;digo OC"/>
+                <Property name="text" type="java.lang.String" value="Ingresa c&#xf3;digo OC"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
                 <Property name="alignmentX" type="float" value="0.0"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -399,17 +407,26 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCapacidad1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoOCActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnCargarOC">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cargar OC"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Cursor de Mano"/>
+                </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCargarOCActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnAdjuntarOrdenCompra">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Adjuntar Orden de compra"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Cursor de Mano"/>
+                </Property>
               </Properties>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel3">
@@ -431,12 +448,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jLabel8" alignment="0" min="-2" pref="181" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="txtFechaOC" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblFechaOC" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
@@ -445,13 +462,13 @@
                                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtProveedor" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtRuc" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="lblProveedor" pref="196" max="32767" attributes="0"/>
+                                      <Component id="lblRuc" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="77" max="32767" attributes="0"/>
+                          <EmptySpace pref="26" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -463,17 +480,17 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtProveedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblProveedor" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtRuc" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblRuc" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtFechaOC" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblFechaOC" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -516,17 +533,17 @@
                     <Property name="text" type="java.lang.String" value="Fecha de OC:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="txtProveedor">
+                <Component class="javax.swing.JLabel" name="lblProveedor">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Empresa x EIRL"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="txtRuc">
+                <Component class="javax.swing.JLabel" name="lblRuc">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="10458525418"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="txtFechaOC">
+                <Component class="javax.swing.JLabel" name="lblFechaOC">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="12/10/2014"/>
                   </Properties>
@@ -545,8 +562,12 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblProductosPedidos">
+                <Component class="javax.swing.JTable" name="tblProductosPedidos1">
                   <Properties>
+                    <Property name="autoCreateRowSorter" type="boolean" value="true"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Arial" size="12" style="0"/>
+                    </Property>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="9" rowCount="4">
                         <Column editable="false" title="Nombre" type="java.lang.String"/>
@@ -609,6 +630,14 @@
                         </Column>
                       </TableColumnModel>
                     </Property>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Cursor de Mano"/>
+                    </Property>
+                    <Property name="editingColumn" type="int" value="0"/>
+                    <Property name="editingRow" type="int" value="0"/>
+                    <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="7a" green="bd" red="ee" type="rgb"/>
+                    </Property>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
@@ -619,6 +648,9 @@
             <Component class="javax.swing.JCheckBox" name="jCheckBox1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Atender orden de compra completa"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Cursor de Mano"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
@@ -646,18 +678,18 @@
                           <Component id="jPanel4" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtCodigoProducto" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
-                                  <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtCodigoInsumo2" min="-2" pref="56" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtCodigoProducto1" min="-2" pref="180" max="-2" attributes="0"/>
+                                  <Component id="txtNombreInsumo2" min="-2" pref="180" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                      <Component id="jComboBox1" min="-2" pref="200" max="-2" attributes="0"/>
+                                      <Component id="cboPresentacion2" min="-2" pref="200" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
@@ -667,7 +699,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtCodigoProducto3" min="-2" pref="70" max="-2" attributes="0"/>
+                                  <Component id="txtCantidadInsumo2" min="-2" pref="70" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -679,22 +711,22 @@
                                       <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jComboBox2" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Component id="cboUnidad2" min="-2" pref="80" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="txtCodigoProducto2" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <Component id="txtPrecioInsumo2" min="-2" pref="90" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="jComboBox3" min="-2" pref="80" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cboMonedaInsumo2" min="-2" pref="101" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="btnAddInsumo2" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -716,14 +748,14 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtCodigoProducto" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoProducto1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoProducto2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoProducto3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCodigoInsumo2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtNombreInsumo2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboPresentacion2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtPrecioInsumo2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboUnidad2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboMonedaInsumo2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnAddInsumo2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCantidadInsumo2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jScrollPane3" min="-2" pref="171" max="-2" attributes="0"/>
@@ -736,6 +768,11 @@
             <Component class="javax.swing.JSeparator" name="jSeparator1">
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel4">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+              </Properties>
 
               <Layout>
                 <DimensionLayout dim="0">
@@ -751,22 +788,21 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="txtFecha2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblFecha2" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="cboAlmacen1" min="-2" pref="240" max="-2" attributes="0"/>
+                              <Component id="cboAlmacen2" min="-2" pref="240" max="-2" attributes="0"/>
                               <Component id="jLabel15" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cboDocumento" min="-2" pref="250" max="-2" attributes="0"/>
+                              <Component id="cboTipoDocumento2" min="-2" pref="250" max="-2" attributes="0"/>
                               <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtCapacidad" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
+                              <Component id="txtNumeroDoc2" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane2" max="32767" attributes="0"/>
-                              <Component id="txtCapacidad2" alignment="0" pref="318" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" pref="318" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
@@ -774,6 +810,7 @@
                                   </Group>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
+                              <Component id="txtFechaEmisionDoc2" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="17" pref="17" max="-2" attributes="0"/>
                       </Group>
@@ -798,14 +835,16 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtFecha2" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cboDocumento" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtCapacidad2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblFecha2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cboTipoDocumento2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="txtFechaEmisionDoc2" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -814,8 +853,8 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="cboAlmacen1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtCapacidad" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cboAlmacen2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtNumeroDoc2" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jScrollPane2" alignment="0" min="-2" pref="58" max="-2" attributes="0"/>
                           </Group>
@@ -840,7 +879,7 @@
                     <Property name="text" type="java.lang.String" value="Fecha de parte de entrada:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="txtFecha2">
+                <Component class="javax.swing.JLabel" name="lblFecha2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="25/06/2014"/>
                   </Properties>
@@ -850,7 +889,7 @@
                     <Property name="text" type="java.lang.String" value="Nombre de almac&#xe9;n:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cboAlmacen1">
+                <Component class="javax.swing.JComboBox" name="cboAlmacen2">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
@@ -861,13 +900,16 @@
                       </StringArray>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboAlmacen2ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Tipo de documento:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cboDocumento">
+                <Component class="javax.swing.JComboBox" name="cboTipoDocumento2">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
@@ -876,6 +918,9 @@
                         <StringItem index="2" value="Item 3"/>
                         <StringItem index="3" value="Item 4"/>
                       </StringArray>
+                    </Property>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Cursor de Mano"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -884,7 +929,7 @@
                     <Property name="text" type="java.lang.String" value="N&#xfa;mero de documento:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtCapacidad">
+                <Component class="javax.swing.JTextField" name="txtNumeroDoc2">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -892,7 +937,6 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="99" green="99" red="99" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="  N&#xfa;m. de documento"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                     <Property name="alignmentX" type="float" value="0.0"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -914,46 +958,13 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCapacidadActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNumeroDoc2ActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel16">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Fecha emisi&#xf3;n de documento:"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="txtCapacidad2">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Lucida Sans Unicode" size="11" style="0"/>
-                    </Property>
-                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="99" green="99" red="99" type="rgb"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="  dd//mm/yy"/>
-                    <Property name="toolTipText" type="java.lang.String" value=""/>
-                    <Property name="alignmentX" type="float" value="0.0"/>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder roundedCorners="true">
-                          <Color PropertyName="color" blue="e6" green="e6" red="e6" type="rgb"/>
-                        </LineBorder>
-                      </Border>
-                    </Property>
-                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Cursor de Texto"/>
-                    </Property>
-                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[0, 0, 0, 0]"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="txtusuario" noResource="true"/>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[280, 24]"/>
-                    </Property>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCapacidad2ActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel17">
                   <Properties>
@@ -967,7 +978,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextArea1">
+                    <Component class="javax.swing.JTextArea" name="txtComentario2">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
@@ -975,6 +986,8 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="com.toedter.calendar.JDateChooser" name="txtFechaEmisionDoc2">
+                </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel18">
@@ -982,8 +995,9 @@
                 <Property name="text" type="java.lang.String" value="C&#xf3;digo "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto">
+            <Component class="javax.swing.JTextField" name="txtCodigoInsumo2">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
                 </Property>
@@ -1011,7 +1025,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProductoActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoInsumo2ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel19">
@@ -1019,7 +1033,7 @@
                 <Property name="text" type="java.lang.String" value="Nombre de Producto"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto1">
+            <Component class="javax.swing.JTextField" name="txtNombreInsumo2">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -1048,7 +1062,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNombreInsumo2ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel20">
@@ -1056,15 +1070,10 @@
                 <Property name="text" type="java.lang.String" value="Presentaci&#xf3;n comercial"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox1">
+            <Component class="javax.swing.JComboBox" name="cboPresentacion2">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
-                  </StringArray>
+                  <StringArray count="0"/>
                 </Property>
               </Properties>
             </Component>
@@ -1073,7 +1082,7 @@
                 <Property name="text" type="java.lang.String" value="Cantidad"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto2">
+            <Component class="javax.swing.JTextField" name="txtPrecioInsumo2">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -1102,7 +1111,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto2ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPrecioInsumo2ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel22">
@@ -1110,7 +1119,7 @@
                 <Property name="text" type="java.lang.String" value="Unidad"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox2">
+            <Component class="javax.swing.JComboBox" name="cboUnidad2">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -1127,7 +1136,7 @@
                 <Property name="text" type="java.lang.String" value="Precio de compra"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto3">
+            <Component class="javax.swing.JTextField" name="txtCantidadInsumo2">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -1156,7 +1165,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto3ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCantidadInsumo2ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel24">
@@ -1164,7 +1173,7 @@
                 <Property name="text" type="java.lang.String" value="Moneda"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox3">
+            <Component class="javax.swing.JComboBox" name="cboMonedaInsumo2">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -1179,10 +1188,13 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="btnAddInsumo2">
               <Properties>
                 <Property name="text" type="java.lang.String" value="+"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddInsumo2ActionPerformed"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane3">
               <AuxValues>
@@ -1191,7 +1203,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblProductosPorStock">
+                <Component class="javax.swing.JTable" name="tblProductosPedidos2">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="9" rowCount="4">
@@ -1288,18 +1300,18 @@
                           <Component id="jPanel7" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtCodigoProducto4" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
+                                  <Component id="txtCodigoInsumo3" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
                                   <Component id="jLabel37" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel38" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtCodigoProducto5" alignment="0" min="-2" pref="180" max="-2" attributes="0"/>
+                                  <Component id="txtNombreInsumo3" alignment="0" min="-2" pref="180" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                      <Component id="jComboBox6" min="-2" pref="200" max="-2" attributes="0"/>
+                                      <Component id="cboPresentacion3" min="-2" pref="200" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
@@ -1309,7 +1321,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel40" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtCodigoProducto6" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
+                                  <Component id="txtCantidadInsumo3" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -1321,16 +1333,16 @@
                                       <Component id="jLabel43" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jComboBox7" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Component id="cboUnidad3" min="-2" pref="80" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="txtCodigoProducto7" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <Component id="txtPrecioInsumo3" min="-2" pref="90" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="jComboBox8" min="-2" pref="80" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cboMonedaInsumo3" min="-2" pref="102" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="btnAddInsumo3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="0" pref="53" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane5" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -1357,14 +1369,14 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtCodigoProducto4" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoProducto5" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox6" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoProducto7" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox7" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox8" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoProducto6" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCodigoInsumo3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtNombreInsumo3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboPresentacion3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtPrecioInsumo3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboUnidad3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboMonedaInsumo3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnAddInsumo3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCantidadInsumo3" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jScrollPane5" min="-2" pref="171" max="-2" attributes="0"/>
@@ -1375,6 +1387,11 @@
           </Layout>
           <SubComponents>
             <Container class="javax.swing.JPanel" name="jPanel7">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+              </Properties>
 
               <Layout>
                 <DimensionLayout dim="0">
@@ -1390,21 +1407,21 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel26" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="txtFecha3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblFecha3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="cboAlmacen2" alignment="0" pref="240" max="32767" attributes="0"/>
+                              <Component id="cboAlmacen3" alignment="0" pref="240" max="32767" attributes="0"/>
                               <Component id="jLabel27" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel32" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtProveedorExt" pref="0" max="32767" attributes="0"/>
+                              <Component id="txtProveedor3" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jLabel28" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel29" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtCapacidad3" alignment="0" pref="260" max="32767" attributes="0"/>
+                              <Component id="txtNumeroDoc3" alignment="0" pref="260" max="32767" attributes="0"/>
                               <Component id="jLabel30" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtCapacidad4" pref="0" max="32767" attributes="0"/>
-                              <Component id="cboDocumento1" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cboTipoDocumento3" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jDateChooser1" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -1412,12 +1429,12 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel33" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jComboBox4" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
+                                      <Component id="cboMoneda" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel34" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jComboBox5" max="32767" attributes="0"/>
+                                      <Component id="cboFormaPago" pref="161" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" attributes="0">
@@ -1459,10 +1476,10 @@
                           <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel26" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtFecha3" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cboDocumento1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBox4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBox5" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblFecha3" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cboTipoDocumento3" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cboMoneda" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cboFormaPago" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -1474,8 +1491,8 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="cboAlmacen2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtCapacidad3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cboAlmacen3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtNumeroDoc3" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -1483,9 +1500,9 @@
                                       <Component id="jLabel30" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="txtProveedorExt" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtCapacidad4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="txtProveedor3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jDateChooser1" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" attributes="0">
@@ -1518,7 +1535,7 @@
                     <Property name="text" type="java.lang.String" value="Fecha de parte de entrada:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="txtFecha3">
+                <Component class="javax.swing.JLabel" name="lblFecha3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="25/06/2014"/>
                   </Properties>
@@ -1528,7 +1545,7 @@
                     <Property name="text" type="java.lang.String" value="Nombre de almac&#xe9;n:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cboAlmacen2">
+                <Component class="javax.swing.JComboBox" name="cboAlmacen3">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
@@ -1545,7 +1562,7 @@
                     <Property name="text" type="java.lang.String" value="Tipo de documento:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cboDocumento1">
+                <Component class="javax.swing.JComboBox" name="cboTipoDocumento3">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
@@ -1562,7 +1579,7 @@
                     <Property name="text" type="java.lang.String" value="N&#xfa;mero de documento:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtCapacidad3">
+                <Component class="javax.swing.JTextField" name="txtNumeroDoc3">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -1570,7 +1587,6 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="99" green="99" red="99" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="  N&#xfa;m. de documento"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                     <Property name="alignmentX" type="float" value="0.0"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -1592,46 +1608,13 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCapacidad3ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNumeroDoc3ActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel30">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Fecha emisi&#xf3;n de documento:"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="txtCapacidad4">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Lucida Sans Unicode" size="11" style="0"/>
-                    </Property>
-                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="99" green="99" red="99" type="rgb"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="  dd//mm/yy"/>
-                    <Property name="toolTipText" type="java.lang.String" value=""/>
-                    <Property name="alignmentX" type="float" value="0.0"/>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder roundedCorners="true">
-                          <Color PropertyName="color" blue="e6" green="e6" red="e6" type="rgb"/>
-                        </LineBorder>
-                      </Border>
-                    </Property>
-                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Cursor de Texto"/>
-                    </Property>
-                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[0, 0, 0, 0]"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="txtusuario" noResource="true"/>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[280, 24]"/>
-                    </Property>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCapacidad4ActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel31">
                   <Properties>
@@ -1645,7 +1628,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextArea2">
+                    <Component class="javax.swing.JTextArea" name="txtComentario3">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
@@ -1658,7 +1641,7 @@
                     <Property name="text" type="java.lang.String" value="Proveedor:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtProveedorExt">
+                <Component class="javax.swing.JTextField" name="txtProveedor3">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -1687,7 +1670,7 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtProveedorExtActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtProveedor3ActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel33">
@@ -1700,7 +1683,7 @@
                     <Property name="text" type="java.lang.String" value="Forma de pago:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jComboBox4">
+                <Component class="javax.swing.JComboBox" name="cboMoneda">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
@@ -1712,7 +1695,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jComboBox5">
+                <Component class="javax.swing.JComboBox" name="cboFormaPago">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
@@ -1734,6 +1717,8 @@
                     <Property name="text" type="java.lang.String" value="07/03/2014"/>
                   </Properties>
                 </Component>
+                <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
+                </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JSeparator" name="jSeparator2">
@@ -1743,8 +1728,9 @@
                 <Property name="text" type="java.lang.String" value="C&#xf3;digo "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto4">
+            <Component class="javax.swing.JTextField" name="txtCodigoInsumo3">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
                 </Property>
@@ -1772,7 +1758,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto4ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoInsumo3ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel38">
@@ -1780,7 +1766,7 @@
                 <Property name="text" type="java.lang.String" value="Nombre de Producto"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto5">
+            <Component class="javax.swing.JTextField" name="txtNombreInsumo3">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -1809,7 +1795,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto5ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNombreInsumo3ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel39">
@@ -1817,15 +1803,10 @@
                 <Property name="text" type="java.lang.String" value="Presentaci&#xf3;n comercial"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox6">
+            <Component class="javax.swing.JComboBox" name="cboPresentacion3">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
-                  </StringArray>
+                  <StringArray count="0"/>
                 </Property>
               </Properties>
             </Component>
@@ -1834,7 +1815,7 @@
                 <Property name="text" type="java.lang.String" value="Cantidad"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto6">
+            <Component class="javax.swing.JTextField" name="txtCantidadInsumo3">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -1863,10 +1844,10 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto6ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCantidadInsumo3ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox7">
+            <Component class="javax.swing.JComboBox" name="cboUnidad3">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -1888,7 +1869,7 @@
                 <Property name="text" type="java.lang.String" value="Precio de compra"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto7">
+            <Component class="javax.swing.JTextField" name="txtPrecioInsumo3">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -1917,10 +1898,10 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto7ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPrecioInsumo3ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox8">
+            <Component class="javax.swing.JComboBox" name="cboMonedaInsumo3">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -1940,10 +1921,13 @@
                 <Property name="text" type="java.lang.String" value="Moneda"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="btnAddInsumo3">
               <Properties>
                 <Property name="text" type="java.lang.String" value="+"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddInsumo3ActionPerformed"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane5">
               <AuxValues>
@@ -1952,7 +1936,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblProductosExterno">
+                <Component class="javax.swing.JTable" name="tblProductosPedidos3">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="9" rowCount="4">
@@ -2049,18 +2033,18 @@
                           <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtCodigoProducto8" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
+                                  <Component id="txtCodigoInsumo4" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
                                   <Component id="jLabel51" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel52" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtCodigoProducto9" alignment="0" min="-2" pref="180" max="-2" attributes="0"/>
+                                  <Component id="txtNombreInsumo4" alignment="0" min="-2" pref="180" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                      <Component id="jComboBox9" min="-2" pref="200" max="-2" attributes="0"/>
+                                      <Component id="cboPresentacion4" min="-2" pref="200" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
@@ -2070,7 +2054,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel54" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtCodigoProducto10" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
+                                  <Component id="txtCantidadInsumo4" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -2082,13 +2066,13 @@
                                       <Component id="jLabel57" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jComboBox10" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Component id="cboUnidad4" min="-2" pref="80" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="txtCodigoProducto11" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <Component id="txtPrecioInsumo4" min="-2" pref="90" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="jComboBox11" min="-2" pref="80" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cboMonedaInsumo4" min="-2" pref="99" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="btncAddInsumo4" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -2118,14 +2102,14 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtCodigoProducto8" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoProducto9" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox9" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoProducto11" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox10" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox11" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoProducto10" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCodigoInsumo4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtNombreInsumo4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboPresentacion4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtPrecioInsumo4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboUnidad4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboMonedaInsumo4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btncAddInsumo4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCantidadInsumo4" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jScrollPane7" min="-2" pref="171" max="-2" attributes="0"/>
@@ -2136,6 +2120,11 @@
           </Layout>
           <SubComponents>
             <Container class="javax.swing.JPanel" name="jPanel8">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+              </Properties>
 
               <Layout>
                 <DimensionLayout dim="0">
@@ -2151,17 +2140,17 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel45" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="txtFecha4" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblFecha4" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jLabel46" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtProveedorExt1" alignment="0" min="-2" pref="240" max="-2" attributes="0"/>
+                              <Component id="cboAlmacen4" min="-2" pref="250" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jLabel47" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel48" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtCapacidad5" alignment="0" pref="260" max="32767" attributes="0"/>
-                              <Component id="cboDocumento2" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtNumeroDoc4" alignment="0" pref="260" max="32767" attributes="0"/>
+                              <Component id="cboTipoDocumento4" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -2173,7 +2162,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel49" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="txtCapacidad6" pref="0" max="32767" attributes="0"/>
+                                  <Component id="txtFechaEmisionDocInterno" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -2204,8 +2193,8 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel45" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtFecha4" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="cboDocumento2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblFecha4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cboTipoDocumento4" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -2214,15 +2203,15 @@
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="txtCapacidad5" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtProveedorExt1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtNumeroDoc4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cboAlmacen4" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jScrollPane6" min="-2" pref="58" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="txtCapacidad6" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtFechaEmisionDocInterno" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel49" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -2248,7 +2237,7 @@
                     <Property name="text" type="java.lang.String" value="Fecha de parte de entrada:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="txtFecha4">
+                <Component class="javax.swing.JLabel" name="lblFecha4">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="25/06/2014"/>
                   </Properties>
@@ -2263,7 +2252,7 @@
                     <Property name="text" type="java.lang.String" value="Tipo de documento:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cboDocumento2">
+                <Component class="javax.swing.JComboBox" name="cboTipoDocumento4">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
@@ -2280,7 +2269,7 @@
                     <Property name="text" type="java.lang.String" value="N&#xfa;mero de documento:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtCapacidad5">
+                <Component class="javax.swing.JTextField" name="txtNumeroDoc4">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -2288,7 +2277,6 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="99" green="99" red="99" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="  N&#xfa;m. de documento"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                     <Property name="alignmentX" type="float" value="0.0"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -2310,7 +2298,7 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCapacidad5ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNumeroDoc4ActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel49">
@@ -2318,7 +2306,7 @@
                     <Property name="text" type="java.lang.String" value="Fecha emisi&#xf3;n de documento:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtCapacidad6">
+                <Component class="javax.swing.JTextField" name="txtFechaEmisionDocInterno">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -2348,7 +2336,7 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCapacidad6ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtFechaEmisionDocInternoActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel50">
@@ -2363,7 +2351,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextArea3">
+                    <Component class="javax.swing.JTextArea" name="txtComentario4">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
@@ -2371,37 +2359,17 @@
                     </Component>
                   </SubComponents>
                 </Container>
-                <Component class="javax.swing.JTextField" name="txtProveedorExt1">
+                <Component class="javax.swing.JComboBox" name="cboAlmacen4">
                   <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Lucida Sans Unicode" size="11" style="0"/>
-                    </Property>
-                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="99" green="99" red="99" type="rgb"/>
-                    </Property>
-                    <Property name="toolTipText" type="java.lang.String" value=""/>
-                    <Property name="alignmentX" type="float" value="0.0"/>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder roundedCorners="true">
-                          <Color PropertyName="color" blue="e6" green="e6" red="e6" type="rgb"/>
-                        </LineBorder>
-                      </Border>
-                    </Property>
-                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Cursor de Texto"/>
-                    </Property>
-                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[0, 0, 0, 0]"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="txtusuario" noResource="true"/>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[280, 24]"/>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="4">
+                        <StringItem index="0" value="Item 1"/>
+                        <StringItem index="1" value="Item 2"/>
+                        <StringItem index="2" value="Item 3"/>
+                        <StringItem index="3" value="Item 4"/>
+                      </StringArray>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtProveedorExt1ActionPerformed"/>
-                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -2412,8 +2380,9 @@
                 <Property name="text" type="java.lang.String" value="C&#xf3;digo "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto8">
+            <Component class="javax.swing.JTextField" name="txtCodigoInsumo4">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
                 </Property>
@@ -2441,10 +2410,10 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto8ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoInsumo4ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto9">
+            <Component class="javax.swing.JTextField" name="txtNombreInsumo4">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -2473,7 +2442,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto9ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNombreInsumo4ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel52">
@@ -2486,19 +2455,14 @@
                 <Property name="text" type="java.lang.String" value="Presentaci&#xf3;n comercial"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox9">
+            <Component class="javax.swing.JComboBox" name="cboPresentacion4">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
-                  </StringArray>
+                  <StringArray count="0"/>
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto10">
+            <Component class="javax.swing.JTextField" name="txtCantidadInsumo4">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -2527,7 +2491,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto10ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCantidadInsumo4ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel54">
@@ -2540,7 +2504,7 @@
                 <Property name="text" type="java.lang.String" value="Unidad"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox10">
+            <Component class="javax.swing.JComboBox" name="cboUnidad4">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -2552,7 +2516,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoProducto11">
+            <Component class="javax.swing.JTextField" name="txtPrecioInsumo4">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="11" style="0"/>
@@ -2581,7 +2545,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoProducto11ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPrecioInsumo4ActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel56">
@@ -2589,7 +2553,7 @@
                 <Property name="text" type="java.lang.String" value="Precio de compra"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox11">
+            <Component class="javax.swing.JComboBox" name="cboMonedaInsumo4">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
@@ -2609,10 +2573,13 @@
                 <Property name="text" type="java.lang.String" value="Moneda"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton3">
+            <Component class="javax.swing.JButton" name="btncAddInsumo4">
               <Properties>
                 <Property name="text" type="java.lang.String" value="+"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btncAddInsumo4ActionPerformed"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane7">
               <AuxValues>
@@ -2621,7 +2588,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblProductosExterno1">
+                <Component class="javax.swing.JTable" name="tblProductosPedidos4">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="9" rowCount="4">
