@@ -15,7 +15,7 @@ import com.disfruta.bean.xtbc.TipoComprobante;
 public class IngresoAlmacen {
     protected int id;
     protected String parteEntrada;
-    protected String nombreAlmacen;
+    protected String atenderCompleto;
     protected String fechaRegistro;
     protected String numeroComprobante;
     protected String serieComprobante;
@@ -31,6 +31,7 @@ public class IngresoAlmacen {
     protected TipoIngresoAlmacen tipoIngreso;
     protected Almacen almacen;
     protected Comprobante comprobante;
+    protected Proveedor proveedor;
     protected String tipoOperacion;
 
     public int getId() {
@@ -49,12 +50,12 @@ public class IngresoAlmacen {
         this.parteEntrada = parteEntrada;
     }
 
-    public String getNombreAlmacen() {
-        return nombreAlmacen;
+    public String getAtenderCompleto() {
+        return atenderCompleto;
     }
 
-    public void setNombreAlmacen(String nombreAlmacen) {
-        this.nombreAlmacen = nombreAlmacen;
+    public void setAtenderCompleto(String nombreAlmacen) {
+        this.atenderCompleto = nombreAlmacen;
     }
 
     public String getFechaRegistro() {
@@ -64,6 +65,16 @@ public class IngresoAlmacen {
     public void setFechaRegistro(String fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
+
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
+    }
+    
+    
 
     public String getNumeroComprobante() {
         return numeroComprobante;

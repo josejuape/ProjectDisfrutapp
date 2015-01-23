@@ -5,16 +5,19 @@
 package com.disfruta.view.logistica;
 
 import com.disfruta.bean.logistica.Almacen;
+import com.disfruta.bean.logistica.IngresoAlmacen;
 import com.disfruta.bean.logistica.IngresoAlmacenInsumo;
 import com.disfruta.bean.logistica.Insumo;
 import com.disfruta.bean.logistica.OrdenCompra;
 import com.disfruta.bean.logistica.OrdenCompraInsumo;
 import com.disfruta.bean.logistica.Proveedor;
+import com.disfruta.bean.logistica.TipoIngresoAlmacen;
 import com.disfruta.bean.logistica.UnidadMedida;
 import com.disfruta.bean.xtbc.Moneda;
 import com.disfruta.bean.xtbc.TipoComprobante;
 import com.disfruta.gestion.logistica.GestionAlmacen;
 import com.disfruta.gestion.logistica.GestionFormaPago;
+import com.disfruta.gestion.logistica.GestionIngresoAlmacen;
 import com.disfruta.gestion.logistica.GestionInsumo;
 import com.disfruta.gestion.logistica.GestionOrdenCompra;
 import com.disfruta.gestion.logistica.GestionOrdenCompraInsumo;
@@ -26,9 +29,12 @@ import com.disfruta.gestion.xtbc.GestionTipoComprobante;
 import com.mxrck.autocompleter.AutoCompleterCallback;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import resources.auxiliar.FechaActual;
 import resources.auxiliar.PaddingLeft;
 
@@ -42,7 +48,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     private resources.comboboxmodel.CboModelAlmacen modelCboAlmacen2;
     private resources.comboboxmodel.CboModelAlmacen modelCboAlmacen3;
     private resources.comboboxmodel.CboModelAlmacen modelCboAlmacen4;
-    private resources.comboboxmodel.CboModelTipoComprobante modelCboTipoDocumento;
+    private resources.comboboxmodel.CboModelTipoComprobante modelCboTipoDocumento2;
     private resources.comboboxmodel.CboModelTipoComprobante modelCboTipoDocumento3;
     private resources.comboboxmodel.CboModelTipoComprobante modelCboTipoDocumento4;
     private resources.comboboxmodel.CboModelFormaPago modelCboFormaPago;
@@ -74,6 +80,9 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     protected ArrayList<IngresoAlmacenInsumo> listaDetalle2;
     protected ArrayList<IngresoAlmacenInsumo> listaDetalle3;
     protected ArrayList<IngresoAlmacenInsumo> listaDetalle4;
+    protected ArrayList<TipoIngresoAlmacen> listaTabs;
+    protected String tab = "";
+    protected OrdenCompra ordenSelect=null;
 
     /**
      * Creates new form PanelIngresoAlmacen
@@ -85,7 +94,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         this.cboAlmacen2.setModel(modelCboAlmacen2);
         this.cboAlmacen3.setModel(modelCboAlmacen3);
         this.cboAlmacen4.setModel(modelCboAlmacen4);
-        this.cboTipoDocumento2.setModel(modelCboTipoDocumento);
+        this.cboTipoDocumento2.setModel(modelCboTipoDocumento2);
         this.cboTipoDocumento3.setModel(modelCboTipoDocumento3);
         this.cboTipoDocumento4.setModel(modelCboTipoDocumento4);
         this.tblProductosPedidos1.setModel(modelProductosPedidos1);
@@ -117,30 +126,31 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             this.modelCboAlmacen4 = new resources.comboboxmodel.CboModelAlmacen(listaAlamcenes);
             this.modelProductosPedidos1 = new resources.tablemodel.ModelTableIngresoAlmacenOC();
             ArrayList<TipoComprobante> listaComprobantes = new GestionTipoComprobante().listar();
-            this.modelCboTipoDocumento = new resources.comboboxmodel.CboModelTipoComprobante(listaComprobantes);
+            this.modelCboTipoDocumento2 = new resources.comboboxmodel.CboModelTipoComprobante(listaComprobantes);
             this.modelCboTipoDocumento3 = new resources.comboboxmodel.CboModelTipoComprobante(listaComprobantes);
             this.modelCboTipoDocumento4 = new resources.comboboxmodel.CboModelTipoComprobante(listaComprobantes);
-            this.modelCboFormaPago=new resources.comboboxmodel.CboModelFormaPago(new GestionFormaPago().listar());
+            this.modelCboFormaPago = new resources.comboboxmodel.CboModelFormaPago(new GestionFormaPago().listar());
             ArrayList<Moneda> listaMoneda = new GestionMoneda().listar();
-            this.modelCboMoneda=new resources.comboboxmodel.CboModelMoneda(listaMoneda);
-            this.modelCboMonedaInsumo2=new resources.comboboxmodel.CboModelMoneda(listaMoneda);
-            this.modelCboMonedaInsumo3=new resources.comboboxmodel.CboModelMoneda(listaMoneda);
-            this.modelCboMonedaInsumo4=new resources.comboboxmodel.CboModelMoneda(listaMoneda);
+            this.modelCboMoneda = new resources.comboboxmodel.CboModelMoneda(listaMoneda);
+            this.modelCboMonedaInsumo2 = new resources.comboboxmodel.CboModelMoneda(listaMoneda);
+            this.modelCboMonedaInsumo3 = new resources.comboboxmodel.CboModelMoneda(listaMoneda);
+            this.modelCboMonedaInsumo4 = new resources.comboboxmodel.CboModelMoneda(listaMoneda);
             ArrayList<UnidadMedida> listaUnidades = new GestionUnidadMedida().listar();
-            this.modelCboUnidad2=new resources.comboboxmodel.CboModelUnidadMedida(listaUnidades);
-            this.modelCboUnidad3=new resources.comboboxmodel.CboModelUnidadMedida(listaUnidades);
-            this.modelCboUnidad4=new resources.comboboxmodel.CboModelUnidadMedida(listaUnidades);
+            this.modelCboUnidad2 = new resources.comboboxmodel.CboModelUnidadMedida(listaUnidades);
+            this.modelCboUnidad3 = new resources.comboboxmodel.CboModelUnidadMedida(listaUnidades);
+            this.modelCboUnidad4 = new resources.comboboxmodel.CboModelUnidadMedida(listaUnidades);
             this.listaInsumos = new ArrayList();
             this.listaInsumos = new GestionInsumo().listar();
-            this.listaDetalle1=new ArrayList();
-            this.listaDetalle2=new ArrayList();
-            modelDetalle2=new resources.tablemodel.ModelTableIngresoAlmacenInsumo(this.listaDetalle2);
-            this.listaDetalle3=new ArrayList();
-            modelDetalle3=new resources.tablemodel.ModelTableIngresoAlmacenInsumo(this.listaDetalle3);
-            this.listaDetalle4=new ArrayList();
-            modelDetalle4=new resources.tablemodel.ModelTableIngresoAlmacenInsumo(this.listaDetalle4);
-            this.listaProveedores=new ArrayList();
-            this.listaProveedores=new GestionProveedor().listar();
+            this.listaDetalle1 = new ArrayList();
+            this.listaDetalle2 = new ArrayList();
+            modelDetalle2 = new resources.tablemodel.ModelTableIngresoAlmacenInsumo(this.listaDetalle2);
+            this.listaDetalle3 = new ArrayList();
+            modelDetalle3 = new resources.tablemodel.ModelTableIngresoAlmacenInsumo(this.listaDetalle3);
+            this.listaDetalle4 = new ArrayList();
+            modelDetalle4 = new resources.tablemodel.ModelTableIngresoAlmacenInsumo(this.listaDetalle4);
+            this.listaProveedores = new ArrayList();
+            this.listaProveedores = new GestionProveedor().listar();
+            this.listaTabs = new GestionIngresoAlmacen().listarTipoIngreso();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PanelIngresoAlmacen.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -186,9 +196,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         PaddingLeft.agregarpadding(this.txtProveedor3);
     }
 
-    
-    
-    private void cargarListaInsumo(){
+    private void cargarListaInsumo() {
         autoCompleteInsumo2 = new TextAutoCompleter(this.txtNombreInsumo2, new AutoCompleterCallback() {
             @Override
             public void callback(Object selectedItem) {
@@ -251,8 +259,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 }
             }
         });
-        autoCompleteInsumo4.addItems(this.listaInsumos);  
-        
+        autoCompleteInsumo4.addItems(this.listaInsumos);
+
         autoCompleteProveedor = new TextAutoCompleter(this.txtProveedor3, new AutoCompleterCallback() {
             @Override
             public void callback(Object selectedItem) {
@@ -268,9 +276,9 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 }
             }
         });
-        autoCompleteProveedor.addItems(this.listaProveedores);  
+        autoCompleteProveedor.addItems(this.listaProveedores);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -284,12 +292,12 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         logoalmacen = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         btnNuevoAlmacen = new javax.swing.JButton();
-        btnNuevoAlmacen1 = new javax.swing.JButton();
+        btnGuardarIngresoAlmacen = new javax.swing.JButton();
         btnNuevoAlmacen2 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        txtCodigoParte1 = new javax.swing.JLabel();
+        lblParteEntrada = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         lblFechaActual = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -309,7 +317,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProductosPedidos1 = new javax.swing.JTable();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        chkAtencionCompleta = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel4 = new javax.swing.JPanel();
@@ -368,8 +376,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         cboMoneda = new javax.swing.JComboBox();
         cboFormaPago = new javax.swing.JComboBox();
         jLabel35 = new javax.swing.JLabel();
-        jLabel36 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        txtFechaEmisionDoc3 = new com.toedter.calendar.JDateChooser();
+        txtFechaLimiteCancel = new com.toedter.calendar.JDateChooser();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel37 = new javax.swing.JLabel();
         txtCodigoInsumo3 = new javax.swing.JTextField();
@@ -400,11 +408,11 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         jLabel48 = new javax.swing.JLabel();
         txtNumeroDoc4 = new javax.swing.JTextField();
         jLabel49 = new javax.swing.JLabel();
-        txtFechaEmisionDocInterno = new javax.swing.JTextField();
         jLabel50 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         txtComentario4 = new javax.swing.JTextArea();
         cboAlmacen4 = new javax.swing.JComboBox();
+        txtFechaEmisionDoc4 = new com.toedter.calendar.JDateChooser();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel51 = new javax.swing.JLabel();
         txtCodigoInsumo4 = new javax.swing.JTextField();
@@ -447,17 +455,22 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         btnNuevoAlmacen.setOpaque(false);
         btnNuevoAlmacen.setPreferredSize(new java.awt.Dimension(92, 30));
 
-        btnNuevoAlmacen1.setBackground(new java.awt.Color(252, 242, 228));
-        btnNuevoAlmacen1.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
-        btnNuevoAlmacen1.setForeground(new java.awt.Color(83, 71, 65));
-        btnNuevoAlmacen1.setText("Guardar");
-        btnNuevoAlmacen1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
-        btnNuevoAlmacen1.setBorderPainted(false);
-        btnNuevoAlmacen1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNuevoAlmacen1.setFocusPainted(false);
-        btnNuevoAlmacen1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnNuevoAlmacen1.setOpaque(false);
-        btnNuevoAlmacen1.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnGuardarIngresoAlmacen.setBackground(new java.awt.Color(252, 242, 228));
+        btnGuardarIngresoAlmacen.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
+        btnGuardarIngresoAlmacen.setForeground(new java.awt.Color(83, 71, 65));
+        btnGuardarIngresoAlmacen.setText("Guardar");
+        btnGuardarIngresoAlmacen.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        btnGuardarIngresoAlmacen.setBorderPainted(false);
+        btnGuardarIngresoAlmacen.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGuardarIngresoAlmacen.setFocusPainted(false);
+        btnGuardarIngresoAlmacen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGuardarIngresoAlmacen.setOpaque(false);
+        btnGuardarIngresoAlmacen.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnGuardarIngresoAlmacen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarIngresoAlmacenActionPerformed(evt);
+            }
+        });
 
         btnNuevoAlmacen2.setBackground(new java.awt.Color(229, 147, 35));
         btnNuevoAlmacen2.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 11)); // NOI18N
@@ -483,7 +496,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 .addGap(193, 193, 193)
                 .addComponent(btnNuevoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnNuevoAlmacen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnGuardarIngresoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnNuevoAlmacen2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(241, Short.MAX_VALUE))
@@ -499,19 +512,24 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 .addGroup(paneltitlealmacenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(paneltitlealmacenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnNuevoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnNuevoAlmacen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnGuardarIngresoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnNuevoAlmacen2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setText("Parte de entrada:");
 
-        txtCodigoParte1.setText("12014-1245");
+        lblParteEntrada.setText("12014-1245");
 
         jLabel4.setText("Fecha de parte de entrada:");
 
@@ -661,8 +679,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         tblProductosPedidos1.getColumnModel().getColumn(7).setResizable(false);
         tblProductosPedidos1.getColumnModel().getColumn(8).setResizable(false);
 
-        jCheckBox1.setText("Atender orden de compra completa");
-        jCheckBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkAtencionCompleta.setText("Atender orden de compra completa");
+        chkAtencionCompleta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -680,7 +698,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtCodigoParte1))
+                                        .addComponent(lblParteEntrada))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -697,7 +715,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jCheckBox1)
+                                .addComponent(chkAtencionCompleta)
                                 .addGap(38, 38, 38))
                             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1))
@@ -713,7 +731,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                                 .addGap(21, 21, 21)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel2)
-                                    .addComponent(txtCodigoParte1))
+                                    .addComponent(lblParteEntrada))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel4)
@@ -735,7 +753,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBox1)
+                    .addComponent(chkAtencionCompleta)
                     .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1142,8 +1160,6 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jLabel35.setText("Fecha limite de cancelación:");
 
-        jLabel36.setText("07/03/2014");
-
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -1170,7 +1186,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(txtNumeroDoc3, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addComponent(jLabel30)
                     .addComponent(cboTipoDocumento3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtFechaEmisionDoc3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(42, 42, 42)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4)
@@ -1181,15 +1197,14 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                         .addGap(40, 40, 40)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel34)
-                            .addComponent(cboFormaPago, 0, 161, Short.MAX_VALUE)))
+                            .addComponent(cboFormaPago, 0, 163, Short.MAX_VALUE)))
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel31)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addComponent(jLabel35)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel36)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel31)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel35)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFechaLimiteCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -1232,14 +1247,14 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtProveedor3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtFechaEmisionDoc3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel35)
-                            .addComponent(jLabel36))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtFechaLimiteCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jLabel37.setText("Código ");
@@ -1371,57 +1386,61 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator2)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator2))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCodigoInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel37))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel38)
-                            .addComponent(txtNombreInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(cboPresentacion3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(9, 9, 9)
-                                .addComponent(jLabel39)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel40)
-                            .addComponent(txtCantidadInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel41)
-                                .addGap(53, 53, 53)
-                                .addComponent(jLabel42)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel43))
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(cboUnidad3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtCodigoInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel37))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtPrecioInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel38)
+                                    .addComponent(txtNombreInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(cboPresentacion3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addGap(9, 9, 9)
+                                        .addComponent(jLabel39)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cboMonedaInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnAddInsumo3)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane5))
-                .addContainerGap())
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel40)
+                                    .addComponent(txtCantidadInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addComponent(jLabel41)
+                                        .addGap(53, 53, 53)
+                                        .addComponent(jLabel42)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel43))
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addComponent(cboUnidad3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtPrecioInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cboMonedaInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnAddInsumo3)))
+                                .addGap(0, 39, Short.MAX_VALUE))
+                            .addComponent(jScrollPane5))
+                        .addContainerGap())))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel37)
@@ -1443,7 +1462,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(txtCantidadInsumo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ingreso por documento externo de compra ", jPanel5);
@@ -1485,22 +1504,6 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
         jLabel49.setText("Fecha emisión de documento:");
 
-        txtFechaEmisionDocInterno.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 11)); // NOI18N
-        txtFechaEmisionDocInterno.setForeground(new java.awt.Color(153, 153, 153));
-        txtFechaEmisionDocInterno.setText("  dd//mm/yy");
-        txtFechaEmisionDocInterno.setToolTipText("");
-        txtFechaEmisionDocInterno.setAlignmentX(0.0F);
-        txtFechaEmisionDocInterno.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(230, 230, 230), 1, true));
-        txtFechaEmisionDocInterno.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txtFechaEmisionDocInterno.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        txtFechaEmisionDocInterno.setName("txtusuario"); // NOI18N
-        txtFechaEmisionDocInterno.setPreferredSize(new java.awt.Dimension(280, 24));
-        txtFechaEmisionDocInterno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaEmisionDocInternoActionPerformed(evt);
-            }
-        });
-
         jLabel50.setText("Comentario:");
 
         txtComentario4.setColumns(20);
@@ -1540,8 +1543,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jLabel49)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtFechaEmisionDocInterno, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFechaEmisionDoc4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -1576,10 +1579,10 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtFechaEmisionDocInterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel49))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel49)
+                            .addComponent(txtFechaEmisionDoc4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jLabel51.setText("Código ");
@@ -1783,7 +1786,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                     .addComponent(txtCantidadInsumo4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ingreso por documento interno de compra", jPanel6);
@@ -1862,10 +1865,6 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNumeroDoc4ActionPerformed
 
-    private void txtFechaEmisionDocInternoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaEmisionDocInternoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaEmisionDocInternoActionPerformed
-
     private void txtCodigoInsumo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoInsumo4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoInsumo4ActionPerformed
@@ -1891,6 +1890,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             orden.setEstado("I");
             OrdenCompra obj = gestionOC.buscarOC(orden);
             if (obj != null) {
+                this.ordenSelect=obj;
                 GestionOrdenCompraInsumo gestionOCInsumo = new GestionOrdenCompraInsumo();
                 ArrayList<OrdenCompraInsumo> listaDetalle = gestionOCInsumo.listar(obj);
                 lblProveedor.setText(obj.getProveedor().getNombres() + " " + obj.getProveedor().getApellidos());
@@ -1899,6 +1899,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
                 this.modelProductosPedidos1.setData(listaDetalle);
                 this.modelProductosPedidos1.fireTableDataChanged();
                 System.out.println("encontrado: " + obj.getId());
+            }else{
+                JOptionPane.showMessageDialog(this,"No se encontro resultados!");
             }
 
         } catch (ClassNotFoundException ex) {
@@ -1914,13 +1916,13 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
     private void btnAddInsumo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInsumo2ActionPerformed
         // TODO add your handling code here:
-        IngresoAlmacenInsumo obj=new IngresoAlmacenInsumo();
+        IngresoAlmacenInsumo obj = new IngresoAlmacenInsumo();
         obj.setInsumo(insumoselected2);
-        double cantidad=Double.parseDouble(this.txtCantidadInsumo2.getText());
+        double cantidad = Double.parseDouble(this.txtCantidadInsumo2.getText());
         obj.setCantidad(cantidad);
-        double precio=Double.parseDouble(this.txtPrecioInsumo2.getText());
+        double precio = Double.parseDouble(this.txtPrecioInsumo2.getText());
         obj.setPrecio(precio);
-        obj.setSubtotal((cantidad*precio));
+        obj.setSubtotal((cantidad * precio));
         obj.setTipoOperacion("i");
         obj.setMoneda(this.modelCboMonedaInsumo2.getElement(this.cboMonedaInsumo2.getSelectedIndex()));
         obj.setUnidad(this.modelCboUnidad2.getElement(this.cboUnidad2.getSelectedIndex()));
@@ -1931,13 +1933,13 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
     private void btnAddInsumo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInsumo3ActionPerformed
         // TODO add your handling code here:
-        IngresoAlmacenInsumo obj=new IngresoAlmacenInsumo();
+        IngresoAlmacenInsumo obj = new IngresoAlmacenInsumo();
         obj.setInsumo(insumoselected3);
-        double cantidad=Double.parseDouble(this.txtCantidadInsumo3.getText());
+        double cantidad = Double.parseDouble(this.txtCantidadInsumo3.getText());
         obj.setCantidad(cantidad);
-        double precio=Double.parseDouble(this.txtPrecioInsumo3.getText());
+        double precio = Double.parseDouble(this.txtPrecioInsumo3.getText());
         obj.setPrecio(precio);
-        obj.setSubtotal((cantidad*precio));
+        obj.setSubtotal((cantidad * precio));
         obj.setTipoOperacion("i");
         obj.setMoneda(this.modelCboMonedaInsumo3.getElement(this.cboMonedaInsumo3.getSelectedIndex()));
         obj.setUnidad(this.modelCboUnidad3.getElement(this.cboUnidad3.getSelectedIndex()));
@@ -1948,13 +1950,13 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
     private void btncAddInsumo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncAddInsumo4ActionPerformed
         // TODO add your handling code here:
-        IngresoAlmacenInsumo obj=new IngresoAlmacenInsumo();
+        IngresoAlmacenInsumo obj = new IngresoAlmacenInsumo();
         obj.setInsumo(insumoselected4);
-        double cantidad=Double.parseDouble(this.txtCantidadInsumo4.getText());
+        double cantidad = Double.parseDouble(this.txtCantidadInsumo4.getText());
         obj.setCantidad(cantidad);
-        double precio=Double.parseDouble(this.txtPrecioInsumo4.getText());
+        double precio = Double.parseDouble(this.txtPrecioInsumo4.getText());
         obj.setPrecio(precio);
-        obj.setSubtotal((cantidad*precio));
+        obj.setSubtotal((cantidad * precio));
         obj.setTipoOperacion("i");
         obj.setMoneda(this.modelCboMonedaInsumo4.getElement(this.cboMonedaInsumo4.getSelectedIndex()));
         obj.setUnidad(this.modelCboUnidad4.getElement(this.cboUnidad4.getSelectedIndex()));
@@ -1963,13 +1965,105 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         this.modelDetalle4.fireTableDataChanged();
     }//GEN-LAST:event_btncAddInsumo4ActionPerformed
 
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+        // TODO add your handling code here:
+        int indextab = this.jTabbedPane1.getSelectedIndex();
+        System.out.println("indextab: " + indextab);
+        if (indextab == 0) {
+            this.tab = "IOC";
+        }
+        if (indextab == 1) {
+            this.tab = "IRS";
+        }
+        if (indextab == 2) {
+            this.tab = "IDEC";
+        }
+        if (indextab == 3) {
+            this.tab = "IDIC";
+        }
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    private void btnGuardarIngresoAlmacenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarIngresoAlmacenActionPerformed
+        // TODO add your handling code here:
+        TipoIngresoAlmacen tipoIngreso = new TipoIngresoAlmacen();
+        for (int i = 0; i < this.listaTabs.size(); i++) {
+            if (this.listaTabs.get(i).getIdentificador().equals(this.tab)) {
+                tipoIngreso = this.listaTabs.get(i);
+            }
+        }
+        IngresoAlmacen ingAlm=new IngresoAlmacen();
+        GestionIngresoAlmacen gestionIng=new GestionIngresoAlmacen();
+        if (this.tab.equals("IOC")) {
+            ingAlm.setTipoIngreso(tipoIngreso);
+            ingAlm.setParteEntrada(this.lblParteEntrada.getText());
+            ingAlm.setAlmacen(this.modelCboAlmacen.getElement(this.cboAlmacen1.getSelectedIndex())); 
+            ingAlm.setEstado("I");
+            ingAlm.setTipoOperacion("i");
+            ingAlm.setOrdenCompra(ordenSelect);
+            if(this.chkAtencionCompleta.isSelected()){
+                ingAlm.setAtenderCompleto("S");
+            }else{
+                ingAlm.setAtenderCompleto("N");
+            }
+            
+        }
+        if (this.tab.equals("IRS")) {
+            ingAlm.setTipoIngreso(tipoIngreso);
+            ingAlm.setParteEntrada(this.lblParteEntrada.getText());
+            ingAlm.setAlmacen(this.modelCboAlmacen2.getElement(this.cboAlmacen2.getSelectedIndex())); 
+            ingAlm.setEstado("I");
+            ingAlm.setTipoOperacion("i");
+            ingAlm.setTipoComprobante(this.modelCboTipoDocumento2.getElement(this.cboTipoDocumento2.getSelectedIndex()));
+            ingAlm.setNumeroComprobante(this.txtNumeroDoc2.getText());
+            Date date = this.txtFechaEmisionDoc2.getDate();
+            SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
+            ingAlm.setFechaEmisionComprobante(formato.format(date)+"");
+            ingAlm.setComentario(this.txtComentario2.getText());
+            
+        }
+        if (this.tab.equals("IDEC")) {
+            ingAlm.setTipoIngreso(tipoIngreso);
+            ingAlm.setParteEntrada(this.lblParteEntrada.getText());
+            ingAlm.setAlmacen(this.modelCboAlmacen3.getElement(this.cboAlmacen3.getSelectedIndex())); 
+            ingAlm.setEstado("I");
+            ingAlm.setTipoOperacion("i");
+            ingAlm.setTipoComprobante(this.modelCboTipoDocumento3.getElement(this.cboTipoDocumento3.getSelectedIndex()));
+            ingAlm.setNumeroComprobante(this.txtNumeroDoc3.getText());
+            Date date = this.txtFechaEmisionDoc3.getDate();
+            SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
+            ingAlm.setFechaEmisionComprobante(formato.format(date)+"");
+            ingAlm.setComentario(this.txtComentario3.getText());
+            ingAlm.setProveedor(proveedorselected3);
+            ingAlm.setMoneda(this.modelCboMoneda.getElement(this.cboMoneda.getSelectedIndex()));
+            ingAlm.setFormaPago(this.modelCboFormaPago.getElement(this.cboFormaPago.getSelectedIndex()));
+            Date date2 = this.txtFechaLimiteCancel.getDate();
+            SimpleDateFormat formato2 = new SimpleDateFormat("DD/MM/YY");
+            ingAlm.setFechaLimiteCancelacion(formato2.format(date2)+"");
+            
+        }
+        if (this.tab.equals("IDIC")) {
+            ingAlm.setTipoIngreso(tipoIngreso);
+            ingAlm.setParteEntrada(this.lblParteEntrada.getText());
+            ingAlm.setAlmacen(this.modelCboAlmacen4.getElement(this.cboAlmacen4.getSelectedIndex())); 
+            ingAlm.setEstado("I");
+            ingAlm.setTipoOperacion("i");
+            ingAlm.setTipoComprobante(this.modelCboTipoDocumento4.getElement(this.cboTipoDocumento4.getSelectedIndex()));
+            ingAlm.setNumeroComprobante(this.txtNumeroDoc4.getText());
+            Date date = this.txtFechaEmisionDoc4.getDate();
+            SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
+            ingAlm.setFechaEmisionComprobante(formato.format(date)+"");
+            ingAlm.setComentario(this.txtComentario4.getText());
+            
+        }
+    }//GEN-LAST:event_btnGuardarIngresoAlmacenActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddInsumo2;
     private javax.swing.JButton btnAddInsumo3;
     private javax.swing.JButton btnAdjuntarOrdenCompra;
     private javax.swing.JButton btnCargarOC;
+    private javax.swing.JButton btnGuardarIngresoAlmacen;
     private javax.swing.JButton btnNuevoAlmacen;
-    private javax.swing.JButton btnNuevoAlmacen1;
     private javax.swing.JButton btnNuevoAlmacen2;
     private javax.swing.JButton btncAddInsumo4;
     private javax.swing.JComboBox cboAlmacen1;
@@ -1990,8 +2084,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     private javax.swing.JComboBox cboUnidad2;
     private javax.swing.JComboBox cboUnidad3;
     private javax.swing.JComboBox cboUnidad4;
-    private javax.swing.JCheckBox jCheckBox1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JCheckBox chkAtencionCompleta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2021,7 +2114,6 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
@@ -2073,6 +2165,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     private javax.swing.JLabel lblFecha4;
     private javax.swing.JLabel lblFechaActual;
     private javax.swing.JLabel lblFechaOC;
+    private javax.swing.JLabel lblParteEntrada;
     private javax.swing.JLabel lblProveedor;
     private javax.swing.JLabel lblRuc;
     private javax.swing.JLabel logoalmacen;
@@ -2088,7 +2181,6 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     private javax.swing.JTextField txtCodigoInsumo3;
     private javax.swing.JTextField txtCodigoInsumo4;
     private javax.swing.JTextField txtCodigoOC;
-    private javax.swing.JLabel txtCodigoParte1;
     private javax.swing.JLabel txtCodigoParte2;
     private javax.swing.JLabel txtCodigoParte3;
     private javax.swing.JLabel txtCodigoParte4;
@@ -2096,7 +2188,9 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     private javax.swing.JTextArea txtComentario3;
     private javax.swing.JTextArea txtComentario4;
     private com.toedter.calendar.JDateChooser txtFechaEmisionDoc2;
-    private javax.swing.JTextField txtFechaEmisionDocInterno;
+    private com.toedter.calendar.JDateChooser txtFechaEmisionDoc3;
+    private com.toedter.calendar.JDateChooser txtFechaEmisionDoc4;
+    private com.toedter.calendar.JDateChooser txtFechaLimiteCancel;
     private javax.swing.JTextField txtNombreInsumo2;
     private javax.swing.JTextField txtNombreInsumo3;
     private javax.swing.JTextField txtNombreInsumo4;

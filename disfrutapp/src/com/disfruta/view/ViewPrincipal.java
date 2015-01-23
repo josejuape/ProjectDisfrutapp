@@ -44,12 +44,12 @@ public final class ViewPrincipal extends javax.swing.JFrame {
      */
     public ViewPrincipal(UsuarioDesktop usuario, ArrayList<MenuPerfil> listaMenus) throws ClassNotFoundException, Exception {
         this.setUndecorated(true);
-        if(usuario!=null){
+//        if(usuario!=null){
         initComponents();
-//        usuario = new UsuarioDesktop();
-//        usuario.setIdUser(1);
+        usuario = new UsuarioDesktop();
+        usuario.setIdUser(1);
         this.menuList = new GestionLogin().listarMenuLogin(usuario);
-        this.btnMenuStaff.setEnabled(false);
+        this.btnMenuStaff.setEnabled(true);
         this.btnMenuLogistica.setEnabled(false);
         this.btnMenuCocina.setEnabled(false);
         this.btnMenuCaja.setEnabled(false);
@@ -85,9 +85,9 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         pos.anchor = GridBagConstraints.NORTHEAST;
         pos.insets = new Insets(0, 0, 0, 10);
         PanelTitulo.add(btnclose, pos);
-        }else{
-            JOptionPane.showMessageDialog(this, "Debe iniciar sesión!");
-        }
+//        }else{
+//            JOptionPane.showMessageDialog(this, "Debe iniciar sesión!");
+//        }
     }
 
     private void init() {
@@ -445,18 +445,21 @@ public final class ViewPrincipal extends javax.swing.JFrame {
                 .addComponent(btnIngresoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnOrdenCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(324, Short.MAX_VALUE))
         );
         PanelBarrasIconosLayout.setVerticalGroup(
             PanelBarrasIconosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelBarrasIconosLayout.createSequentialGroup()
-                .addComponent(PanelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelBarrasIconosLayout.createSequentialGroup()
                 .addGroup(PanelBarrasIconosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnOrdenCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnIngresoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalidaAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(PanelBarrasIconosLayout.createSequentialGroup()
+                        .addComponent(PanelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelBarrasIconosLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(PanelBarrasIconosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnOrdenCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSalidaAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnIngresoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
