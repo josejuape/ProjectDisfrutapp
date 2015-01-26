@@ -162,6 +162,42 @@ public class LogicUsuarioDesktop {
         return lista;
     } 
     
+    public ArrayList listarStaffCocina() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SQLException, Exception{
+        
+        DaoUsuarioDesktop oDaoMenu = new DaoUsuarioDesktop();
+        ArrayList<UsuarioDesktop> lista = new ArrayList();
+        ArrayList<Parametro> param = new ArrayList();
+        ArrayList objetos=oDaoMenu.listarStaffCocina(param, objCnx);
+        ResultSet rs=(ResultSet)objetos.get(0);
+        CallableStatement cst=(CallableStatement)objetos.get(1);
+        objCnx=(ObjConexion)objetos.get(2);
+        rs.beforeFirst();
+        while(rs.next()){
+            UsuarioDesktop user=new UsuarioDesktop();
+            user.setIdUser(rs.getInt("n_iduser_desktop"));
+            user.setNombres(rs.getString("v_nombres"));
+            user.setApellidos(rs.getString("v_apellidos"));
+            user.setDni(rs.getString("v_dni"));
+            user.setFechNacimiento(rs.getString("v_fecha_nacimiento"));
+            user.setSexo(rs.getString("c_sexo"));
+            user.setFoto(rs.getString("v_foto"));
+            user.setEmail(rs.getString("v_email"));
+            user.setDireccion(rs.getString("v_direccion"));
+            user.setCelular(rs.getString("v_celular"));
+            user.setUsuario(rs.getString("v_usuario"));
+            user.setPassword(rs.getString("v_clave"));
+            user.setApellidos(rs.getString("v_apellidos"));
+            user.setEstado(rs.getString("v_estado"));
+            user.setFechaRegistro(rs.getString("d_fecha_registro"));
+            user.setPedidosAtendidos(rs.getInt("n_pedidos_atendidos"));
+            lista.add(user);
+        }
+        rs.close();
+        cst.close();
+        //objCnx.getMysql().desconectarBD();
+        return lista;
+    } 
+    
     public UsuarioDesktop getUltimoObject() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SQLException, Exception{
         
         DaoUsuarioDesktop oDaoMenu = new DaoUsuarioDesktop();

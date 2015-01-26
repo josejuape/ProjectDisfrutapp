@@ -16,6 +16,8 @@ public class Pedido {
     protected String tipo;
     protected double montototal;
     protected String estado;
+    protected String fecha;
+    protected String hora;
     protected String mesa;
     protected UsuarioDesktop usuario;
     protected String tipoOperacion;
@@ -82,6 +84,22 @@ public class Pedido {
 
     public void setTipoOperacion(String tipoOperacion) {
         this.tipoOperacion = tipoOperacion;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
     }
     
     

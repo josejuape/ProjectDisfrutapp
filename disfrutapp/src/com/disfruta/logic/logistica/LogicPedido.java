@@ -83,6 +83,38 @@ public class LogicPedido {
             objPedido.setTipo(rs.getString("c_tipo_pedido"));
             objPedido.setMontototal(rs.getDouble("n_valor_total"));
             objPedido.setEstado(rs.getString("c_estado"));
+            objPedido.setFecha(rs.getString("d_fecha_hora"));
+            objPedido.setMesa(rs.getString("v_numero_mesa"));
+            UsuarioDesktop usuario=new UsuarioDesktop();
+            usuario.setIdUser(rs.getInt("n_iduser_desktop"));
+            usuario.setNombres(rs.getString("v_nombres"));
+            usuario.setApellidos(rs.getString("v_apellidos"));
+            objPedido.setUsuario(usuario);            
+            lista.add(objPedido);
+        }
+        rs.close();
+        cst.close();
+        return lista;
+    } 
+    
+    public ArrayList listarPedidosHoy(String hoy) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SQLException, Exception{        
+        DaoPedido oDaoPedido = new DaoPedido();
+        ArrayList<Pedido> lista = new ArrayList();
+        ArrayList<Parametro> param = new ArrayList();
+        param.add(new Parametro("IN",hoy));
+        ArrayList objetos=oDaoPedido.listarPedidosHoy(param, objCnx);
+        ResultSet rs=(ResultSet)objetos.get(0);
+        CallableStatement cst=(CallableStatement)objetos.get(1);
+        objCnx=(ObjConexion)objetos.get(2);
+        rs.beforeFirst();
+        while(rs.next()){
+            Pedido objPedido=new Pedido();
+            objPedido.setId(rs.getInt("n_idpedido"));
+            objPedido.setEstadoPedido(rs.getString("c_estado_pedido"));
+            objPedido.setTipo(rs.getString("c_tipo_pedido"));
+            objPedido.setMontototal(rs.getDouble("n_valor_total"));
+            objPedido.setEstado(rs.getString("c_estado"));
+            objPedido.setFecha(rs.getString("d_fecha_hora"));
             objPedido.setMesa(rs.getString("v_numero_mesa"));
             UsuarioDesktop usuario=new UsuarioDesktop();
             usuario.setIdUser(rs.getInt("n_iduser_desktop"));
@@ -112,6 +144,7 @@ public class LogicPedido {
             objPedido.setMontototal(rs.getDouble("n_valor_total"));
             objPedido.setEstado(rs.getString("c_estado"));
             objPedido.setMesa(rs.getString("v_numero_mesa"));
+            objPedido.setFecha(rs.getString("d_fecha_hora"));
             UsuarioDesktop usuario=new UsuarioDesktop();
             usuario.setIdUser(rs.getInt("n_iduser_desktop"));
             usuario.setNombres(rs.getString("v_nombres"));

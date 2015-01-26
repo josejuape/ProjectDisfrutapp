@@ -896,7 +896,6 @@ public final class PanelUsuarios extends javax.swing.JPanel {
             File archivo = ventana.getSelectedFile();
             this.urlFoto = String.valueOf(archivo);
             Image foto = getToolkit().getImage(this.urlFoto);
-            String dirfotoactual = archivo.getPath().replace('\\', '/');
             foto = foto.getScaledInstance(150, 139, Image.SCALE_DEFAULT);
             this.lblFoto.setText("");
             this.lblFoto.setIcon(new ImageIcon(foto));

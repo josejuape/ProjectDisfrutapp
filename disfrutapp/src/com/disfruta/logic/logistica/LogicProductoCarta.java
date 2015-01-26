@@ -87,6 +87,80 @@ public class LogicProductoCarta {
         cst.close();
         return lista;
     }
+    
+    public ArrayList listarCarta() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SQLException, Exception {
+        DaoProductoCarta oDaoProductoCarta = new DaoProductoCarta();
+        ArrayList<ProductoCarta> lista = new ArrayList();
+        ArrayList<Parametro> param = new ArrayList();
+        ArrayList objetos = oDaoProductoCarta.listarCarta(param, objCnx);
+        ResultSet rs = (ResultSet) objetos.get(0);
+        CallableStatement cst = (CallableStatement) objetos.get(1);
+        objCnx = (ObjConexion) objetos.get(2);
+        int control = 0;
+        int idpro = 0;
+        rs.beforeFirst();
+
+        if (rs.next()) {
+            control = rs.getInt("n_idproducto_carta");
+            ProductoCarta objProductoCarta = new ProductoCarta();
+            objProductoCarta.setIdproductocarta(rs.getInt("n_idproducto_carta"));
+            objProductoCarta.setNombre(rs.getString("v_nombre"));
+            objProductoCarta.setDescripcion(rs.getString("logtbc_producto_carta.v_descripcion"));
+            FamiliaProducto familia = new FamiliaProducto();
+            familia.setN_idfamilia(rs.getInt("logtbc_producto_carta.n_idfamilia"));
+            objProductoCarta.setFamilia(familia);
+            ArrayList<PresentacionPrecioVenta> presentaciones = new ArrayList();
+            PresentacionVenta pres = new PresentacionVenta();
+            PresentacionPrecioVenta pv = new PresentacionPrecioVenta();
+            pres.setId(rs.getInt("n_idpresentacion_producto"));
+            pres.setDescripcion(rs.getString("logtbc_presentacion_producto.v_descripcion"));
+            pv.setPresentacion(pres);
+            pv.setPrecioventa(rs.getDouble("n_precioventa"));
+            pv.setProporcion(rs.getDouble("n_proporcion"));
+            presentaciones.add(pv);
+            while (rs.next()) {
+                idpro = rs.getInt("n_idproducto_carta");
+                System.out.println("idpro: " + idpro+" - control: "+control);
+                if (idpro == control) {                    
+                    pres = new PresentacionVenta();
+                    pv = new PresentacionPrecioVenta();
+                    pres.setId(rs.getInt("n_idpresentacion_producto"));
+                    pres.setDescripcion(rs.getString("logtbc_presentacion_producto.v_descripcion"));
+                    pv.setPresentacion(pres);
+                    pv.setPrecioventa(rs.getDouble("n_precioventa"));
+                    pv.setProporcion(rs.getDouble("n_proporcion"));
+                    presentaciones.add(pv);
+                } else {
+                    control = rs.getInt("n_idproducto_carta");
+                    objProductoCarta.setPresentaciones(presentaciones);
+                    lista.add(objProductoCarta);
+                    presentaciones = new ArrayList();
+                    objProductoCarta = new ProductoCarta();
+                    objProductoCarta.setIdproductocarta(rs.getInt("n_idproducto_carta"));
+                    objProductoCarta.setNombre(rs.getString("v_nombre"));
+                    objProductoCarta.setDescripcion(rs.getString("logtbc_producto_carta.v_descripcion"));
+                    FamiliaProducto fa = new FamiliaProducto();
+                    familia.setN_idfamilia(rs.getInt("logtbc_producto_carta.n_idfamilia"));
+                    objProductoCarta.setFamilia(fa);
+                    pres = new PresentacionVenta();
+                    pv = new PresentacionPrecioVenta();
+                    pres.setId(rs.getInt("n_idpresentacion_producto"));
+                    pres.setDescripcion(rs.getString("logtbc_presentacion_producto.v_descripcion"));
+                    pv.setPresentacion(pres);
+                    pv.setPrecioventa(rs.getDouble("n_precioventa"));
+                    pv.setProporcion(rs.getDouble("n_proporcion"));
+                    presentaciones.add(pv);
+                }
+
+            }
+            objProductoCarta.setPresentaciones(presentaciones);
+            lista.add(objProductoCarta);
+            
+        }
+        rs.close();
+        cst.close();
+        return lista;
+    }
 
     public ArrayList listarPorFamilia(FamiliaProducto fam) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SQLException, Exception {
         DaoProductoCarta oDaoProductoCarta = new DaoProductoCarta();

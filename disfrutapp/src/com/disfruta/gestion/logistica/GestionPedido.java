@@ -185,6 +185,40 @@ public class GestionPedido {
         }
     }
     
+    public ArrayList<Pedido> listarPedidosHoy(String hoy) throws ClassNotFoundException, Exception {
+        ArrayList array = new ArrayList();
+        try {
+            LogicPedido logicPedido = new LogicPedido(objCnx);
+            array=logicPedido.listarPedidosHoy(hoy);
+            
+            return array;
+             
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestionPedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GestionPedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GestionPedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionPedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (Exception ex) {
+            Logger.getLogger(GestionPedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
+            try {
+                objCnx.getMysql().desconectarBD();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionPedido.class.getName()).log(Level.SEVERE, null, ex);
+               
+            }
+        }
+    }
+    
     public Pedido getUltimoObject() throws ClassNotFoundException, Exception {        
         try {
             LogicPedido logicPedido = new LogicPedido(objCnx);

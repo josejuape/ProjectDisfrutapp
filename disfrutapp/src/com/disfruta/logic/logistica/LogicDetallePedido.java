@@ -96,12 +96,13 @@ public class LogicDetallePedido {
             producto.setDescripcion(rs.getString("v_descripcion"));
             precioventa.setProudcto(producto);
             PresentacionVenta presventa=new PresentacionVenta();
-            presventa.setId(rs.getInt("n_idpresentacion_producto"));
-            presventa.setDescripcion(rs.getString("v_descripcion"));
+            presventa.setId(rs.getInt("logtbc_presentacion_producto.n_idpresentacion_producto"));
+            presventa.setDescripcion(rs.getString("logtbc_presentacion_producto.v_descripcion"));
             precioventa.setPresentacion(presventa);
             precioventa.setPrecioventa(rs.getDouble("n_precioventa"));
             precioventa.setProporcion(rs.getDouble("n_proporcion"));
             objPedido.setPresentacion(precioventa);
+            pedido.setMesa(rs.getString("v_numero_mesa"));
             objPedido.setPedido(pedido);
             lista.add(objPedido);
         }
@@ -109,4 +110,73 @@ public class LogicDetallePedido {
         cst.close();
         return lista;
     } 
+    
+    public ArrayList listarTodo() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SQLException, Exception{        
+        DaoDetallePedido oDaoDetallePedido = new DaoDetallePedido();
+        ArrayList<DetallePedido> lista = new ArrayList();
+        ArrayList<Parametro> param = new ArrayList();
+        ArrayList objetos=oDaoDetallePedido.listarTodo(param, objCnx);
+        ResultSet rs=(ResultSet)objetos.get(0);
+        CallableStatement cst=(CallableStatement)objetos.get(1);
+        objCnx=(ObjConexion)objetos.get(2);
+        rs.beforeFirst();
+        while(rs.next()){
+            DetallePedido objPedido=new DetallePedido();
+            objPedido.setId(rs.getInt("n_iddetalle_pedido"));
+            objPedido.setCantidad(rs.getDouble("n_cantidad"));
+            objPedido.setSubtotal(rs.getDouble("n_valor_venta"));
+            objPedido.setEstado(rs.getString("c_estado"));
+            objPedido.setComentario(rs.getString("v_comentario"));
+            
+            PresentacionPrecioVenta precioventa=new PresentacionPrecioVenta();
+            ProductoCarta producto=new ProductoCarta();
+            producto.setIdproductocarta(rs.getInt("n_idproducto_carta"));
+            producto.setNombre(rs.getString("v_nombre"));
+            producto.setDescripcion(rs.getString("v_descripcion"));
+            precioventa.setProudcto(producto);
+            PresentacionVenta presventa=new PresentacionVenta();
+            presventa.setId(rs.getInt("logtbc_presentacion_producto.n_idpresentacion_producto"));
+            presventa.setDescripcion(rs.getString("logtbc_presentacion_producto.v_descripcion"));
+            precioventa.setPresentacion(presventa);
+            precioventa.setPrecioventa(rs.getDouble("n_precioventa"));
+            precioventa.setProporcion(rs.getDouble("n_proporcion"));
+            objPedido.setPresentacion(precioventa);
+            Pedido pedido=new Pedido();
+            pedido.setId(rs.getInt("n_idpedido") );
+            pedido.setMesa(rs.getString("v_numero_mesa"));
+            objPedido.setPedido(pedido);
+            lista.add(objPedido);
+        }
+        rs.close();
+        cst.close();
+        return lista;
+    } 
+    
+    public String actualizarEstadoPlato(DetallePedido bean) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, Exception {
+        String msg;
+
+        DaoDetallePedido oDaoDetallePedido = new DaoDetallePedido();
+        ArrayList<Parametro> param = new ArrayList();
+        Parametro param1 = new Parametro("OUT", Types.VARCHAR);
+        Parametro param2 = new Parametro("IN", bean.getId());
+        Parametro param3 = new Parametro("IN", bean.getTipoOperacion());
+
+        param.add(param1);
+        param.add(param2);
+        param.add(param3);
+
+        ArrayList objetos = oDaoDetallePedido.actualizarEstadoPlato(param, objCnx);
+        if (objetos.isEmpty()) {
+            msg = "Sin resultados";
+        } else {
+            msg = objetos.get(0).toString();
+            CallableStatement cst = (CallableStatement) objetos.get(1);
+            objCnx = (ObjConexion) objetos.get(2);
+            //objCnx.getMysql().confirmar();
+            cst.close();
+
+            //ocnx.getMysql().desconectarBD();
+        }
+        return msg;
+    }
 }

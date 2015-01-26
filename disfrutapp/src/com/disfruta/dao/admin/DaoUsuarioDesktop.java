@@ -49,6 +49,17 @@ public class DaoUsuarioDesktop {
         return result;
      } 
      
+     public ArrayList listarStaffCocina(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception{
+        ArrayList result=new ArrayList();
+        if(objCnx.conectarMysqlLocal()){            
+            String proc="{call listar_usuario_perfil_staffcocina()}";//llamada a un procedimiento
+            Consultas query=new Consultas(); 
+            result=query.procedimiento(proc, param, objCnx.getMysql().getCnx());
+            result.add(objCnx);
+        }
+        return result;
+     } 
+     
      public ArrayList getUltimoObject(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
         ArrayList result = new ArrayList();
         if (objCnx.conectarMysqlLocal()) {

@@ -216,6 +216,38 @@ public class GestionProductoCarta {
         }
     }
     
+     public ArrayList<ProductoCarta> listarCarta() throws ClassNotFoundException, Exception {
+        ArrayList array = new ArrayList();
+        try {
+            LogicProductoCarta logicProductoCarta = new LogicProductoCarta(objCnx);
+            array=logicProductoCarta.listarCarta();            
+            return array;             
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (Exception ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
+            try {
+                objCnx.getMysql().desconectarBD();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+               
+            }
+        }
+    }
+    
     public ArrayList<ProductoCarta> listarPorBusqueda(String nombre) throws ClassNotFoundException, Exception {
         ArrayList array = new ArrayList();
         try {

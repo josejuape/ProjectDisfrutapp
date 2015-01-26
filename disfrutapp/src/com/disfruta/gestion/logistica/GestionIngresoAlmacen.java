@@ -21,14 +21,14 @@ public class GestionIngresoAlmacen {
     ObjConexion objCnx = new ObjConexion();
     
     
-    public String registrar(IngresoAlmacen beanIngreso) {
-        String mensaje = "Operacion incorrecta";
+    public int registrar(IngresoAlmacen beanIngreso) {
+        int mensaje = 0;
         try {
             
             LogicIngresoAlmacen logicIngreso = new LogicIngresoAlmacen(objCnx);
+            String o=beanIngreso.getTipoOperacion();
             
-            
-            if (beanIngreso.getTipoOperacion().equalsIgnoreCase("i")) {
+            if (o.equals("ioc") || o.equals("irs") || o.equals("idec") || o.equals("idic")) {
                 mensaje = logicIngreso.mantenimiento(beanIngreso);
             }else{
                 return mensaje;

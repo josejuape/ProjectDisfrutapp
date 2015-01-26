@@ -37,6 +37,17 @@ public class DaoPedido {
         return result;
     }
     
+    public ArrayList listarPedidosHoy(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
+        ArrayList result = new ArrayList();
+        if (objCnx.conectarMysqlLocal()) {
+            String proc = "{call listar_pedidos_hoy(?)}";
+            Consultas query = new Consultas();
+            result = query.procedimiento(proc, param, objCnx.getMysql().getCnx());
+            result.add(objCnx);
+        }
+        return result;
+    }
+    
     public ArrayList getUltimoObject(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
         ArrayList result = new ArrayList();
         if (objCnx.conectarMysqlLocal()) {

@@ -185,4 +185,83 @@ public class GestionDetallePedido {
             }
         }
     }
+    
+    public ArrayList<DetallePedido> listarTodos() throws ClassNotFoundException, Exception {
+        ArrayList array = new ArrayList();
+        try {
+            LogicDetallePedido logicDetallePedido = new LogicDetallePedido(objCnx);
+            array=logicDetallePedido.listarTodo();
+            
+            return array;
+             
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (Exception ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
+            try {
+                objCnx.getMysql().desconectarBD();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+               
+            }
+        }
+    }
+    
+    
+    public String actualizarEstadoPlato(DetallePedido beanDetallePedido) {
+        String mensaje = "Operacion incorrecta";
+        try {
+            
+            LogicDetallePedido logicDetallePedido = new LogicDetallePedido(objCnx);
+            
+            String op=beanDetallePedido.getTipoOperacion();
+            if(op.equals("ee") || op.equals("ac") || op.equals("de")){
+                mensaje = logicDetallePedido.actualizarEstadoPlato(beanDetallePedido);
+            }else{
+                return mensaje;
+            }
+                        
+            objCnx.getMysql().confirmar();
+            
+            return mensaje;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        } catch (Exception ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        }finally{
+            try {
+                objCnx.getMysql().deshacer();
+                objCnx.getMysql().desconectarBD();
+                return mensaje;
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+               return mensaje;
+            }
+        }
+        
+    }
 }

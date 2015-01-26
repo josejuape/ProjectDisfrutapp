@@ -36,4 +36,26 @@ public class DaoDetallePedido {
         }
         return result;
     }
+    
+    public ArrayList listarTodo(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
+        ArrayList result = new ArrayList();
+        if (objCnx.conectarMysqlLocal()) {
+            String proc = "{call listartodo_detalle_pedido()}";
+            Consultas query = new Consultas();
+            result = query.procedimiento(proc, param, objCnx.getMysql().getCnx());
+            result.add(objCnx);
+        }
+        return result;
+    }
+    
+    public ArrayList actualizarEstadoPlato(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
+        ArrayList result = new ArrayList();
+        if (objCnx.conectarMysqlLocal()) {
+            String fun = "{? = call actualizar_estado_plato(?,?)}";
+            Consultas query = new Consultas();
+            result = query.funcion(fun, param, objCnx.getMysql().getCnx());
+            result.add(objCnx);
+        }
+        return result;
+    }
 }

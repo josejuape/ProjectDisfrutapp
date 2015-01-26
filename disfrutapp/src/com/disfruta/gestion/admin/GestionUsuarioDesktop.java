@@ -182,6 +182,41 @@ public class GestionUsuarioDesktop {
         }
     }
     
+    
+    public ArrayList<UsuarioDesktop> listarStaffCocina() throws ClassNotFoundException, Exception {
+        ArrayList array = new ArrayList();
+        try {
+            LogicUsuarioDesktop logicMenu = new LogicUsuarioDesktop(objCnx);
+            array=logicMenu.listarStaffCocina();
+            
+            return array;
+             
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestionUsuarioDesktop.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GestionUsuarioDesktop.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GestionUsuarioDesktop.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionUsuarioDesktop.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (Exception ex) {
+            Logger.getLogger(GestionUsuarioDesktop.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
+            try {
+                objCnx.getMysql().desconectarBD();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionMenu.class.getName()).log(Level.SEVERE, null, ex);
+               
+            }
+        }
+    }
+    
     public ArrayList<UsuarioDesktop> listarStaff() throws ClassNotFoundException, Exception {
         ArrayList array = new ArrayList();
         try {

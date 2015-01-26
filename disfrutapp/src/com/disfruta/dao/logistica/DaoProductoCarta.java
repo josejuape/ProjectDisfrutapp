@@ -49,6 +49,17 @@ public class DaoProductoCarta {
         return result;
     }
     
+    public ArrayList listarCarta(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
+        ArrayList result = new ArrayList();
+        if (objCnx.conectarMysqlLocal()) {
+            String proc = "{call listar_productos_total_carta()}";
+            Consultas query = new Consultas();
+            result = query.procedimiento(proc, param, objCnx.getMysql().getCnx());
+            result.add(objCnx);
+        }
+        return result;
+    }
+    
     public ArrayList listarPorBusqueda(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
         ArrayList result = new ArrayList();
         if (objCnx.conectarMysqlLocal()) {

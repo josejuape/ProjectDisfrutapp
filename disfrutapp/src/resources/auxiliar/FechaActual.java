@@ -30,6 +30,24 @@ public class FechaActual {
         return fechaActual;
     }
     
+    public static String formatoMysql(){
+        Calendar fecha=Calendar.getInstance();
+        int dia=fecha.get(Calendar.DATE);
+        int mes=fecha.get(Calendar.MONTH)+1;
+        String mescadena=mes+"";
+        String diacadena=dia+"";
+        if(mes<10){
+            mescadena="0"+mescadena;
+        }
+        if(dia<10){
+            diacadena="0"+diacadena;
+        }
+        int anio=fecha.get(Calendar.YEAR);
+        
+        String fechaActual=anio+"-"+mescadena+"-"+diacadena;
+        return fechaActual;
+    }
+    
     public static String fechactual(){
         Calendar fecha=Calendar.getInstance();
         int dia=fecha.get(Calendar.DATE);

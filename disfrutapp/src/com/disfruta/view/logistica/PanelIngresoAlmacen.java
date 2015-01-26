@@ -5,6 +5,7 @@
 package com.disfruta.view.logistica;
 
 import com.disfruta.bean.logistica.Almacen;
+import com.disfruta.bean.logistica.FormaPago;
 import com.disfruta.bean.logistica.IngresoAlmacen;
 import com.disfruta.bean.logistica.IngresoAlmacenInsumo;
 import com.disfruta.bean.logistica.Insumo;
@@ -13,6 +14,7 @@ import com.disfruta.bean.logistica.OrdenCompraInsumo;
 import com.disfruta.bean.logistica.Proveedor;
 import com.disfruta.bean.logistica.TipoIngresoAlmacen;
 import com.disfruta.bean.logistica.UnidadMedida;
+import com.disfruta.bean.xtbc.Comprobante;
 import com.disfruta.bean.xtbc.Moneda;
 import com.disfruta.bean.xtbc.TipoComprobante;
 import com.disfruta.gestion.logistica.GestionAlmacen;
@@ -81,7 +83,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     protected ArrayList<IngresoAlmacenInsumo> listaDetalle3;
     protected ArrayList<IngresoAlmacenInsumo> listaDetalle4;
     protected ArrayList<TipoIngresoAlmacen> listaTabs;
-    protected String tab = "";
+    protected String tab = "IOC";
     protected OrdenCompra ordenSelect=null;
 
     /**
@@ -266,7 +268,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             public void callback(Object selectedItem) {
                 String cad = selectedItem.toString();
                 for (int i = 0; i < listaProveedores.size(); i++) {
-                    if (cad.equals(((Insumo) listaProveedores.get(i)).getNombre())) {
+                    Proveedor pro=(Proveedor) listaProveedores.get(i);
+                    if (cad.equalsIgnoreCase(pro.getNombres()+" "+pro.getApellidos())) {
                         try {
                             proveedorselected3 = (Proveedor) listaProveedores.get(i);
                         } catch (Exception ex) {
@@ -1987,38 +1990,56 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         // TODO add your handling code here:
         TipoIngresoAlmacen tipoIngreso = new TipoIngresoAlmacen();
         for (int i = 0; i < this.listaTabs.size(); i++) {
+            System.out.println("tab: "+this.tab);
+            System.out.println("listatab: "+this.listaTabs.get(i).getIdentificador());
             if (this.listaTabs.get(i).getIdentificador().equals(this.tab)) {
+                System.out.println("entro...");
                 tipoIngreso = this.listaTabs.get(i);
             }
         }
         IngresoAlmacen ingAlm=new IngresoAlmacen();
         GestionIngresoAlmacen gestionIng=new GestionIngresoAlmacen();
+        System.out.println("tab: "+this.tab);
         if (this.tab.equals("IOC")) {
             ingAlm.setTipoIngreso(tipoIngreso);
             ingAlm.setParteEntrada(this.lblParteEntrada.getText());
             ingAlm.setAlmacen(this.modelCboAlmacen.getElement(this.cboAlmacen1.getSelectedIndex())); 
             ingAlm.setEstado("I");
-            ingAlm.setTipoOperacion("i");
+            ingAlm.setTipoOperacion("ioc");
             ingAlm.setOrdenCompra(ordenSelect);
             if(this.chkAtencionCompleta.isSelected()){
                 ingAlm.setAtenderCompleto("S");
             }else{
                 ingAlm.setAtenderCompleto("N");
             }
-            
+            ingAlm.setProveedor(new Proveedor());
+            ingAlm.setFormaPago(new FormaPago());
+            ingAlm.setMoneda(new Moneda());
+            ingAlm.setComprobante(new Comprobante());
+            ingAlm.setTipoComprobante(new TipoComprobante());
+            int msg=gestionIng.registrar(ingAlm);
+            System.out.println("msg: "+msg);
         }
         if (this.tab.equals("IRS")) {
             ingAlm.setTipoIngreso(tipoIngreso);
             ingAlm.setParteEntrada(this.lblParteEntrada.getText());
             ingAlm.setAlmacen(this.modelCboAlmacen2.getElement(this.cboAlmacen2.getSelectedIndex())); 
             ingAlm.setEstado("I");
-            ingAlm.setTipoOperacion("i");
+            ingAlm.setTipoOperacion("irs");
             ingAlm.setTipoComprobante(this.modelCboTipoDocumento2.getElement(this.cboTipoDocumento2.getSelectedIndex()));
             ingAlm.setNumeroComprobante(this.txtNumeroDoc2.getText());
             Date date = this.txtFechaEmisionDoc2.getDate();
             SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
             ingAlm.setFechaEmisionComprobante(formato.format(date)+"");
             ingAlm.setComentario(this.txtComentario2.getText());
+            ingAlm.setProveedor(new Proveedor());
+            ingAlm.setFormaPago(new FormaPago());
+            ingAlm.setMoneda(new Moneda());
+            ingAlm.setComprobante(new Comprobante());
+            ingAlm.setOrdenCompra(new OrdenCompra());
+            
+            int msg=gestionIng.registrar(ingAlm);
+            System.out.println("msg: "+msg);
             
         }
         if (this.tab.equals("IDEC")) {
@@ -2026,7 +2047,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             ingAlm.setParteEntrada(this.lblParteEntrada.getText());
             ingAlm.setAlmacen(this.modelCboAlmacen3.getElement(this.cboAlmacen3.getSelectedIndex())); 
             ingAlm.setEstado("I");
-            ingAlm.setTipoOperacion("i");
+            ingAlm.setTipoOperacion("idec");
             ingAlm.setTipoComprobante(this.modelCboTipoDocumento3.getElement(this.cboTipoDocumento3.getSelectedIndex()));
             ingAlm.setNumeroComprobante(this.txtNumeroDoc3.getText());
             Date date = this.txtFechaEmisionDoc3.getDate();
@@ -2039,6 +2060,11 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             Date date2 = this.txtFechaLimiteCancel.getDate();
             SimpleDateFormat formato2 = new SimpleDateFormat("DD/MM/YY");
             ingAlm.setFechaLimiteCancelacion(formato2.format(date2)+"");
+            ingAlm.setComprobante(new Comprobante());
+            ingAlm.setOrdenCompra(new OrdenCompra());
+            
+            int msg=gestionIng.registrar(ingAlm);
+            System.out.println("msg: "+msg);
             
         }
         if (this.tab.equals("IDIC")) {
@@ -2046,13 +2072,21 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             ingAlm.setParteEntrada(this.lblParteEntrada.getText());
             ingAlm.setAlmacen(this.modelCboAlmacen4.getElement(this.cboAlmacen4.getSelectedIndex())); 
             ingAlm.setEstado("I");
-            ingAlm.setTipoOperacion("i");
+            ingAlm.setTipoOperacion("idic");
             ingAlm.setTipoComprobante(this.modelCboTipoDocumento4.getElement(this.cboTipoDocumento4.getSelectedIndex()));
             ingAlm.setNumeroComprobante(this.txtNumeroDoc4.getText());
             Date date = this.txtFechaEmisionDoc4.getDate();
             SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
             ingAlm.setFechaEmisionComprobante(formato.format(date)+"");
             ingAlm.setComentario(this.txtComentario4.getText());
+            ingAlm.setProveedor(new Proveedor());
+            ingAlm.setFormaPago(new FormaPago());
+            ingAlm.setMoneda(new Moneda());
+            ingAlm.setComprobante(new Comprobante());
+            ingAlm.setOrdenCompra(new OrdenCompra());
+            
+            int msg=gestionIng.registrar(ingAlm);
+            System.out.println("msg: "+msg);
             
         }
     }//GEN-LAST:event_btnGuardarIngresoAlmacenActionPerformed

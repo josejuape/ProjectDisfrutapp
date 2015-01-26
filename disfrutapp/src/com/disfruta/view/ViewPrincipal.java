@@ -12,6 +12,7 @@ import com.disfruta.gestion.xtbc.GestionUbigeo;
 import com.disfruta.view.logistica.PanelIngresoAlmacen;
 import com.disfruta.view.logistica.PanelOrdenDeCompra;
 import com.disfruta.view.staff.PanelStaff;
+import com.disruta.view.cocina.PanelCocina;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -51,7 +52,7 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         this.menuList = new GestionLogin().listarMenuLogin(usuario);
         this.btnMenuStaff.setEnabled(true);
         this.btnMenuLogistica.setEnabled(false);
-        this.btnMenuCocina.setEnabled(false);
+        this.btnMenuCocina.setEnabled(true);
         this.btnMenuCaja.setEnabled(false);
         this.btnMenuAdmin.setEnabled(false);
         init();
@@ -575,6 +576,12 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         btnMenuAdmin.setIcon(null);
         btnMenuCaja.setIcon(null);
         btnMenuStaff.setIcon(null);
+        
+        this.PanelBarrasIconos.setVisible(false);
+        PanelCocina ps = new PanelCocina();
+        this.DesktopContainer.removeAll();
+        this.DesktopContainer.add(ps);
+        this.DesktopContainer.updateUI();
     }//GEN-LAST:event_btnMenuCocinaActionPerformed
 
     /**

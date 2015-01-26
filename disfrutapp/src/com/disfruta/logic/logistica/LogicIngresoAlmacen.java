@@ -33,16 +33,16 @@ public class LogicIngresoAlmacen {
         this.objCnx=paramCnx;
     }
     
-    public String mantenimiento(IngresoAlmacen beanIngreso) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, Exception {
-        String msg;
+    public int mantenimiento(IngresoAlmacen beanIngreso) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, Exception {
+        int msg=0;
 
         DaoIngresoAlmacen oDaoIngreso = new DaoIngresoAlmacen();
         ArrayList<Parametro> param = new ArrayList();
-        Parametro param1 = new Parametro("OUT", Types.VARCHAR);
+        Parametro param1 = new Parametro("OUT", Types.INTEGER);
         Parametro param2 = new Parametro("IN", beanIngreso.getId());
         Parametro param3 = new Parametro("IN", beanIngreso.getParteEntrada());
         Parametro param4 = new Parametro("IN", beanIngreso.getAtenderCompleto());
-        Parametro param5 = new Parametro("IN", beanIngreso.getFechaRegistro());
+        Parametro param5 = new Parametro("IN","");//fecha redgistro
         Parametro param6 = new Parametro("IN", beanIngreso.getNumeroComprobante());
         Parametro param7 = new Parametro("IN", beanIngreso.getSerieComprobante());
         Parametro param8 = new Parametro("IN", beanIngreso.getFechaEmisionComprobante());
@@ -84,9 +84,9 @@ public class LogicIngresoAlmacen {
 
         ArrayList objetos = oDaoIngreso.mantenimiento(param, objCnx);
         if (objetos.isEmpty()) {
-            msg = "Sin resultados";
+            msg = 0;
         } else {
-            msg = objetos.get(0).toString();
+            msg = (int) objetos.get(0);
             CallableStatement cst = (CallableStatement) objetos.get(1);
             objCnx = (ObjConexion) objetos.get(2);
             //objCnx.getMysql().confirmar();
