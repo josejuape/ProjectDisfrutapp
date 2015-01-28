@@ -73,6 +73,7 @@ public class MenuAdmin extends JMenuBar implements ActionListener {
 		PanelUsuarios pu; 
             try {
                 pu = new PanelUsuarios();
+                pu.setBounds(0,0,960,590);
                 panelctn.removeAll();
                 panelctn.add(pu);
                 panelctn.updateUI();
@@ -83,7 +84,8 @@ public class MenuAdmin extends JMenuBar implements ActionListener {
             }                
 	}else if(e.getActionCommand().equals("Perfiles")){
             try {
-                PanelPerfilUsuario pu=new PanelPerfilUsuario(); 
+                PanelPerfilUsuario pu=new PanelPerfilUsuario();
+                pu.setBounds(0,0,960,590);
                 panelctn.removeAll();
                 panelctn.add(pu);            
                 panelctn.updateUI();

@@ -41,7 +41,7 @@ public class ItemPlatoEnEspera extends JPanel {
         System.out.println("cantidad llnn: " + pedido.getCantidad());
         this.cant = this.cant + pedido.getCantidad();
         this.setLayout(null);
-        this.setPreferredSize(new Dimension(820, 45));
+        this.setPreferredSize(new Dimension(620, 45));
         this.setBackground(new Color(242, 242, 242));
         this.setBorder(new LineBorder(new Color(255, 255, 255), 2, true));
         this.icono = new JLabel("ico");

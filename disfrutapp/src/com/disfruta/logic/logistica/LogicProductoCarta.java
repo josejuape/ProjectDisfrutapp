@@ -4,6 +4,7 @@
  */
 package com.disfruta.logic.logistica;
 
+import com.disfruta.bean.logistica.DetallePedido;
 import com.disfruta.bean.logistica.FamiliaProducto;
 import com.disfruta.bean.logistica.PresentacionPrecioVenta;
 import com.disfruta.bean.logistica.PresentacionVenta;
@@ -38,8 +39,9 @@ public class LogicProductoCarta {
         Parametro param2 = new Parametro("IN", beanProductoCarta.getIdproductocarta());
         Parametro param3 = new Parametro("IN", beanProductoCarta.getNombre());
         Parametro param4 = new Parametro("IN", beanProductoCarta.getDescripcion());
-        Parametro param5 = new Parametro("IN", beanProductoCarta.getFamilia().getN_idfamilia());
-        Parametro param6 = new Parametro("IN", beanProductoCarta.getTipoOperacion());
+        Parametro param5 = new Parametro("IN", beanProductoCarta.getDespachadoen());
+        Parametro param6 = new Parametro("IN", beanProductoCarta.getFamilia().getN_idfamilia());
+        Parametro param7 = new Parametro("IN", beanProductoCarta.getTipoOperacion());
 
         param.add(param1);
         param.add(param2);
@@ -47,6 +49,7 @@ public class LogicProductoCarta {
         param.add(param4);
         param.add(param5);
         param.add(param6);
+        param.add(param7);
 
         ArrayList objetos = oDaoProductoCarta.mantenimiento(param, objCnx);
         if (objetos.isEmpty()) {
@@ -76,6 +79,7 @@ public class LogicProductoCarta {
             ProductoCarta objProductoCarta = new ProductoCarta();
             objProductoCarta.setIdproductocarta(rs.getInt("n_idproducto_carta"));
             objProductoCarta.setNombre(rs.getString("v_nombre"));
+            objProductoCarta.setDespachadoen(rs.getString("v_despacho_en"));
             objProductoCarta.setDescripcion(rs.getString("logtbc_producto_carta.v_descripcion"));
             FamiliaProducto familia = new FamiliaProducto();
             familia.setN_idfamilia(rs.getInt("n_idfamilia"));
@@ -105,6 +109,7 @@ public class LogicProductoCarta {
             ProductoCarta objProductoCarta = new ProductoCarta();
             objProductoCarta.setIdproductocarta(rs.getInt("n_idproducto_carta"));
             objProductoCarta.setNombre(rs.getString("v_nombre"));
+            objProductoCarta.setDespachadoen(rs.getString("v_despacho_en"));
             objProductoCarta.setDescripcion(rs.getString("logtbc_producto_carta.v_descripcion"));
             FamiliaProducto familia = new FamiliaProducto();
             familia.setN_idfamilia(rs.getInt("logtbc_producto_carta.n_idfamilia"));
@@ -156,6 +161,42 @@ public class LogicProductoCarta {
             objProductoCarta.setPresentaciones(presentaciones);
             lista.add(objProductoCarta);
             
+        }
+        rs.close();
+        cst.close();
+        return lista;
+    }
+    
+    public ArrayList<DetallePedido> listarProductosDevueltos() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SQLException, Exception {
+        DaoProductoCarta oDaoProductoCarta = new DaoProductoCarta();
+        ArrayList<DetallePedido> lista = new ArrayList();
+        ArrayList<Parametro> param = new ArrayList();
+        ArrayList objetos = oDaoProductoCarta.listarProductosDevueltos(param, objCnx);
+        ResultSet rs = (ResultSet) objetos.get(0);
+        CallableStatement cst = (CallableStatement) objetos.get(1);
+        objCnx = (ObjConexion) objetos.get(2);
+        rs.beforeFirst();
+
+        while (rs.next()) {
+            DetallePedido detalle=new DetallePedido();
+            detalle.setId(rs.getInt("n_iddetalle_pedido"));
+            detalle.setCantidad(rs.getDouble("n_cantidad"));
+            detalle.setSubtotal(rs.getDouble("n_valor_venta"));
+            detalle.setEstado(rs.getString("c_estado"));
+            detalle.setComentario(rs.getString("v_comentario"));
+            ProductoCarta producto=new ProductoCarta();
+            producto.setIdproductocarta(rs.getInt("n_idproducto_carta"));
+            producto.setNombre(rs.getString("v_nombre"));
+            PresentacionVenta prese=new PresentacionVenta();
+            prese.setId(rs.getInt("n_idpresentacion_producto"));
+            prese.setDescripcion(rs.getString("logtbc_presentacion_producto.v_descripcion"));
+            PresentacionPrecioVenta pv=new PresentacionPrecioVenta();
+            pv.setPrecioventa(rs.getDouble("n_precioventa"));
+            pv.setProporcion(rs.getDouble("n_proporcion"));
+            pv.setPresentacion(prese);
+            pv.setProudcto(producto);
+            detalle.setPresentacion(pv);
+            lista.add(detalle);
         }
         rs.close();
         cst.close();

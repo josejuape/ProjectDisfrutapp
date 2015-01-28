@@ -81,6 +81,8 @@ public class PanelProductoCarta extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblMostrarPresentacion = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
+        cboDespachadoen = new javax.swing.JComboBox();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(960, 590));
@@ -281,6 +283,10 @@ public class PanelProductoCarta extends javax.swing.JPanel {
         tblMostrarPresentacion.getColumnModel().getColumn(1).setResizable(false);
         tblMostrarPresentacion.getColumnModel().getColumn(2).setResizable(false);
 
+        jLabel8.setText("Despachado en:");
+
+        cboDespachadoen.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "- SELECCIONE -", "COCINA", "BAR" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -291,18 +297,20 @@ public class PanelProductoCarta extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(txtNombreProductoCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3))
+                                .addComponent(jLabel3)))
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel5)
+                            .addComponent(cboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(txtNombreProductoCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(43, 43, 43)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(cboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cboDespachadoen, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
@@ -326,18 +334,20 @@ public class PanelProductoCarta extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(cboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtNombreProductoCarta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel8)
+                            .addComponent(cboDespachadoen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -349,7 +359,7 @@ public class PanelProductoCarta extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(96, Short.MAX_VALUE))))
+                        .addContainerGap(95, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -381,11 +391,13 @@ public class PanelProductoCarta extends javax.swing.JPanel {
         // TODO add your handling code here:
         String nom = this.txtNombreProductoCarta.getText();
         int r = this.cboCategoria.getSelectedIndex();
-        if (r >= 0 && !(nom.equals(""))) {
+        int p=this.cboDespachadoen.getSelectedIndex();
+        if (r >= 0 && p>0 && !(nom.equals(""))) {
             if (this.control.equals("nuevo")) {
                 ProductoCarta pro = new ProductoCarta();
                 pro.setNombre(this.txtNombreProductoCarta.getText());
                 pro.setDescripcion(this.txtDescripcionProdCarta.getText());
+                pro.setDespachadoen(this.cboDespachadoen.getSelectedItem().toString());
                 pro.setTipoOperacion("i");
                 int pos = this.cboCategoria.getSelectedIndex();
                 FamiliaProducto fami = (FamiliaProducto) this.modelCboCategoria.getElement(pos);
@@ -400,6 +412,7 @@ public class PanelProductoCarta extends javax.swing.JPanel {
                     ProductoCarta pro = this.modelTableProductoCarta.getValue(row);
                     pro.setNombre(this.txtNombreProductoCarta.getText());
                     pro.setDescripcion(this.txtDescripcionProdCarta.getText());
+                    pro.setDespachadoen(this.cboDespachadoen.getSelectedItem().toString());
                     pro.setTipoOperacion("a");
                     int pos = this.cboCategoria.getSelectedIndex();
                     FamiliaProducto fami = (FamiliaProducto) this.modelCboCategoria.getElement(pos);
@@ -437,8 +450,9 @@ public class PanelProductoCarta extends javax.swing.JPanel {
                 this.control = "modificar";
                 ProductoCarta producto = this.modelTableProductoCarta.getValue(p);
                 this.txtNombreProductoCarta.setText(producto.getNombre());
-                this.txtDescripcionProdCarta.setText(producto.getDescripcion());
-                this.cboCategoria.setSelectedItem(producto.getFamilia().getV_familia());
+                this.txtDescripcionProdCarta.setText(producto.getDescripcion());                
+                this.cboCategoria.setSelectedItem(producto.getFamilia().getV_familia().toString());
+                this.cboDespachadoen.setSelectedItem(producto.getDespachadoen());
                 this.modelTablePrecioVenta.setData(new GestionPresentacionPrecioVenta().listarPorProducto(producto));
                 this.modelTablePrecioVenta.fireTableDataChanged();
             }
@@ -500,6 +514,7 @@ public class PanelProductoCarta extends javax.swing.JPanel {
     private javax.swing.JButton btnGuardarProductoCarta;
     private javax.swing.JButton btnNuevoProducto;
     private javax.swing.JComboBox cboCategoria;
+    private javax.swing.JComboBox cboDespachadoen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -507,6 +522,7 @@ public class PanelProductoCarta extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

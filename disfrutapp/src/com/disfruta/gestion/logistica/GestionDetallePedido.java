@@ -108,6 +108,50 @@ public class GestionDetallePedido {
         
     }
     
+    public String venderProductoDevuelto(DetallePedido beanDetallePedido) {
+        String mensaje = "Operacion incorrecta";
+        try {
+            
+            LogicDetallePedido logicDetallePedido = new LogicDetallePedido(objCnx);
+            
+            
+            if (beanDetallePedido.getTipoOperacion().equalsIgnoreCase("a")) {
+                mensaje = logicDetallePedido.venderProductoDevuelto(beanDetallePedido);
+            }else{
+                return mensaje;
+            }
+            
+            objCnx.getMysql().confirmar();
+            
+            return mensaje;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        } catch (Exception ex) {
+            Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+            ex.getMessage();
+        }finally{
+            try {
+                objCnx.getMysql().deshacer();
+                objCnx.getMysql().desconectarBD();
+                return mensaje;
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionDetallePedido.class.getName()).log(Level.SEVERE, null, ex);
+               return mensaje;
+            }
+        }
+        
+    }
+    
      public String eliminar(DetallePedido beanDetallePedido) {
         String mensaje = "Operacion incorrecta";
         try {
@@ -228,7 +272,7 @@ public class GestionDetallePedido {
             LogicDetallePedido logicDetallePedido = new LogicDetallePedido(objCnx);
             
             String op=beanDetallePedido.getTipoOperacion();
-            if(op.equals("ee") || op.equals("ac") || op.equals("de")){
+            if(op.equals("ee") || op.equals("ac") || op.equals("de") || op.equals("cc")){
                 mensaje = logicDetallePedido.actualizarEstadoPlato(beanDetallePedido);
             }else{
                 return mensaje;

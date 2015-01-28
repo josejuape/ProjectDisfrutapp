@@ -71,6 +71,34 @@ public class LogicDetallePedido {
         return msg;
     }
     
+    public String venderProductoDevuelto(DetallePedido bean) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, Exception {
+        String msg;
+
+        DaoDetallePedido oDaoDetallePedido = new DaoDetallePedido();
+        ArrayList<Parametro> param = new ArrayList();
+        Parametro param1 = new Parametro("OUT", Types.VARCHAR);
+        Parametro param2 = new Parametro("IN", bean.getId());
+        Parametro param3 = new Parametro("IN", bean.getTipoOperacion());
+
+        param.add(param1);
+        param.add(param2);
+        param.add(param3);
+
+        ArrayList objetos = oDaoDetallePedido.venderProductoDevuelto(param, objCnx);
+        if (objetos.isEmpty()) {
+            msg = "Sin resultados";
+        } else {
+            msg = objetos.get(0).toString();
+            CallableStatement cst = (CallableStatement) objetos.get(1);
+            objCnx = (ObjConexion) objetos.get(2);
+            //objCnx.getMysql().confirmar();
+            cst.close();
+
+            //ocnx.getMysql().desconectarBD();
+        }
+        return msg;
+    }
+    
     public ArrayList listar(Pedido pedido) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SQLException, Exception{        
         DaoDetallePedido oDaoDetallePedido = new DaoDetallePedido();
         ArrayList<DetallePedido> lista = new ArrayList();

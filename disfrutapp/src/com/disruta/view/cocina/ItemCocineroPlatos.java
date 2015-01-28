@@ -14,8 +14,11 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
 
 /**
@@ -23,7 +26,6 @@ import javax.swing.border.LineBorder;
  * @author Juape
  */
 public class ItemCocineroPlatos extends JPanel{
-    protected JPanel container;
     protected JLabel foto;
     protected JLabel nombre;
     protected JButton verdetalle;
@@ -32,13 +34,10 @@ public class ItemCocineroPlatos extends JPanel{
     
     public ItemCocineroPlatos(final CocineroPlatos cocinero){
         panel=this;
-        container=new JPanel();
-        container.setLayout(null);
-        this.setLayout(new GridLayout(1, 1, 10, 10));
-        this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        container.setPreferredSize(new Dimension(420, 50));
-        container.setBackground(new Color(242, 242, 242));
-        container.setBorder(new LineBorder(new Color(255, 255, 255), 2, true));
+        this.setLayout(null);
+        this.setPreferredSize(new Dimension(420, 50));
+        this.setBackground(new Color(242, 242, 242));
+        this.setBorder(new LineBorder(new Color(255, 255, 255), 2, true));
         Image fotoimg = getToolkit().getImage(getClass().getResource("/images/fotoPerfil.png"));
         fotoimg = fotoimg.getScaledInstance(40, 40, Image.SCALE_DEFAULT);
         foto=new JLabel();
@@ -50,13 +49,22 @@ public class ItemCocineroPlatos extends JPanel{
         verdetalle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panel.setLayout(new GridLayout(cocinero.getPlatos().size(), 1, 10, 10));
-                
+                JDialog dialog=new JDialog();
+                dialog.setSize(700, 400);
+                JPanel panelplatos=new JPanel();
+                panelplatos.setLayout(new GridLayout(10, 1, 10, 10));
+                panelplatos.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
+                panelplatos.setBackground(Color.WHITE);
+                JScrollPane scroll=new JScrollPane();
+                scroll.setPreferredSize(new Dimension(700,400));
+                scroll .setViewportView(panelplatos);
+                scroll .getViewport().setView(panelplatos);
+                dialog.add(scroll);
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
                 for (int i = 0; i < cocinero.getPlatos().size(); i++) {
-                    ItemPlatoEnEspera item=new ItemPlatoEnEspera(cocinero.getPlatos().get(i),panel);
-                    panel.add(item);
-                    panel.setMaximumSize(new Dimension(520,400));
-                    panel.setMinimumSize(new Dimension(520,400));
+                    ItemPlatoEnEspera item=new ItemPlatoEnEspera(cocinero.getPlatos().get(i),panelplatos);
+                    panelplatos.add(item);
                 }
             }
         });
@@ -64,12 +72,10 @@ public class ItemCocineroPlatos extends JPanel{
         cantidad=new JLabel();
         cantidad.setText(cocinero.getPlatos().size()+"");
         cantidad.setBounds(450, 5, 60, 40);
-        container.add(foto);
-        container.add(nombre);
-        container.add(verdetalle);
-        container.add(cantidad);
-        
-        this.add(container);
+        this.add(foto);
+        this.add(nombre);
+        this.add(verdetalle);
+        this.add(cantidad);
     }
     
 }

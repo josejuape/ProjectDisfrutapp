@@ -16,11 +16,13 @@ import com.disfruta.gestion.logistica.GestionFamiliaProducto;
 import com.disfruta.gestion.logistica.GestionPedido;
 import com.disfruta.gestion.logistica.GestionProductoCarta;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -35,8 +37,13 @@ public class PanelTabPedido extends javax.swing.JPanel {
     protected resources.comboboxmodel.CboModelFamiliaProducto cboModelFamilia;
     protected resources.comboboxmodel.CboModelUsuario cboModelUsuario;
     public ArrayList<PanelProductoCartaItem> listaProductosElegidos;
+    public ArrayList<ItemProductoDevuelto> listaProductosElegidosDevueltos;
     public ArrayList<PanelProductoCartaItem> listadoProductos;
-    public ArrayList<PanelProductoCartaItem> listaProductosDevueltos;
+    public ArrayList<ItemProductoDevuelto> listaProductosDevueltos;
+    public boolean control_devueltos = false;//para controlar si se esta en vista de productos devueltos
+    public double montoTotal = 0;// para ir sumando el total cada ves q se agrega un producto
+    public int cantidadProducto = 0;//para mostrar cantidad de productos marcados
+    public boolean resumen = false;//variable para controlar la activacion del boton terminar pedido; se activa solo cuando le doy ver pedido
 
     /**
      * Creates new form PanelTabPedido
@@ -45,10 +52,37 @@ public class PanelTabPedido extends javax.swing.JPanel {
         init();
         initComponents();
         cargarProductos();
+        this.setPreferredSize(new Dimension(960, 480));
+        this.setLayout(null);
+        this.lbltituloproddevueltos.setBounds(8, 10, 200, 24);
+        this.lbltituloproddevueltos.setVisible(false);
+        this.lbliconuser.setBounds(8, 10, 25, 25);
+        this.cboUsuarioStaff.setBounds(35, 10, 280, 25);
+        this.lblnummesa.setBounds(325, 10, 50, 25);
+        this.txtNumeroMesa.setBounds(385, 10, 90, 25);
+        this.btnMostrarProductosDvueltos.setBounds(910, 8, 40, 30);
+        this.btnBuscarPorCarta.setBounds(8, 45, 470, 30);
+        this.btnBuscarPorNombre.setBounds(482, 45, 470, 30);
+        this.panelbusqueda.setBounds(8, 77, 944, 25);
+        this.panelbusqueda.setLayout(null);
+        this.cboBuscarPorCategoria.setBounds(0, 0, 944, 25);
+        this.txtBuscarPorNombreProducto.setBounds(2, 0, 940, 25);
+        this.panelTitulos.setBounds(0, 108, 960, 26);
+        this.panelTitulos.setLayout(null);
+        this.panelTitulos.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, new Color(230, 230, 230)));
+        this.lblproducto.setBounds(10, 3, 120, 18);
+        this.lblprecio.setBounds(370, 3, 120, 18);
+        this.lblpresentacion.setBounds(510, 3, 120, 18);
+        this.lblcantidad.setBounds(650, 3, 120, 18);
+        this.lblsubtotal.setBounds(780, 3, 100, 18);
+        this.scrollContainer.setBounds(0, 135, 960, 375);
+        this.scrollContainer.setBorder(null);
+
         this.cboBuscarPorCategoria.setModel(cboModelFamilia);
-        this.panelContainerProductos.setLayout(new GridLayout(10, 1, 10, 10));//gridLayout es una matriz (filas,columnas,margen de filas,margen de columnas)
-        this.panelContainerProductos.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));// margenes internos para el panel
-        this.txtBuscarPorNombreProducto.setEnabled(false);
+        this.panelContainerProductos.setLayout(new GridLayout(10, 1, 1, 0));//gridLayout es una matriz (filas,columnas,margen de filas,margen de columnas)
+        this.panelContainerProductos.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));// margenes internos para el panel
+
+        this.txtBuscarPorNombreProducto.setVisible(false);
         this.cboUsuarioStaff.setModel(cboModelUsuario);
         PaddingLeft.agregarpadding(this.txtBuscarPorNombreProducto);
         PaddingLeft.agregarpadding(this.txtNumeroMesa);
@@ -59,10 +93,11 @@ public class PanelTabPedido extends javax.swing.JPanel {
     private void init() {
         try {
             listaProductosElegidos = new ArrayList();
+            listaProductosElegidosDevueltos = new ArrayList();
             this.cboModelUsuario = new resources.comboboxmodel.CboModelUsuario(new GestionUsuarioDesktop().listarStaff());
             listadoProductos = new ArrayList();
             this.cboModelFamilia = new resources.comboboxmodel.CboModelFamiliaProducto(new GestionFamiliaProducto().listar());
-            this.listaProductosDevueltos=new ArrayList();
+            this.listaProductosDevueltos = new ArrayList();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PanelStaff.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -71,7 +106,7 @@ public class PanelTabPedido extends javax.swing.JPanel {
     }
 
     public void llenarUltimaSeleccion() {
-        System.out.println("llenar ultima seleccion: "+listadoProductos.size());
+        System.out.println("llenar ultima seleccion: " + listadoProductos.size());
         for (int i = 0; i < listadoProductos.size(); i++) {
             PanelProductoCartaItem obj = (PanelProductoCartaItem) listadoProductos.get(i);
             if (obj.productoSelected != null) {
@@ -104,7 +139,7 @@ public class PanelTabPedido extends javax.swing.JPanel {
             if (lista.size() > 10) {
                 rows = lista.size();
             }
-            this.panelContainerProductos.setLayout(new GridLayout(rows, 1, 10, 10));
+            this.panelContainerProductos.setLayout(new GridLayout(rows, 1, 1, 0));
             for (int i = 0; i < lista.size(); i++) {
                 System.out.println("listado productos: " + listadoProductos.size());
                 boolean band = false;
@@ -117,11 +152,13 @@ public class PanelTabPedido extends javax.swing.JPanel {
                     }
                 }
                 if (band == false) {
-                    panelProducto = new PanelProductoCartaItem(lista.get(i));
+                    panelProducto = new PanelProductoCartaItem(lista.get(i), this);
                 }
                 this.listadoProductos.add(panelProducto);
                 this.panelContainerProductos.add(panelProducto);
-                this.listaProductosDevueltos.add(panelProducto);
+                if (i % 2 != 0) {
+                    panelProducto.setBackground(new Color(252, 249, 245));
+                }
             }
             this.panelContainerProductos.repaint();
         } catch (ClassNotFoundException ex) {
@@ -147,6 +184,14 @@ public class PanelTabPedido extends javax.swing.JPanel {
         this.panelContainerProductos = panelContainerProductos;
     }
 
+    public ArrayList<ItemProductoDevuelto> getListaProductosElegidosDevueltos() {
+        return listaProductosElegidosDevueltos;
+    }
+
+    public void setListaProductosElegidosDevueltos(ArrayList<ItemProductoDevuelto> listaProductosElegidosDevueltos) {
+        this.listaProductosElegidosDevueltos = listaProductosElegidosDevueltos;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -156,7 +201,7 @@ public class PanelTabPedido extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel15 = new javax.swing.JLabel();
+        lbliconuser = new javax.swing.JLabel();
         cboUsuarioStaff = new javax.swing.JComboBox();
         txtNumeroMesa = new javax.swing.JTextField();
         btnBuscarPorCarta = new javax.swing.JButton();
@@ -164,19 +209,21 @@ public class PanelTabPedido extends javax.swing.JPanel {
         panelbusqueda = new javax.swing.JPanel();
         cboBuscarPorCategoria = new javax.swing.JComboBox();
         txtBuscarPorNombreProducto = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrollContainer = new javax.swing.JScrollPane();
         panelContainerProductos = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        btnMostrarPedidosDvueltos = new javax.swing.JButton();
+        lblnummesa = new javax.swing.JLabel();
+        btnMostrarProductosDvueltos = new javax.swing.JButton();
+        panelTitulos = new javax.swing.JPanel();
+        lblproducto = new javax.swing.JLabel();
+        lblprecio = new javax.swing.JLabel();
+        lblpresentacion = new javax.swing.JLabel();
+        lblcantidad = new javax.swing.JLabel();
+        lblsubtotal = new javax.swing.JLabel();
+        lbltituloproddevueltos = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cboStaff.png"))); // NOI18N
+        lbliconuser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cboStaff.png"))); // NOI18N
 
         cboUsuarioStaff.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "- Seleccione Staff -", "Item 2", "Item 3", "Item 4" }));
         cboUsuarioStaff.addActionListener(new java.awt.event.ActionListener() {
@@ -210,6 +257,8 @@ public class PanelTabPedido extends javax.swing.JPanel {
         btnBuscarPorCarta.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscarPorCarta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btn_carta.png"))); // NOI18N
         btnBuscarPorCarta.setText("Carta");
+        btnBuscarPorCarta.setBorder(null);
+        btnBuscarPorCarta.setBorderPainted(false);
         btnBuscarPorCarta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBuscarPorCarta.setFocusable(false);
         btnBuscarPorCarta.setRolloverEnabled(false);
@@ -224,6 +273,8 @@ public class PanelTabPedido extends javax.swing.JPanel {
         btnBuscarPorNombre.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscarPorNombre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btn_buscar.png"))); // NOI18N
         btnBuscarPorNombre.setText("Buscar");
+        btnBuscarPorNombre.setBorder(null);
+        btnBuscarPorNombre.setBorderPainted(false);
         btnBuscarPorNombre.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBuscarPorNombre.setFocusable(false);
         btnBuscarPorNombre.addActionListener(new java.awt.event.ActionListener() {
@@ -233,9 +284,11 @@ public class PanelTabPedido extends javax.swing.JPanel {
         });
 
         panelbusqueda.setBackground(new java.awt.Color(255, 255, 255));
-        panelbusqueda.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(204, 204, 204), 1, true));
 
         cboBuscarPorCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "- Busqueda por familia de porducto -", "Item 2", "Item 3", "Item 4" }));
+        cboBuscarPorCategoria.setBorder(null);
+        cboBuscarPorCategoria.setFocusable(false);
+        cboBuscarPorCategoria.setOpaque(false);
         cboBuscarPorCategoria.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cboBuscarPorCategoriaItemStateChanged(evt);
@@ -276,128 +329,166 @@ public class PanelTabPedido extends javax.swing.JPanel {
             panelbusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelbusquedaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cboBuscarPorCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtBuscarPorNombreProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                .addGroup(panelbusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtBuscarPorNombreProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 876, Short.MAX_VALUE)
+                    .addComponent(cboBuscarPorCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelbusquedaLayout.setVerticalGroup(
             panelbusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelbusquedaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelbusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboBuscarPorCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuscarPorNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(cboBuscarPorCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtBuscarPorNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(179, 179, 179));
-        jLabel2.setText("Producto");
-
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(179, 179, 179));
-        jLabel3.setText("Precio unit.");
-
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(179, 179, 179));
-        jLabel4.setText("Presentación");
-
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(179, 179, 179));
-        jLabel6.setText("SubTotal");
-
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(179, 179, 179));
-        jLabel5.setText("Cantidad");
-
-        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jScrollPane1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(242, 242, 242), 1, true));
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollContainer.setBackground(new java.awt.Color(255, 255, 255));
+        scrollContainer.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(242, 242, 242), 1, true));
+        scrollContainer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         panelContainerProductos.setBackground(new java.awt.Color(255, 255, 255));
         panelContainerProductos.setForeground(new java.awt.Color(255, 255, 255));
         panelContainerProductos.setLayout(null);
-        jScrollPane1.setViewportView(panelContainerProductos);
+        scrollContainer.setViewportView(panelContainerProductos);
 
-        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel1.setText("N° Mesa:");
+        lblnummesa.setForeground(new java.awt.Color(102, 102, 102));
+        lblnummesa.setText("N° Mesa:");
 
-        btnMostrarPedidosDvueltos.setText("Pedidos devueltos");
-        btnMostrarPedidosDvueltos.addActionListener(new java.awt.event.ActionListener() {
+        btnMostrarProductosDvueltos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btn_productos_devueltos.png"))); // NOI18N
+        btnMostrarProductosDvueltos.setBorderPainted(false);
+        btnMostrarProductosDvueltos.setContentAreaFilled(false);
+        btnMostrarProductosDvueltos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMostrarProductosDvueltos.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btn_productos_devueltos_active.png"))); // NOI18N
+        btnMostrarProductosDvueltos.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btn_productos_devueltos_active.png"))); // NOI18N
+        btnMostrarProductosDvueltos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMostrarPedidosDvueltosActionPerformed(evt);
+                btnMostrarProductosDvueltosActionPerformed(evt);
             }
         });
+
+        panelTitulos.setBackground(new java.awt.Color(254, 237, 220));
+
+        lblproducto.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblproducto.setForeground(new java.awt.Color(153, 153, 153));
+        lblproducto.setText("Producto");
+
+        lblprecio.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblprecio.setForeground(new java.awt.Color(153, 153, 153));
+        lblprecio.setText("Precio unit.");
+
+        lblpresentacion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblpresentacion.setForeground(new java.awt.Color(153, 153, 153));
+        lblpresentacion.setText("Presentación");
+
+        lblcantidad.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblcantidad.setForeground(new java.awt.Color(153, 153, 153));
+        lblcantidad.setText("Cantidad");
+
+        lblsubtotal.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblsubtotal.setForeground(new java.awt.Color(153, 153, 153));
+        lblsubtotal.setText("SubTotal");
+
+        javax.swing.GroupLayout panelTitulosLayout = new javax.swing.GroupLayout(panelTitulos);
+        panelTitulos.setLayout(panelTitulosLayout);
+        panelTitulosLayout.setHorizontalGroup(
+            panelTitulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTitulosLayout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(lblproducto)
+                .addGap(310, 310, 310)
+                .addComponent(lblprecio)
+                .addGap(73, 73, 73)
+                .addComponent(lblpresentacion)
+                .addGap(62, 62, 62)
+                .addComponent(lblcantidad)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblsubtotal)
+                .addGap(75, 75, 75))
+        );
+        panelTitulosLayout.setVerticalGroup(
+            panelTitulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTitulosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTitulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblproducto, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblprecio)
+                    .addComponent(lblpresentacion)
+                    .addComponent(lblcantidad)
+                    .addComponent(lblsubtotal))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        lbltituloproddevueltos.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        lbltituloproddevueltos.setForeground(new java.awt.Color(253, 148, 2));
+        lbltituloproddevueltos.setText("Productos devueltos");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(26, 26, 26)
-                            .addComponent(jLabel15)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(cboUsuarioStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(38, 38, 38)
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(txtNumeroMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnMostrarPedidosDvueltos))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(22, 22, 22)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 898, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(22, 22, 22)
-                            .addComponent(btnBuscarPorCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnBuscarPorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(scrollContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 898, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(jLabel2)
-                .addGap(306, 306, 306)
-                .addComponent(jLabel3)
-                .addGap(63, 63, 63)
-                .addComponent(jLabel4)
-                .addGap(64, 64, 64)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addGap(92, 92, 92))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelTitulos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(lbliconuser, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cboUsuarioStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38)
+                                .addComponent(lblnummesa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNumeroMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbltituloproddevueltos, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(167, 167, 167)))
+                        .addComponent(btnMostrarProductosDvueltos, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(btnBuscarPorCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBuscarPorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(104, 104, 104))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtNumeroMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cboUsuarioStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1)
-                        .addComponent(btnMostrarPedidosDvueltos)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lbltituloproddevueltos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtNumeroMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboUsuarioStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblnummesa))
+                            .addComponent(lbliconuser, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnMostrarProductosDvueltos, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuscarPorCarta)
                     .addComponent(btnBuscarPorNombre))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(101, 101, 101))
+                .addComponent(panelTitulos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addComponent(scrollContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -413,16 +504,17 @@ public class PanelTabPedido extends javax.swing.JPanel {
         // TODO add your handling code here:
         this.btnBuscarPorCarta.setBackground(new Color(229, 147, 35));
         this.btnBuscarPorNombre.setBackground(new Color(254, 190, 119));
-        this.cboBuscarPorCategoria.setEnabled(true);
-        this.txtBuscarPorNombreProducto.setEnabled(false);
+        this.cboBuscarPorCategoria.setVisible(true);
+        this.txtBuscarPorNombreProducto.setVisible(false);
+
     }//GEN-LAST:event_btnBuscarPorCartaActionPerformed
 
     private void btnBuscarPorNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPorNombreActionPerformed
         // TODO add your handling code here:
         this.btnBuscarPorNombre.setBackground(new Color(229, 147, 35));
         this.btnBuscarPorCarta.setBackground(new Color(254, 190, 119));
-        this.txtBuscarPorNombreProducto.setEnabled(true);
-        this.cboBuscarPorCategoria.setEnabled(false);
+        this.txtBuscarPorNombreProducto.setVisible(true);
+        this.cboBuscarPorCategoria.setVisible(false);
 
         //cpodigo de ejemplo
 
@@ -498,7 +590,8 @@ public class PanelTabPedido extends javax.swing.JPanel {
     private void cboBuscarPorCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboBuscarPorCategoriaItemStateChanged
         try {
             // TODO add your handling code here:  
-
+            this.resumen = false;
+            PanelStaff.btnTerminarPedido.setBackground(new Color(102, 102, 102));
             if (listadoProductos.size() > 0) {
                 llenarUltimaSeleccion();
             }
@@ -511,7 +604,7 @@ public class PanelTabPedido extends javax.swing.JPanel {
             if (lista.size() > 10) {
                 rows = lista.size();
             }
-            this.panelContainerProductos.setLayout(new GridLayout(rows, 1, 10, 10));
+            this.panelContainerProductos.setLayout(new GridLayout(rows, 1, 0, 0));
             for (int i = 0; i < lista.size(); i++) {
                 System.out.println("listado productos: " + listadoProductos.size());
                 boolean band = false;
@@ -524,10 +617,13 @@ public class PanelTabPedido extends javax.swing.JPanel {
                     }
                 }
                 if (band == false) {
-                    panelProducto = new PanelProductoCartaItem(lista.get(i));
+                    panelProducto = new PanelProductoCartaItem(lista.get(i), this);
                 }
                 this.listadoProductos.add(panelProducto);
                 this.panelContainerProductos.add(panelProducto);
+                if (i % 2 != 0) {
+                    panelProducto.setBackground(new Color(252, 249, 245));
+                }
             }
             this.panelContainerProductos.repaint();
         } catch (ClassNotFoundException ex) {
@@ -549,7 +645,8 @@ public class PanelTabPedido extends javax.swing.JPanel {
         try {
             // TODO add your handling code here:
             this.panelContainerProductos.removeAll();
-
+            this.resumen = false;
+            PanelStaff.btnTerminarPedido.setBackground(new Color(102, 102, 102));
             String cad = this.txtBuscarPorNombreProducto.getText();
             if (cad.length() > 1) {
                 System.out.println("busco por: " + cad);
@@ -559,7 +656,7 @@ public class PanelTabPedido extends javax.swing.JPanel {
                 if (lista.size() > 10) {
                     rows = lista.size();
                 }
-                this.panelContainerProductos.setLayout(new GridLayout(rows, 1, 10, 10));
+                this.panelContainerProductos.setLayout(new GridLayout(rows, 1, 0, 0));
                 for (int i = 0; i < lista.size(); i++) {
                     boolean band = false;
                     PanelProductoCartaItem panelProducto = null;
@@ -571,9 +668,12 @@ public class PanelTabPedido extends javax.swing.JPanel {
                         }
                     }
                     if (band == false) {
-                        panelProducto = new PanelProductoCartaItem(lista.get(i));
+                        panelProducto = new PanelProductoCartaItem(lista.get(i), this);
                     }
                     this.panelContainerProductos.add(panelProducto);
+                    if (i % 2 != 0) {
+                        panelProducto.setBackground(new Color(252, 249, 245));
+                    }
                 }
             }
             this.panelContainerProductos.repaint();
@@ -592,38 +692,83 @@ public class PanelTabPedido extends javax.swing.JPanel {
         int select = tabbed.getSelectedIndex();
         String numero = this.txtNumeroMesa.getText();
         tabbed.setTitleAt(select, numero + " ");
-        panel.lblnumeromesa.setText(numero);
+        panel.lblnummesa.setText(numero);
     }//GEN-LAST:event_txtNumeroMesaKeyReleased
 
-    private void btnMostrarPedidosDvueltosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarPedidosDvueltosActionPerformed
-        // TODO add your handling code here:
-        this.btnBuscarPorCarta.setVisible(false);
-        this.btnBuscarPorNombre.setVisible(false);
-        this.panelbusqueda.setVisible(false);
-        this.panelContainerProductos.removeAll();
-        for (int i = 0; i < this.listaProductosDevueltos.size(); i++) {
-            System.out.println("nufnfnfkkkkkkkkkkk");
-            PanelProductoCartaItem item=this.listaProductosDevueltos.get(i);
-            this.panelContainerProductos.add(item);
-        }
-    }//GEN-LAST:event_btnMostrarPedidosDvueltosActionPerformed
+    private void btnMostrarProductosDvueltosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarProductosDvueltosActionPerformed
+        try {
+            // TODO add your handling code here:
+            this.control_devueltos = true;
+            ImageIcon estado_ac = new ImageIcon(getClass().getResource("/images/btn_productos_devueltos_active.png"));
+            this.btnMostrarProductosDvueltos.setIcon(estado_ac);
+            this.btnBuscarPorCarta.setVisible(false);
+            this.btnBuscarPorNombre.setVisible(false);
+            this.panelbusqueda.setVisible(false);
+            this.lbliconuser.setBounds(8, 40, 25, 25);
+            this.cboUsuarioStaff.setBounds(35, 40, 280, 25);
+            this.lblnummesa.setBounds(325, 40, 50, 25);
+            this.txtNumeroMesa.setBounds(385, 40, 90, 25);
+            this.panelTitulos.setBounds(0, 72, 960, 26);
+            this.scrollContainer.setBounds(0, 98, 960, 425);
+            this.lbltituloproddevueltos.setVisible(true);
+            ArrayList<DetallePedido> listaproductos = new GestionProductoCarta().listarProductosDevueltos();
+            int size = 10;
+            if (listaproductos.size() > 10) {
+                this.panelContainerProductos.setLayout(new GridLayout(listaProductosDevueltos.size(), 1, 0, 0));
+            } else {
+                this.panelContainerProductos.setLayout(new GridLayout(size, 1, 0, 0));
+            }
+            this.panelContainerProductos.removeAll();
+            int sizelista = listaProductosDevueltos.size();
+            for (int i = 0; i < listaproductos.size(); i++) {
+                DetallePedido detalle = listaproductos.get(i);
+                boolean band = true;//No esta en lista=true
+                System.out.println("size devueltos: " + listaProductosDevueltos.size());
+                for (int j = 0; j < sizelista; j++) {
+                    ItemProductoDevuelto item = this.listaProductosDevueltos.get(j);
+                    if (item.idproducto == detalle.getPresentacion().getProudcto().getIdproductocarta() && item.presentacionSelect.getPresentacion().getId() == detalle.getPresentacion().getPresentacion().getId()) {
+                        band = false;//esta en lista=false
+                    }
+                }
+                if (band) {//si no esta en lista lo agregamos
+                    ItemProductoDevuelto itemDev = new ItemProductoDevuelto(detalle, this);
+                    listaProductosDevueltos.add(itemDev);
+                }
+            }
 
+            for (int i = 0; i < listaProductosDevueltos.size(); i++) {
+                ItemProductoDevuelto item=listaProductosDevueltos.get(i);
+                this.panelContainerProductos.add(item);
+                if(i%2!=0){
+                    item.setBackground(new Color(252,249,245));
+                }
+            }
+            this.panelContainerProductos.updateUI();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PanelTabPedido.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(PanelTabPedido.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnMostrarProductosDvueltosActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscarPorCarta;
-    private javax.swing.JButton btnBuscarPorNombre;
-    private javax.swing.JButton btnMostrarPedidosDvueltos;
+    public javax.swing.JButton btnBuscarPorCarta;
+    public javax.swing.JButton btnBuscarPorNombre;
+    public javax.swing.JButton btnMostrarProductosDvueltos;
     protected javax.swing.JComboBox cboBuscarPorCategoria;
     protected javax.swing.JComboBox cboUsuarioStaff;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel panelContainerProductos;
-    private javax.swing.JPanel panelbusqueda;
+    private javax.swing.JLabel lblcantidad;
+    public javax.swing.JLabel lbliconuser;
+    public javax.swing.JLabel lblnummesa;
+    private javax.swing.JLabel lblprecio;
+    private javax.swing.JLabel lblpresentacion;
+    private javax.swing.JLabel lblproducto;
+    private javax.swing.JLabel lblsubtotal;
+    public javax.swing.JLabel lbltituloproddevueltos;
+    protected javax.swing.JPanel panelContainerProductos;
+    public javax.swing.JPanel panelTitulos;
+    public javax.swing.JPanel panelbusqueda;
+    public javax.swing.JScrollPane scrollContainer;
     private javax.swing.JTextField txtBuscarPorNombreProducto;
     protected javax.swing.JTextField txtNumeroMesa;
     // End of variables declaration//GEN-END:variables

@@ -4,6 +4,7 @@
  */
 package com.disfruta.gestion.logistica;
 
+import com.disfruta.bean.logistica.DetallePedido;
 import com.disfruta.bean.logistica.FamiliaProducto;
 import com.disfruta.bean.logistica.ProductoCarta;
 import com.disfruta.conexion.ObjConexion;
@@ -221,6 +222,38 @@ public class GestionProductoCarta {
         try {
             LogicProductoCarta logicProductoCarta = new LogicProductoCarta(objCnx);
             array=logicProductoCarta.listarCarta();            
+            return array;             
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (Exception ex) {
+            Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
+            try {
+                objCnx.getMysql().desconectarBD();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);
+               
+            }
+        }
+    }
+     
+     public ArrayList<DetallePedido> listarProductosDevueltos() throws ClassNotFoundException, Exception {
+        ArrayList array = new ArrayList();
+        try {
+            LogicProductoCarta logicProductoCarta = new LogicProductoCarta(objCnx);
+            array=logicProductoCarta.listarProductosDevueltos();            
             return array;             
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(GestionProductoCarta.class.getName()).log(Level.SEVERE, null, ex);

@@ -9,6 +9,7 @@ import com.disfruta.bean.logistica.CocineroPlatos;
 import com.disfruta.bean.logistica.DetallePedido;
 import com.disfruta.gestion.admin.GestionUsuarioDesktop;
 import com.disfruta.gestion.logistica.GestionDetallePedido;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -20,48 +21,78 @@ import javax.swing.BorderFactory;
  * @author Juape
  */
 public class PanelCocina extends javax.swing.JPanel {
+
     protected ArrayList<ItemStaffSesion> staffCocina;
     public static ArrayList<CocineroPlatos> cocineros;
+    protected ArrayList<DetallePedido> listaPedidosEnLista;
+    protected ArrayList<PanelProductoPedidoCocina> items;
     /**
      * Creates new form PanelCocina
      */
     public PanelCocina() {
-        try {
-            init();
-            initComponents();
-            this.panelContainerProductos.setLayout(new GridLayout(25, 1, 10, 10));//gridLayout es una matriz (filas,columnas,margen de filas,margen de columnas)
-            this.panelContainerProductos.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));// margenes internos para el panel
-            this.panelContainerProductosEspera.setLayout(new GridLayout(10, 1, 10, 10));
-            this.panelContainerProductosEspera.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            GestionDetallePedido gp = new GestionDetallePedido();
-            ArrayList<DetallePedido> lista = gp.listarTodos();
-            for (int i = 0; i < lista.size(); i++) {
-                DetallePedido d = lista.get(i);
-                System.out.println("cantidad: " + d.getCantidad());
-                System.out.println("mesa: " + d.getPedido().getMesa());
-                PanelProductoPedidoCocina panel = new PanelProductoPedidoCocina(d,staffCocina,this.panelContainerProductos);
-                this.panelContainerProductos.add(panel);
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PanelCocina.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(PanelCocina.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        init();
+        initComponents();
+        this.panelContainerProductos.setLayout(new GridLayout(25, 1, 0, 0));//gridLayout es una matriz (filas,columnas,margen de filas,margen de columnas)
+        this.panelContainerProductos.setBorder(null);// margenes internos para el panel
+        this.panelContainerProductosEspera.setLayout(new GridLayout(10, 1, 0, 0));
+        this.panelContainerProductosEspera.setBorder(null);
+        this.jScrollPane1.setBorder(null);
+        cargarUltimosPedidos();
     }
-    
-    private void init(){
+
+    private void init() {
         try {
-            staffCocina=new ArrayList();
-            ArrayList<UsuarioDesktop> users=new GestionUsuarioDesktop().listarStaffCocina();
-            System.out.println("size cocina: "+users.size());
-            cocineros=new ArrayList();
+            listaPedidosEnLista = new ArrayList();
+            items=new ArrayList();
+            staffCocina = new ArrayList();
+            ArrayList<UsuarioDesktop> users = new GestionUsuarioDesktop().listarStaffCocina();
+            System.out.println("size cocina: " + users.size());
+            cocineros = new ArrayList();
             for (int i = 0; i < users.size(); i++) {
-                CocineroPlatos cocinero=new CocineroPlatos(users.get(i),new <DetallePedido>ArrayList());
+                CocineroPlatos cocinero = new CocineroPlatos(users.get(i), new <DetallePedido>ArrayList());
                 this.cocineros.add(cocinero);
-                ItemStaffSesion obj=new ItemStaffSesion(users.get(i));
+                ItemStaffSesion obj = new ItemStaffSesion(users.get(i));
                 staffCocina.add(obj);
             }
-            System.out.println("staff cocina: "+staffCocina.size());
+            System.out.println("staff cocina: " + staffCocina.size());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PanelCocina.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(PanelCocina.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void cargarUltimosPedidos() {
+        try {
+            GestionDetallePedido gp = new GestionDetallePedido();
+            ArrayList<DetallePedido> lista = gp.listarTodos();
+            if (lista.size() > 10) {
+                this.panelContainerProductos.setLayout(new GridLayout(lista.size(), 1, 0, 0));
+            }
+            boolean band = true;//es nuevo
+            for (int i = 0; i < lista.size(); i++) {
+                DetallePedido d = lista.get(i);
+                for (int j = 0; j < this.listaPedidosEnLista.size(); j++) {
+                    DetallePedido yaenlista = this.listaPedidosEnLista.get(j);
+                    if (d.getId() == yaenlista.getId()) {
+                        band = false;
+                        if(d.getEstado().equals("CC")){
+                            pedidoQuitado(d);
+                        }
+                        break;
+                    }
+                }
+                if (band) {
+                    PanelProductoPedidoCocina panel = new PanelProductoPedidoCocina(d, staffCocina, this.panelContainerProductos);
+                    this.panelContainerProductos.add(panel);
+                    this.listaPedidosEnLista.add(d);
+                    this.items.add(panel);
+                    if (i % 2 != 0) {
+                        panel.setBackground(new Color(252, 249, 245));
+                    }
+                }
+
+            }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PanelCocina.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -69,7 +100,17 @@ public class PanelCocina extends javax.swing.JPanel {
         }
     }
     
-    
+    //si el pedido esta co estado CC quiere decir que el staff lo ha quitado del pedido luego de enviarlo a cocina
+    //sinembargo cocina todavia no lo empieza a preparar-> entonces se elimina de la lista de cocina antes que lo 
+    //pueda ver y empezar a preparar
+    protected void pedidoQuitado(DetallePedido d){
+        for (int i = 0; i < items.size(); i++) {
+            PanelProductoPedidoCocina pa=items.get(i);
+            if(pa.idProducto==d.getId()){
+                this.panelContainerProductos.remove(pa);
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -90,6 +131,7 @@ public class PanelCocina extends javax.swing.JPanel {
         btnConfigurarStaFfCocina = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
+        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
         jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTabbedPane1MouseClicked(evt);
@@ -100,6 +142,7 @@ public class PanelCocina extends javax.swing.JPanel {
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         panelContainerProductos.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -107,11 +150,11 @@ public class PanelCocina extends javax.swing.JPanel {
         panelContainerProductos.setLayout(panelContainerProductosLayout);
         panelContainerProductosLayout.setHorizontalGroup(
             panelContainerProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 779, Short.MAX_VALUE)
+            .addGap(0, 799, Short.MAX_VALUE)
         );
         panelContainerProductosLayout.setVerticalGroup(
             panelContainerProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 530, Short.MAX_VALUE)
+            .addGap(0, 541, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(panelContainerProductos);
@@ -120,15 +163,11 @@ public class PanelCocina extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+            .addComponent(jScrollPane1)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
         );
@@ -179,9 +218,9 @@ public class PanelCocina extends javax.swing.JPanel {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(161, 161, 161)
+                .addContainerGap(235, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+                .addGap(68, 68, 68)
                 .addComponent(btnConfigurarStaFfCocina)
                 .addGap(313, 313, 313))
         );
@@ -203,7 +242,7 @@ public class PanelCocina extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 823, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,7 +255,8 @@ public class PanelCocina extends javax.swing.JPanel {
 
     private void btnConfigurarStaFfCocinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigurarStaFfCocinaActionPerformed
         // TODO add your handling code here:
-        DialogSesionStaffCocina dialog=new DialogSesionStaffCocina(null,true);
+        DialogSesionStaffCocina dialog = new DialogSesionStaffCocina(null, true);
+        dialog.setLocationRelativeTo(this);
         dialog.panelCtnStaffCocina.setLayout(new GridLayout(6, 1, 10, 10));
         dialog.panelCtnStaffCocina.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         for (int i = 0; i < staffCocina.size(); i++) {
@@ -229,26 +269,27 @@ public class PanelCocina extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         for (int i = 0; i < cocineros.size(); i++) {
-            System.out.println("Cocinero: "+cocineros.get(i).getUsuario().getNombres());
+            System.out.println("Cocinero: " + cocineros.get(i).getUsuario().getNombres());
             for (int j = 0; j < cocineros.get(i).getPlatos().size(); j++) {
-                System.out.println("Plato: "+cocineros.get(i).getPlatos().get(j).getId());
+                System.out.println("Plato: " + cocineros.get(i).getPlatos().get(j).getId());
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
         // TODO add your handling code here:
-        int p=this.jTabbedPane1.getSelectedIndex();
-        if(p==1){
-            for(int i=0;i<cocineros.size();i++){
-                if(cocineros.get(i).getPlatos().size()>0){
-                ItemCocineroPlatos item=new ItemCocineroPlatos(cocineros.get(i));
-                this.panelContainerProductosEspera.add(item);
+        int p = this.jTabbedPane1.getSelectedIndex();
+        if (p == 1) {
+            this.panelContainerProductosEspera.removeAll();
+            for (int i = 0; i < cocineros.size(); i++) {
+                if (cocineros.get(i).getPlatos().size() > 0) {
+                    ItemCocineroPlatos item = new ItemCocineroPlatos(cocineros.get(i));
+                    this.panelContainerProductosEspera.add(item);
                 }
             }
+            this.panelContainerProductosEspera.updateUI();
         }
     }//GEN-LAST:event_jTabbedPane1MouseClicked
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfigurarStaFfCocina;
     private javax.swing.JButton jButton1;

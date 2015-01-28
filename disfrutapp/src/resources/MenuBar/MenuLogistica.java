@@ -68,22 +68,26 @@ public class MenuLogistica extends JMenuBar implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Almacen")) {
             PanelAlmacen pu = new PanelAlmacen();
+            pu.setBounds(0,0,960,590);
             panelctn.removeAll();
             panelctn.add(pu);
             panelctn.updateUI();
         } else if (e.getActionCommand().equals("Insumo")) {
             PanelProductoInsumo pp = new PanelProductoInsumo();
+            pp.setBounds(0,0,960,590);
             panelctn.removeAll();
             panelctn.add(pp);
             panelctn.updateUI();
         } else if (e.getActionCommand().equals("Proveedor")) {
             PanelProveedor prov = new PanelProveedor();
+            prov.setBounds(0,0,960,590);
             panelctn.removeAll();
             panelctn.add(prov);
             panelctn.updateUI();
         }
         if (e.getActionCommand().equals("Producto carta")) {
             PanelProductoCarta form = new PanelProductoCarta();
+            form.setBounds(0,0,960,590);
             panelctn.removeAll();
             panelctn.add(form);
             panelctn.updateUI();

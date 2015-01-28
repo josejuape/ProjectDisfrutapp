@@ -14,6 +14,7 @@ public class ProductoCarta {
     protected int idproductocarta;
     protected String nombre;
     protected String descripcion;
+    protected String despachadoen;
     protected FamiliaProducto familia;
     protected ArrayList<PresentacionPrecioVenta> presentaciones;
     protected String tipoOperacion;
@@ -64,6 +65,14 @@ public class ProductoCarta {
 
     public void setPresentaciones(ArrayList<PresentacionPrecioVenta> presentaciones) {
         this.presentaciones = presentaciones;
+    }
+
+    public String getDespachadoen() {
+        return despachadoen;
+    }
+
+    public void setDespachadoen(String despachadoen) {
+        this.despachadoen = despachadoen;
     }
     
     

@@ -29,6 +29,7 @@ public class ModelTableProductoCarta extends AbstractTableModel {
     private void crearCabeceras(){
         this.CabeceraTabla.add("NOMBRE");
         this.CabeceraTabla.add("CATEGORIA");
+        this.CabeceraTabla.add("DESPACHADO EN");
     }
     
     public ProductoCarta getValue(int rowIndex){
@@ -62,6 +63,8 @@ public class ModelTableProductoCarta extends AbstractTableModel {
                 return data.get(rowIndex).getNombre();
             case 1:
                 return data.get(rowIndex).getFamilia().getV_familia();
+            case 2:
+                return data.get(rowIndex).getDespachadoen();
             default:
                 return null;
         }
