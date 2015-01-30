@@ -4,6 +4,7 @@
  */
 package com.disfruta.gestion.admin;
 
+import Tester.MenuDinamico;
 import com.disfruta.bean.admin.Menu;
 import com.disfruta.bean.admin.PerfilUsuario;
 import com.disfruta.conexion.ObjConexion;
@@ -155,6 +156,40 @@ public class GestionMenu {
         try {
             LogicMenu logicMenu = new LogicMenu(objCnx);
             array=logicMenu.listar();
+            
+            return array;
+             
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestionMenu.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GestionMenu.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GestionMenu.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionMenu.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        } catch (Exception ex) {
+            Logger.getLogger(GestionMenu.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
+            try {
+                objCnx.getMysql().desconectarBD();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionMenu.class.getName()).log(Level.SEVERE, null, ex);
+               
+            }
+        }
+    }
+    
+    public ArrayList<MenuDinamico> listarMenuDinamico() throws ClassNotFoundException, Exception {
+        ArrayList array = new ArrayList();
+        try {
+            LogicMenu logicMenu = new LogicMenu(objCnx);
+            array=logicMenu.listarMenuDinamico();
             
             return array;
              

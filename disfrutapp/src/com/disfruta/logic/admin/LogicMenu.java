@@ -4,6 +4,7 @@
  */
 package com.disfruta.logic.admin;
 
+import Tester.MenuDinamico;
 import com.disfruta.bean.admin.Menu;
 import com.disfruta.bean.admin.PerfilUsuario;
 import com.disfruta.conexion.ObjConexion;
@@ -78,6 +79,37 @@ public String mantenimiento(Menu beanMenu) throws ClassNotFoundException, Instan
             objMenu.setNodo(rs.getInt("n_menu_nodo"));
             objMenu.setEstado(rs.getString("c_estado"));
             objMenu.setBarra(rs.getString("c_barra"));
+            lista.add(objMenu);
+        }
+        rs.close();
+        cst.close();
+        //objCnx.getMysql().desconectarBD();
+        return lista;
+    }
+    
+    public ArrayList listarMenuDinamico() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SQLException, Exception{
+        
+        DaoMenu oDaoMenu = new DaoMenu();
+        ArrayList<MenuDinamico> lista = new ArrayList();
+        ArrayList<Parametro> param = new ArrayList();
+        ArrayList objetos=oDaoMenu.listarMenuDinamico(param, objCnx);
+        ResultSet rs=(ResultSet)objetos.get(0);
+        CallableStatement cst=(CallableStatement)objetos.get(1);
+        objCnx=(ObjConexion)objetos.get(2);
+        rs.beforeFirst();
+        while(rs.next()){
+            MenuDinamico objMenu=new MenuDinamico();
+            objMenu.setId_menu(rs.getInt("n_idmenu_dinamico"));
+            objMenu.setDescripcion(rs.getString("descripcion"));
+            objMenu.setNombre(rs.getString("nombre"));
+            objMenu.setMenu_item(rs.getString("menu_item"));
+            objMenu.setOrden(rs.getString("orden"));
+            objMenu.setNivel(rs.getInt("nivel"));
+            objMenu.setId_menu_padre(rs.getInt("id_menu_padre"));
+            objMenu.setVisible(rs.getString("visible"));
+            objMenu.setControl(rs.getString("control"));
+            objMenu.setId_formulario(rs.getInt("id_formulario"));
+            objMenu.setFlag_sistema(rs.getString("flag_sistema"));
             lista.add(objMenu);
         }
         rs.close();

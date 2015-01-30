@@ -102,30 +102,30 @@ public class PanelPerfilUsuario extends javax.swing.JPanel {
                         DefaultMutableTreeNode nodo1 = new DefaultMutableTreeNode();
                         String des2 = item.getDescripcion();
                         nodo1.setUserObject(des2);
-                        for (com.disfruta.bean.admin.Menu item2 : lista) {
-                            if (item2.getNodopadre() == item.getNodo() && item2.getNodo() != item2.getNodopadre()) {
-                                DefaultMutableTreeNode nodo2 = new DefaultMutableTreeNode();
-                                System.out.println("iditem: " + item2.getId());
-                                boolean control = true;
-                                if (permisosUser != null && permisosUser.size() > 0) {
-                                    for (int i = 0; i < permisosUser.size(); i++) {
-                                        Menu itemmenu = permisosUser.get(i);
-                                        if (itemmenu.getId() == item2.getId()) {
-                                            control = false;
-                                            break;
-                                        }
-                                    }
-                                }
-                                String des3 = item2.getDescripcion();
-                                if (control) {
-                                    nodo2.setUserObject(des3);
-                                } else {
-                                    System.out.println("iditem Selected: " + item2.getId());
-                                    nodo2.setUserObject(des3);
-                                }
-                                nodo1.add(nodo2);
-                            }
-                        }
+//                        for (com.disfruta.bean.admin.Menu item2 : lista) {
+//                            if (item2.getNodopadre() == item.getNodo() && item2.getNodo() != item2.getNodopadre()) {
+//                                DefaultMutableTreeNode nodo2 = new DefaultMutableTreeNode();
+//                                System.out.println("iditem: " + item2.getId());
+//                                boolean control = true;
+//                                if (permisosUser != null && permisosUser.size() > 0) {
+//                                    for (int i = 0; i < permisosUser.size(); i++) {
+//                                        Menu itemmenu = permisosUser.get(i);
+//                                        if (itemmenu.getId() == item2.getId()) {
+//                                            control = false;
+//                                            break;
+//                                        }
+//                                    }
+//                                }
+//                                String des3 = item2.getDescripcion();
+//                                if (control) {
+                                    nodo1.setUserObject(des2);
+//                                } else {
+//                                    System.out.println("iditem Selected: " + item2.getId());
+//                                    nodo2.setUserObject(des3);
+//                                }
+//                                nodo1.add(nodo2);
+//                            }
+//                        }
                         nodo.add(nodo1);
                     }
                 }
@@ -355,6 +355,11 @@ public class PanelPerfilUsuario extends javax.swing.JPanel {
                 permisosTreeMouseClicked(evt);
             }
         });
+        permisosTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                permisosTreeValueChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -411,6 +416,7 @@ public class PanelPerfilUsuario extends javax.swing.JPanel {
         this.cboEstado.setSelectedIndex(0);
         this.control = "nuevo";
         this.itemsMenuSelect = new ArrayList();
+        this.tblPerfiles.clearSelection();
     }//GEN-LAST:event_btnNuevoUsuarioActionPerformed
     
     private void btnGuardarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarUsuarioActionPerformed
@@ -419,8 +425,10 @@ public class PanelPerfilUsuario extends javax.swing.JPanel {
             String cad = this.txtDescripcionPerfil.getText();
             if (!(cad.equals(""))) {
                 TreePath checkedPaths[] = checkTreeManager.getSelectionModel().getSelectionPaths();
+                System.out.println("siedfgdfg: "+checkedPaths.length);
                 for (int i = 0; i < checkedPaths.length; i++) {
                     Object items[] = checkedPaths[i].getPath();
+                    System.out.println("items2  :"+items.length);
                     for (int j = 0; j < items.length; j++) {
                         String name = items[j].toString();
                         for (int k = 0; k < lista.size(); k++) {
@@ -453,6 +461,7 @@ public class PanelPerfilUsuario extends javax.swing.JPanel {
                     
                     PerfilUsuario ultimoPerfil = gestion.getUltimoObject();
                     GestionMenuPerfil gm = new GestionMenuPerfil();
+                    System.out.println("size items menu: "+this.itemsMenuSelect.size());
                     for (int i = 0; i < this.itemsMenuSelect.size(); i++) {
                         MenuPerfil menuPerfil = new MenuPerfil();
                         menuPerfil.setPerfil(ultimoPerfil);
@@ -460,7 +469,8 @@ public class PanelPerfilUsuario extends javax.swing.JPanel {
                         menuPerfil.setVisible("S");
                         menuPerfil.setEstado("A");
                         menuPerfil.setTipoOperacion("i");
-                        gm.registrarMenu(menuPerfil);
+                        String msg=gm.registrarMenu(menuPerfil);
+                        System.out.println("rpt: "+msg);
                     }
                     
                     JOptionPane.showMessageDialog(this, "Registrado Correctamente !");
@@ -559,6 +569,12 @@ public class PanelPerfilUsuario extends javax.swing.JPanel {
         }
         
     }//GEN-LAST:event_btnEliminarPerfilActionPerformed
+
+    private void permisosTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_permisosTreeValueChanged
+        // TODO add your handling code here:
+        System.out.println("Haz seleccionado uno:");
+    }//GEN-LAST:event_permisosTreeValueChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminarPerfil;
     private javax.swing.JButton btnGuardarUsuario;
@@ -1008,7 +1024,7 @@ class CheckTreeCellRenderer extends JPanel implements TreeCellRenderer {
         TreePath path = tree.getPathForRow(row);
         if (path != null) {
             if (selectionModel.isPathSelected(path, true)) {
-                System.out.println("esntro aqui...1");
+//                System.out.println("esntro aqui...1");
                 checkBox.setState(Boolean.TRUE);
             } else {
                 checkBox.setState(selectionModel.isPartiallySelected(path) ? null : Boolean.FALSE);

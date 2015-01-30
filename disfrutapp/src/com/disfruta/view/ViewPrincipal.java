@@ -35,7 +35,7 @@ import resources.auxiliar.ListaUbigeo;
  * @author Juape
  */
 public final class ViewPrincipal extends javax.swing.JFrame {
-
+    protected FrmLogin login;
     protected ArrayList<Menu> itemsStaff = null;
     protected ArrayList<Menu> itemsLogistica = null;
     protected ArrayList<Menu> itemsCocina = null;
@@ -47,69 +47,60 @@ public final class ViewPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form ViewPrincipal
      */
-    public ViewPrincipal(UsuarioDesktop usuario, ArrayList<MenuPerfil> listaMenus) throws ClassNotFoundException, Exception {
+    public ViewPrincipal(UsuarioDesktop usuario, ArrayList<MenuPerfil> listaMenus,FrmLogin login) throws ClassNotFoundException, Exception {
         this.setUndecorated(true);
-//        if(usuario!=null){
-        initComponents();
-        this.PanelContainer.setPreferredSize(new Dimension(960,640));
-        this.PanelContainer.setLayout(null);
-        this.PanelTitulo.setBounds(0,0,960,25);
-        this.PanelBarrasIconos.setBounds(0,25,960,25);
-        this.DesktopContainer.setBounds(0,50,960,590);
-        this.DesktopContainer.setLayout(null);
-        usuario = new UsuarioDesktop();
-        usuario.setIdUser(1);
-        this.menuList = new GestionLogin().listarMenuLogin(usuario);
-        this.btnMenuStaff.setEnabled(true);
-        this.btnMenuLogistica.setEnabled(false);
-        this.btnMenuCocina.setEnabled(true);
-        this.btnMenuCaja.setEnabled(false);
-        this.btnMenuAdmin.setEnabled(false);
-        this.btnActualizarPedidos.setVisible(false);
-        this.btnIngresoAlmacen.setVisible(false);
-        this.btnSalidaAlmacen.setVisible(false);
-        this.btnOrdenCompra.setVisible(false);
-        init();
-        //JOptionPane.showMessageDialog(this, "Size menus: " + listaMenus.size());
-        this.setLocationRelativeTo(null);
+        if (usuario != null) {
+            this.login=login;
+            setProgress(0,"Iniciando...");
+            login.getProgressBar().setVisible(true);
+            initComponents();
+            setProgress(10,"Comprobando conexión...");
+            setProgress(20,"Validando usuario...");
+            this.PanelContainer.setPreferredSize(new Dimension(960, 640));
+            this.PanelContainer.setLayout(null);
+            this.PanelTitulo.setBounds(0, 0, 960, 25);
+            this.PanelBarrasIconos.setBounds(0, 25, 960, 25);
+            this.PanelBarrasIconos.setLayout(null);
+            this.PanelMenu.setBounds(40, 1, 250,23);
+            this.btnSalidaAlmacen.setBounds(400,1,40,22);
+            this.btnIngresoAlmacen.setBounds(460,1,40,22);
+            this.btnOrdenCompra.setBounds(520,1,40,22);
+            this.DesktopContainer.setBounds(0, 50, 960, 590);
+            this.DesktopContainer.setLayout(null);
+            usuario = new UsuarioDesktop();
+            usuario.setIdUser(1);
+            this.menuList = new GestionLogin().listarMenuLogin(usuario);
+            setProgress(30,"Cargando modulos...");
+            this.btnMenuStaff.setEnabled(false);
+            this.btnMenuLogistica.setEnabled(false);
+            this.btnMenuCocina.setEnabled(false);
+            this.btnMenuCaja.setEnabled(false);
+            this.btnMenuAdmin.setEnabled(false);
+            this.btnActualizarPedidos.setVisible(false);
+            this.btnIngresoAlmacen.setVisible(false);
+            this.btnSalidaAlmacen.setVisible(false);
+            this.btnOrdenCompra.setVisible(false);
+            setProgress(40,"Cargando componentes...");
+            init();
+            setProgress(50,"Cargando información ...");
+            //JOptionPane.showMessageDialog(this, "Size menus: " + listaMenus.size());
+            this.setLocationRelativeTo(null);
+            setProgress(60,"Conprobando permisos ...");
 //        DesktopContainer.setLayout(new BorderLayout());
-        PanelTitulo.setLayout(null);
-        lbltitle.setBounds(10,1,200,22);
-//        lblContainerMenu.setBounds(257,2,445,22);        
-//        ImageIcon estado_ac = new ImageIcon(getClass().getResource("/images/menu.png"));
-//        lblContainerMenu.setIcon(estado_ac);
-//        lblContainerMenu.setBackground(Color.red);
-        
-//        PanelTitulo.setLayout(new GridBagLayout());
-//        GridBagConstraints pos = new GridBagConstraints();
-//        pos.gridx = 0;
-//        pos.gridy = 0;
-//        pos.gridwidth = 1;
-//        pos.gridheight = 1;
-//        pos.weightx = 0.5;
-//        pos.weighty = 1.0;
-//        pos.anchor = GridBagConstraints.WEST;
-//        pos.insets = new Insets(0, 10, 0, 0);
-//        lbltitle.setBounds(5, 20, 190, 22);
-//        PanelTitulo.add(lbltitle, pos);
-//        pos.gridx = 1;
-//        pos.gridy = 0;
-//        pos.gridwidth = 1;
-//        pos.gridheight = 1;
-//        pos.weightx = 1.0;
-//        pos.anchor = GridBagConstraints.WEST;
-//        PanelTitulo.add(PanelBarra, pos);
-//        pos.gridx = 2;
-//        pos.gridy = 0;
-//        pos.gridwidth = 1;
-//        pos.gridheight = 1;
-//        pos.weightx = 0.5;
-//        pos.anchor = GridBagConstraints.NORTHEAST;
-//        pos.insets = new Insets(0, 0, 0, 10);
-//        PanelTitulo.add(btnclose, pos);
-//        }else{
-//            JOptionPane.showMessageDialog(this, "Debe iniciar sesión!");
-//        }
+            PanelTitulo.setLayout(null);
+            lbltitle.setBounds(10, 1, 200, 22);
+            PanelBarra.setBounds(214, 1, 535, 25);
+            PanelBarra.setLayout(null);
+            lblContainerMenu.setBounds(0, 0, 535, 22);
+            lblContainerMenu.setLayout(null);
+            btnMenuStaff.setBounds(0, 0, 90, 22);
+            setProgress(70,"Configurando permisos...");
+            setProgress(80,"Configurando interfaces...");
+            setProgress(90,"Cargando recursos extras...");
+            setProgress(100,"Completado...");
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe iniciar sesión!");
+        }
     }
 
     private void init() {
@@ -118,32 +109,32 @@ public final class ViewPrincipal extends javax.swing.JFrame {
             for (int i = 0; i < menuList.size(); i++) {
                 Menu menu = menuList.get(i).getMenu();
                 if (menu.getNodo() == menu.getNodopadre()) {
-                    System.out.println("Modulo: "+menu.getDescripcion());
+                    System.out.println("Modulo: " + menu.getDescripcion());
                     switch (menu.getDescripcion()) {
                         case "STAFF":
                             this.itemsStaff = new ArrayList();
                             this.btnMenuStaff.setEnabled(true);
-                            encontrarHijos(menu.getNodo(),"STAFF");
+                            encontrarHijos(menu.getNodo(), "STAFF");
                             break;
                         case "LOGISTICA":
                             this.itemsLogistica = new ArrayList();
                             this.btnMenuLogistica.setEnabled(true);
-                            encontrarHijos(menu.getNodo(),"LOGISTICA");
+                            encontrarHijos(menu.getNodo(), "LOGISTICA");
                             break;
                         case "COCINA":
                             this.itemsCocina = new ArrayList();
                             this.btnMenuCocina.setEnabled(true);
-                            encontrarHijos(menu.getNodo(),"COCINA");
+                            encontrarHijos(menu.getNodo(), "COCINA");
                             break;
                         case "CAJA":
                             this.itemsCaja = new ArrayList();
                             this.btnMenuCaja.setEnabled(true);
-                            encontrarHijos(menu.getNodo(),"CAJA");
+                            encontrarHijos(menu.getNodo(), "CAJA");
                             break;
                         case "ADMINISTRACION":
                             this.itemsAdministracion = new ArrayList();
                             this.btnMenuAdmin.setEnabled(true);
-                            encontrarHijos(menu.getNodo(),"ADMINISTRACION");
+                            encontrarHijos(menu.getNodo(), "ADMINISTRACION");
                             break;
                         default:
                             System.out.println("no encontro modulo..!");
@@ -162,28 +153,28 @@ public final class ViewPrincipal extends javax.swing.JFrame {
     private void encontrarHijos(int padre, String modulo) {
         for (int i = 0; i < menuList.size(); i++) {
             Menu menu = menuList.get(i).getMenu();
-            if (menu.getNodo()!=menu.getNodopadre() && menu.getNodopadre() == padre) {
+            if (menu.getNodo() != menu.getNodopadre() && menu.getNodopadre() == padre) {
                 switch (modulo) {
                     case "STAFF":
                         this.itemsStaff.add(menu);
-                        encontrarHijos(menu.getNodo(),"STAFF");
+                        encontrarHijos(menu.getNodo(), "STAFF");
                         break;
                     case "LOGISTICA":
                         System.out.println("item: " + menu.getDescripcion());
                         this.itemsLogistica.add(menu);
-                        encontrarHijos(menu.getNodo(),"LOGISTICA");
+                        encontrarHijos(menu.getNodo(), "LOGISTICA");
                         break;
                     case "COCINA":
                         this.itemsCocina.add(menu);
-                        encontrarHijos(menu.getNodo(),"COCINA");
+                        encontrarHijos(menu.getNodo(), "COCINA");
                         break;
                     case "CAJA":
                         this.itemsCaja.add(menu);
-                        encontrarHijos(menu.getNodo(),"CAJA");
+                        encontrarHijos(menu.getNodo(), "CAJA");
                         break;
                     case "ADMINISTRACION":
                         this.itemsAdministracion.add(menu);
-                        encontrarHijos(menu.getNodo(),"ADMINISTRACION");
+                        encontrarHijos(menu.getNodo(), "ADMINISTRACION");
                         break;
                     default:
                         System.out.println("no modulo..!");
@@ -192,6 +183,16 @@ public final class ViewPrincipal extends javax.swing.JFrame {
             }
         }
 
+    }
+    
+    private void setProgress(int porcentaje,String msg){
+        login.getLabel().setText(msg);
+        login.getProgressBar().setValue(porcentaje);
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException ex) {
+            JOptionPane.showMessageDialog(this,"Error al iniciar el sistema!");
+        }
     }
 
     /**
@@ -230,10 +231,10 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         btnMenuStaff = new javax.swing.JButton();
         btnMenuLogistica = new javax.swing.JButton();
         btnMenuCocina = new javax.swing.JButton();
+        btnMenuBar = new javax.swing.JButton();
         btnMenuCaja = new javax.swing.JButton();
         btnMenuAdmin = new javax.swing.JButton();
         lblContainerMenu = new javax.swing.JLabel();
-        btnMenuBar = new javax.swing.JButton();
         PanelBarrasIconos = new javax.swing.JPanel();
         PanelMenu = new javax.swing.JPanel();
         btnSalidaAlmacen = new javax.swing.JButton();
@@ -298,11 +299,12 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         lbltitle.setAlignmentX(5.0F);
         lbltitle.setAlignmentY(5f);
 
-        PanelBarra.setBackground(new java.awt.Color(255, 255, 0));
+        PanelBarra.setBackground(new java.awt.Color(153, 153, 153));
         PanelBarra.setOpaque(false);
         PanelBarra.setPreferredSize(new java.awt.Dimension(445, 22));
         PanelBarra.setLayout(null);
 
+        btnMenuStaff.setBackground(new java.awt.Color(102, 204, 0));
         btnMenuStaff.setForeground(new java.awt.Color(255, 0, 0));
         btnMenuStaff.setBorder(null);
         btnMenuStaff.setBorderPainted(false);
@@ -322,6 +324,7 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         PanelBarra.add(btnMenuStaff);
         btnMenuStaff.setBounds(0, 0, 90, 22);
 
+        btnMenuLogistica.setBackground(new java.awt.Color(0, 153, 102));
         btnMenuLogistica.setForeground(new java.awt.Color(255, 0, 51));
         btnMenuLogistica.setBorder(null);
         btnMenuLogistica.setBorderPainted(false);
@@ -338,6 +341,7 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         PanelBarra.add(btnMenuLogistica);
         btnMenuLogistica.setBounds(90, 0, 88, 22);
 
+        btnMenuCocina.setBackground(new java.awt.Color(0, 204, 153));
         btnMenuCocina.setBorder(null);
         btnMenuCocina.setBorderPainted(false);
         btnMenuCocina.setContentAreaFilled(false);
@@ -351,19 +355,33 @@ public final class ViewPrincipal extends javax.swing.JFrame {
             }
         });
         PanelBarra.add(btnMenuCocina);
-        btnMenuCocina.setBounds(180, 0, 88, 22);
+        btnMenuCocina.setBounds(178, 0, 90, 22);
+
+        btnMenuBar.setBorderPainted(false);
+        btnMenuBar.setContentAreaFilled(false);
+        btnMenuBar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMenuBar.setFocusPainted(false);
+        btnMenuBar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btnbar.png"))); // NOI18N
+        btnMenuBar.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btncaja.png"))); // NOI18N
+        PanelBarra.add(btnMenuBar);
+        btnMenuBar.setBounds(267, 0, 90, 22);
 
         btnMenuCaja.setBackground(new java.awt.Color(204, 0, 0));
-        btnMenuCaja.setText("button");
         btnMenuCaja.setBorder(null);
+        btnMenuCaja.setBorderPainted(false);
+        btnMenuCaja.setContentAreaFilled(false);
         btnMenuCaja.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMenuCaja.setMargin(new java.awt.Insets(2, 0, 2, 0));
-        btnMenuCaja.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btncaja.png"))); // NOI18N
+        btnMenuCaja.setFocusPainted(false);
+        btnMenuCaja.setMaximumSize(new java.awt.Dimension(32, 8));
+        btnMenuCaja.setMinimumSize(new java.awt.Dimension(32, 8));
+        btnMenuCaja.setOpaque(false);
+        btnMenuCaja.setPreferredSize(new java.awt.Dimension(32, 8));
         btnMenuCaja.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btncaja.png"))); // NOI18N
-        btnMenuCaja.setSelected(true);
+        btnMenuCaja.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btncaja.png"))); // NOI18N
         PanelBarra.add(btnMenuCaja);
-        btnMenuCaja.setBounds(-79, 0, 80, 20);
+        btnMenuCaja.setBounds(356, 0, 90, 22);
 
+        btnMenuAdmin.setBackground(new java.awt.Color(153, 153, 0));
         btnMenuAdmin.setBorder(null);
         btnMenuAdmin.setBorderPainted(false);
         btnMenuAdmin.setContentAreaFilled(false);
@@ -377,19 +395,13 @@ public final class ViewPrincipal extends javax.swing.JFrame {
             }
         });
         PanelBarra.add(btnMenuAdmin);
-        btnMenuAdmin.setBounds(355, 0, 90, 22);
+        btnMenuAdmin.setBounds(446, 0, 88, 22);
 
-        lblContainerMenu.setBackground(new java.awt.Color(204, 0, 51));
-        lblContainerMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu.png"))); // NOI18N
+        lblContainerMenu.setBackground(new java.awt.Color(153, 153, 153));
+        lblContainerMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/barra-letras.png"))); // NOI18N
+        lblContainerMenu.setOpaque(true);
         PanelBarra.add(lblContainerMenu);
-        lblContainerMenu.setBounds(0, 0, 445, 22);
-
-        btnMenuBar.setText("Bar");
-        btnMenuBar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuBarActionPerformed(evt);
-            }
-        });
+        lblContainerMenu.setBounds(0, 0, 540, 22);
 
         javax.swing.GroupLayout PanelTituloLayout = new javax.swing.GroupLayout(PanelTitulo);
         PanelTitulo.setLayout(PanelTituloLayout);
@@ -399,10 +411,8 @@ public final class ViewPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lbltitle, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(62, 62, 62)
-                .addComponent(PanelBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
-                .addComponent(btnMenuBar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PanelBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
+                .addGap(73, 73, 73)
                 .addComponent(btnclose)
                 .addContainerGap())
         );
@@ -413,8 +423,7 @@ public final class ViewPrincipal extends javax.swing.JFrame {
                     .addGroup(PanelTituloLayout.createSequentialGroup()
                         .addGroup(PanelTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnclose, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PanelBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnMenuBar))
+                            .addComponent(PanelBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(lbltitle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -425,7 +434,6 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         PanelMenu.setBackground(new java.awt.Color(242, 242, 242));
         PanelMenu.setMaximumSize(new java.awt.Dimension(900, 32767));
         PanelMenu.setMinimumSize(new java.awt.Dimension(450, 22));
-        PanelMenu.setOpaque(false);
         PanelMenu.setPreferredSize(new java.awt.Dimension(450, 22));
 
         javax.swing.GroupLayout PanelMenuLayout = new javax.swing.GroupLayout(PanelMenu);
@@ -482,8 +490,8 @@ public final class ViewPrincipal extends javax.swing.JFrame {
             PanelBarrasIconosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelBarrasIconosLayout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addComponent(PanelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62)
+                .addComponent(PanelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63)
                 .addComponent(btnSalidaAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnIngresoAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -552,7 +560,7 @@ public final class ViewPrincipal extends javax.swing.JFrame {
 
     private void btnMenuLogisticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuLogisticaActionPerformed
         // TODO add your handling code here: 
-        this.DesktopContainer.setBounds(0,50,960,590);
+        this.DesktopContainer.setBounds(0, 50, 960, 590);
         this.DesktopContainer.removeAll();
         DesktopContainer.validate();
         btnMenuLogistica.setIcon(new ImageIcon(getClass().getResource("/images/btnlogistica.png")));
@@ -567,9 +575,9 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         this.btnActualizarPedidos.setVisible(false);
         PanelMenu.removeAll();
         PanelMenu.setLayout(new BorderLayout());
-        PanelMenu.add(new MenuLogistica(DesktopContainer,this.itemsLogistica), BorderLayout.NORTH);
+        PanelMenu.add(new MenuLogistica(DesktopContainer, this.itemsLogistica), BorderLayout.NORTH);
         this.PanelBarrasIconos.setVisible(true);
-        
+
     }//GEN-LAST:event_btnMenuLogisticaActionPerformed
 
     private void btnMenuStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuStaffActionPerformed
@@ -582,8 +590,8 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         this.PanelBarrasIconos.setVisible(false);
         PanelStaff ps = new PanelStaff();
         this.DesktopContainer.removeAll();
-        this.DesktopContainer.setBounds(0,25,960,615);
-        ps.setBounds(0,0,960,615);
+        this.DesktopContainer.setBounds(0, 25, 960, 615);
+        ps.setBounds(0, 0, 960, 615);
         this.DesktopContainer.add(ps);
         this.DesktopContainer.updateUI();
         DesktopContainer.validate();
@@ -592,7 +600,7 @@ public final class ViewPrincipal extends javax.swing.JFrame {
 
     private void btnMenuAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuAdminActionPerformed
         // TODO add your handling code here: 
-        this.DesktopContainer.setBounds(0,50,960,590);
+        this.DesktopContainer.setBounds(0, 50, 960, 590);
         this.DesktopContainer.removeAll();
         DesktopContainer.validate();
         btnMenuAdmin.setIcon(new ImageIcon(getClass().getResource("/images/btnadm.png")));
@@ -605,10 +613,11 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         this.btnOrdenCompra.setVisible(false);
         this.btnActualizarPedidos.setVisible(false);
         this.PanelBarrasIconos.setVisible(true);
+
 ////        btnMenuCocina.setIcon(null);
         PanelMenu.removeAll();
         PanelMenu.setLayout(new BorderLayout());
-        PanelMenu.add(new MenuAdmin(DesktopContainer,this.itemsAdministracion), BorderLayout.NORTH);
+        PanelMenu.add(new MenuAdmin(DesktopContainer, this.itemsAdministracion), BorderLayout.NORTH);
     }//GEN-LAST:event_btnMenuAdminActionPerformed
 
     private void btnSalidaAlmacenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalidaAlmacenActionPerformed
@@ -622,6 +631,7 @@ public final class ViewPrincipal extends javax.swing.JFrame {
     private void btnOrdenCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenCompraActionPerformed
         // TODO add your handling code here:
         PanelOrdenDeCompra odc = new PanelOrdenDeCompra();
+        odc.setBounds(0, 0, 960, 580);
         DesktopContainer.removeAll();
         DesktopContainer.add(odc);
         DesktopContainer.updateUI();
@@ -630,6 +640,7 @@ public final class ViewPrincipal extends javax.swing.JFrame {
     private void btnIngresoAlmacenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresoAlmacenActionPerformed
         // TODO add your handling code here:
         PanelIngresoAlmacen ia = new PanelIngresoAlmacen();
+        ia.setBounds(0, 0, 960, 580);
         DesktopContainer.removeAll();
         DesktopContainer.add(ia);
         DesktopContainer.updateUI();
@@ -637,40 +648,35 @@ public final class ViewPrincipal extends javax.swing.JFrame {
 
     private void btnMenuCocinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuCocinaActionPerformed
         // TODO add your handling code here:
-       this.DesktopContainer.removeAll();
+        this.DesktopContainer.removeAll();
+        this.DesktopContainer.updateUI();
         this.DesktopContainer.validate();
         btnMenuCocina.setIcon(new ImageIcon(getClass().getResource("/images/btncocina.png")));
         btnMenuLogistica.setIcon(null);
         btnMenuAdmin.setIcon(null);
         btnMenuCaja.setIcon(null);
         btnMenuStaff.setIcon(null);
-        this.DesktopContainer.setBounds(0,50,960,590);
+        this.DesktopContainer.setBounds(0, 50, 960, 590);
         final PanelCocina ps = new PanelCocina();
-        ps.setBounds(0,0,960,580);        
-        this.DesktopContainer.add(ps);        
+        ps.setBounds(0, 0, 960, 580);
+        this.DesktopContainer.add(ps);
         this.PanelBarrasIconos.setVisible(true);//barra grande de herramientas
         this.PanelMenu.setVisible(false);//barra que contiene al Menu de items
         this.btnIngresoAlmacen.setVisible(false);
         this.btnSalidaAlmacen.setVisible(false);
         this.btnOrdenCompra.setVisible(false);
         this.btnActualizarPedidos.setVisible(true);
-        btnActualizarPedidos.addActionListener(new ActionListener(){
+        btnActualizarPedidos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"Se va actualizar!");
+                JOptionPane.showMessageDialog(null, "Se va actualizar!");
                 ps.cargarUltimosPedidos();
             }
         });
     }//GEN-LAST:event_btnMenuCocinaActionPerformed
 
-    private void btnMenuBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuBarActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_btnMenuBarActionPerformed
-
     private void btnActualizarPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarPedidosActionPerformed
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_btnActualizarPedidosActionPerformed
 
     /**
@@ -704,7 +710,7 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new ViewPrincipal(null, null).setVisible(true);
+                    new ViewPrincipal(null, null,null).setVisible(true);
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ViewPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {

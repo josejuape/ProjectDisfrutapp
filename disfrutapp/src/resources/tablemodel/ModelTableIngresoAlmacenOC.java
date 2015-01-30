@@ -14,19 +14,21 @@ import javax.swing.table.AbstractTableModel;
  * @author Juape
  */
 public class ModelTableIngresoAlmacenOC extends AbstractTableModel {
+
     private ArrayList<String> CabeceraTabla = new ArrayList();
     private ArrayList<OrdenCompraInsumo> data = new ArrayList();
 
-    public ModelTableIngresoAlmacenOC(){
+    public ModelTableIngresoAlmacenOC() {
         this.crearCabeceras();
+
     }
-    
-    public ModelTableIngresoAlmacenOC(ArrayList<OrdenCompraInsumo> ListaDatos){
+
+    public ModelTableIngresoAlmacenOC(ArrayList<OrdenCompraInsumo> ListaDatos) {
         this.crearCabeceras();
-        this.data=ListaDatos;
+        this.data = ListaDatos;
     }
-    
-    private void crearCabeceras(){
+
+    private void crearCabeceras() {
         this.CabeceraTabla.add("CÓDIGO");
         this.CabeceraTabla.add("NOMBRE");
         this.CabeceraTabla.add("PRESENTACIÓN");
@@ -37,11 +39,11 @@ public class ModelTableIngresoAlmacenOC extends AbstractTableModel {
         this.CabeceraTabla.add("ATENDIDOS");
         this.CabeceraTabla.add("POR ATENDER");
     }
-    
-    public OrdenCompraInsumo getValue(int rowIndex){
+
+    public OrdenCompraInsumo getValue(int rowIndex) {
         return data.get(rowIndex);
     }
-    
+
     @Override
     public int getRowCount() {
         return data.size();
@@ -49,7 +51,7 @@ public class ModelTableIngresoAlmacenOC extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-       return this.CabeceraTabla.size();
+        return this.CabeceraTabla.size();
     }
 
     public String getColumnName(int column) {
@@ -59,12 +61,12 @@ public class ModelTableIngresoAlmacenOC extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        if(columnIndex==7 || columnIndex==8){
+        if (columnIndex == 7 || columnIndex == 8) {
             return true;
         }
         return true;
     }
-    
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
@@ -83,9 +85,9 @@ public class ModelTableIngresoAlmacenOC extends AbstractTableModel {
             case 6:
                 return data.get(rowIndex).getSubtotal();
             case 7:
-                return "";
+                return 0;
             case 8:
-                return "";
+                return 0;
             default:
                 return null;
         }
@@ -114,5 +116,4 @@ public class ModelTableIngresoAlmacenOC extends AbstractTableModel {
     public void setListenerList(EventListenerList listenerList) {
         this.listenerList = listenerList;
     }
-    
 }

@@ -38,6 +38,17 @@ public class DaoMenu {
         return result;
     }  
     
+    public ArrayList listarMenuDinamico(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception{
+        ArrayList result=new ArrayList();
+        if(objCnx.conectarMysqlLocal()){            
+            String proc="{call listar_menu_dinamico()}";//lamada a un procedimiento
+            Consultas query=new Consultas(); 
+            result=query.procedimiento(proc, param, objCnx.getMysql().getCnx());
+            result.add(objCnx);
+        }
+        return result;
+    }
+    
     public ArrayList listarPorPerfilUsuario(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception{
         ArrayList result=new ArrayList();
         if(objCnx.conectarMysqlLocal()){            

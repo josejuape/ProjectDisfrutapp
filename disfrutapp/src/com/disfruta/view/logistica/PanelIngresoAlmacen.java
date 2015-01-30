@@ -20,6 +20,7 @@ import com.disfruta.bean.xtbc.TipoComprobante;
 import com.disfruta.gestion.logistica.GestionAlmacen;
 import com.disfruta.gestion.logistica.GestionFormaPago;
 import com.disfruta.gestion.logistica.GestionIngresoAlmacen;
+import com.disfruta.gestion.logistica.GestionIngresoAlmacenInsumo;
 import com.disfruta.gestion.logistica.GestionInsumo;
 import com.disfruta.gestion.logistica.GestionOrdenCompra;
 import com.disfruta.gestion.logistica.GestionOrdenCompraInsumo;
@@ -37,6 +38,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import resources.auxiliar.FechaActual;
 import resources.auxiliar.PaddingLeft;
 
@@ -84,7 +86,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
     protected ArrayList<IngresoAlmacenInsumo> listaDetalle4;
     protected ArrayList<TipoIngresoAlmacen> listaTabs;
     protected String tab = "IOC";
-    protected OrdenCompra ordenSelect=null;
+    protected OrdenCompra ordenSelect = null;
 
     /**
      * Creates new form PanelIngresoAlmacen
@@ -268,8 +270,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             public void callback(Object selectedItem) {
                 String cad = selectedItem.toString();
                 for (int i = 0; i < listaProveedores.size(); i++) {
-                    Proveedor pro=(Proveedor) listaProveedores.get(i);
-                    if (cad.equalsIgnoreCase(pro.getNombres()+" "+pro.getApellidos())) {
+                    Proveedor pro = (Proveedor) listaProveedores.get(i);
+                    if (cad.equalsIgnoreCase(pro.getNombres() + " " + pro.getApellidos())) {
                         try {
                             proveedorselected3 = (Proveedor) listaProveedores.get(i);
                         } catch (Exception ex) {
@@ -642,20 +644,26 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         tblProductosPedidos1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tblProductosPedidos1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Nombre", "Contenido/ Cap", "Presentación comercial", "Cantidad", "Unidad", "Precio", "Moneda", "Atendidos", "Por atender"
+                "CÓDIGO", "NOMBRE", "CANTIDAD", "PRECIO", "MONEDA", "SUBTOTAL", "ATENDIDOS", "POR ATENDER"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true, true
+                false, false, false, false, false, false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -680,7 +688,6 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         tblProductosPedidos1.getColumnModel().getColumn(5).setResizable(false);
         tblProductosPedidos1.getColumnModel().getColumn(6).setResizable(false);
         tblProductosPedidos1.getColumnModel().getColumn(7).setResizable(false);
-        tblProductosPedidos1.getColumnModel().getColumn(8).setResizable(false);
 
         chkAtencionCompleta.setText("Atender orden de compra completa");
         chkAtencionCompleta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1893,17 +1900,40 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             orden.setEstado("I");
             OrdenCompra obj = gestionOC.buscarOC(orden);
             if (obj != null) {
-                this.ordenSelect=obj;
+                this.ordenSelect = obj;
                 GestionOrdenCompraInsumo gestionOCInsumo = new GestionOrdenCompraInsumo();
                 ArrayList<OrdenCompraInsumo> listaDetalle = gestionOCInsumo.listar(obj);
                 lblProveedor.setText(obj.getProveedor().getNombres() + " " + obj.getProveedor().getApellidos());
                 lblRuc.setText(obj.getProveedor().getRuc());
                 lblFechaOC.setText(obj.getFechaRegistro());
-                this.modelProductosPedidos1.setData(listaDetalle);
-                this.modelProductosPedidos1.fireTableDataChanged();
+                
+                DefaultTableModel model=new DefaultTableModel(listaDetalle.size(),8);                
+                for (int i = 0; i < listaDetalle.size(); i++) {
+                    OrdenCompraInsumo ob=listaDetalle.get(i);
+                    IngresoAlmacenInsumo r=new IngresoAlmacenInsumo();
+                    model.setValueAt(ob.getInsumo().getIdinsumo(),i, 0);
+                    r.setInsumo(ob.getInsumo());
+                    model.setValueAt(ob.getInsumo().getNombre(),i, 1);
+                    model.setValueAt(ob.getCantidad(),i, 2);
+                    r.setCantidad(ob.getCantidad());
+                    model.setValueAt(ob.getPrecio(),i, 3);
+                    r.setMoneda(ob.getMoneda());
+                    model.setValueAt(ob.getMoneda().getV_moneda(),i, 4);
+                    r.setPrecio(ob.getPrecio());
+                    model.setValueAt(ob.getSubtotal(),i, 5);
+                    r.setSubtotal(ob.getSubtotal());
+                    model.setValueAt(0,i, 6);
+                    r.setUnidad(ob.getUnidad());
+                    model.setValueAt(0,i, 7);  
+                    
+                    this.listaDetalle1.add(r);
+                }
+                this.tblProductosPedidos1.setModel(model);
+//                this.modelProductosPedidos1.setData(listaDetalle);
+//                this.modelProductosPedidos1.fireTableDataChanged();
                 System.out.println("encontrado: " + obj.getId());
-            }else{
-                JOptionPane.showMessageDialog(this,"No se encontro resultados!");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontro resultados!");
             }
 
         } catch (ClassNotFoundException ex) {
@@ -1919,53 +1949,74 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
 
     private void btnAddInsumo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInsumo2ActionPerformed
         // TODO add your handling code here:
-        IngresoAlmacenInsumo obj = new IngresoAlmacenInsumo();
-        obj.setInsumo(insumoselected2);
-        double cantidad = Double.parseDouble(this.txtCantidadInsumo2.getText());
-        obj.setCantidad(cantidad);
-        double precio = Double.parseDouble(this.txtPrecioInsumo2.getText());
-        obj.setPrecio(precio);
-        obj.setSubtotal((cantidad * precio));
-        obj.setTipoOperacion("i");
-        obj.setMoneda(this.modelCboMonedaInsumo2.getElement(this.cboMonedaInsumo2.getSelectedIndex()));
-        obj.setUnidad(this.modelCboUnidad2.getElement(this.cboUnidad2.getSelectedIndex()));
-        this.listaDetalle2.add(obj);
-        this.modelDetalle2.setData(listaDetalle2);
-        this.modelDetalle2.fireTableDataChanged();
+        int posmoneda = this.cboMonedaInsumo2.getSelectedIndex();
+        int posunidad = this.cboUnidad2.getSelectedIndex();
+        String cant = this.txtCantidadInsumo2.getText();
+        if (posmoneda >= 0 && posunidad >= 0 && !(cant.equals("")) && insumoselected2 != null) {
+            IngresoAlmacenInsumo obj = new IngresoAlmacenInsumo();
+            obj.setInsumo(insumoselected2);
+            double cantidad = Double.parseDouble(cant);
+            obj.setCantidad(cantidad);
+            double precio = Double.parseDouble(this.txtPrecioInsumo2.getText());
+            obj.setPrecio(precio);
+            obj.setSubtotal((cantidad * precio));
+            obj.setTipoOperacion("i");
+            obj.setMoneda(this.modelCboMonedaInsumo2.getElement(posmoneda));
+            obj.setUnidad(this.modelCboUnidad2.getElement(posunidad));
+            this.listaDetalle2.add(obj);
+            this.modelDetalle2.setData(listaDetalle2);
+            this.modelDetalle2.fireTableDataChanged();
+        }else {
+            JOptionPane.showMessageDialog(this, "Llene todos los campos!");
+        }
     }//GEN-LAST:event_btnAddInsumo2ActionPerformed
 
     private void btnAddInsumo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInsumo3ActionPerformed
         // TODO add your handling code here:
-        IngresoAlmacenInsumo obj = new IngresoAlmacenInsumo();
-        obj.setInsumo(insumoselected3);
-        double cantidad = Double.parseDouble(this.txtCantidadInsumo3.getText());
-        obj.setCantidad(cantidad);
-        double precio = Double.parseDouble(this.txtPrecioInsumo3.getText());
-        obj.setPrecio(precio);
-        obj.setSubtotal((cantidad * precio));
-        obj.setTipoOperacion("i");
-        obj.setMoneda(this.modelCboMonedaInsumo3.getElement(this.cboMonedaInsumo3.getSelectedIndex()));
-        obj.setUnidad(this.modelCboUnidad3.getElement(this.cboUnidad3.getSelectedIndex()));
-        this.listaDetalle3.add(obj);
-        this.modelDetalle3.setData(listaDetalle3);
-        this.modelDetalle3.fireTableDataChanged();
+        int posmoneda = this.cboMonedaInsumo3.getSelectedIndex();
+        int posunidad = this.cboUnidad3.getSelectedIndex();
+        String cant = this.txtCantidadInsumo3.getText();
+        if (posmoneda >= 0 && posunidad >= 0 && !(cant.equals("")) && insumoselected3 != null) {
+            IngresoAlmacenInsumo obj = new IngresoAlmacenInsumo();
+            obj.setInsumo(insumoselected3);
+            double cantidad = Double.parseDouble(this.txtCantidadInsumo3.getText());
+            obj.setCantidad(cantidad);
+            double precio = Double.parseDouble(this.txtPrecioInsumo3.getText());
+            obj.setPrecio(precio);
+            obj.setSubtotal((cantidad * precio));
+            obj.setTipoOperacion("i");
+            obj.setMoneda(this.modelCboMonedaInsumo3.getElement(this.cboMonedaInsumo3.getSelectedIndex()));
+            obj.setUnidad(this.modelCboUnidad3.getElement(this.cboUnidad3.getSelectedIndex()));
+            this.listaDetalle3.add(obj);
+            this.modelDetalle3.setData(listaDetalle3);
+            this.modelDetalle3.fireTableDataChanged();
+        } else {
+            JOptionPane.showMessageDialog(this, "Llene todos los campos!");
+        }
     }//GEN-LAST:event_btnAddInsumo3ActionPerformed
 
     private void btncAddInsumo4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncAddInsumo4ActionPerformed
         // TODO add your handling code here:
-        IngresoAlmacenInsumo obj = new IngresoAlmacenInsumo();
-        obj.setInsumo(insumoselected4);
-        double cantidad = Double.parseDouble(this.txtCantidadInsumo4.getText());
-        obj.setCantidad(cantidad);
-        double precio = Double.parseDouble(this.txtPrecioInsumo4.getText());
-        obj.setPrecio(precio);
-        obj.setSubtotal((cantidad * precio));
-        obj.setTipoOperacion("i");
-        obj.setMoneda(this.modelCboMonedaInsumo4.getElement(this.cboMonedaInsumo4.getSelectedIndex()));
-        obj.setUnidad(this.modelCboUnidad4.getElement(this.cboUnidad4.getSelectedIndex()));
-        this.listaDetalle4.add(obj);
-        this.modelDetalle4.setData(listaDetalle4);
-        this.modelDetalle4.fireTableDataChanged();
+        int posmoneda = this.cboMonedaInsumo4.getSelectedIndex();
+        int posunidad = this.cboUnidad4.getSelectedIndex();
+        String cant = this.txtCantidadInsumo4.getText();
+        if (posmoneda >= 0 && posunidad >= 0 && !(cant.equals("")) && insumoselected4 != null) {
+            IngresoAlmacenInsumo obj = new IngresoAlmacenInsumo();
+            obj.setInsumo(insumoselected4);
+            double cantidad = Double.parseDouble(this.txtCantidadInsumo4.getText());
+            obj.setCantidad(cantidad);
+            double precio = Double.parseDouble(this.txtPrecioInsumo4.getText());
+            obj.setPrecio(precio);
+            obj.setSubtotal((cantidad * precio));
+            obj.setTipoOperacion("i");
+            obj.setMoneda(this.modelCboMonedaInsumo4.getElement(this.cboMonedaInsumo4.getSelectedIndex()));
+            obj.setUnidad(this.modelCboUnidad4.getElement(this.cboUnidad4.getSelectedIndex()));
+            this.listaDetalle4.add(obj);
+            this.modelDetalle4.setData(listaDetalle4);
+            this.modelDetalle4.fireTableDataChanged();
+        }else {
+            JOptionPane.showMessageDialog(this, "Llene todos los campos!");
+        }
     }//GEN-LAST:event_btncAddInsumo4ActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
@@ -1990,26 +2041,26 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
         // TODO add your handling code here:
         TipoIngresoAlmacen tipoIngreso = new TipoIngresoAlmacen();
         for (int i = 0; i < this.listaTabs.size(); i++) {
-            System.out.println("tab: "+this.tab);
-            System.out.println("listatab: "+this.listaTabs.get(i).getIdentificador());
+            System.out.println("tab: " + this.tab);
+            System.out.println("listatab: " + this.listaTabs.get(i).getIdentificador());
             if (this.listaTabs.get(i).getIdentificador().equals(this.tab)) {
                 System.out.println("entro...");
                 tipoIngreso = this.listaTabs.get(i);
             }
         }
-        IngresoAlmacen ingAlm=new IngresoAlmacen();
-        GestionIngresoAlmacen gestionIng=new GestionIngresoAlmacen();
-        System.out.println("tab: "+this.tab);
+        IngresoAlmacen ingAlm = new IngresoAlmacen();
+        GestionIngresoAlmacen gestionIng = new GestionIngresoAlmacen();
+        System.out.println("tab: " + this.tab);
         if (this.tab.equals("IOC")) {
             ingAlm.setTipoIngreso(tipoIngreso);
             ingAlm.setParteEntrada(this.lblParteEntrada.getText());
-            ingAlm.setAlmacen(this.modelCboAlmacen.getElement(this.cboAlmacen1.getSelectedIndex())); 
+            ingAlm.setAlmacen(this.modelCboAlmacen.getElement(this.cboAlmacen1.getSelectedIndex()));
             ingAlm.setEstado("I");
             ingAlm.setTipoOperacion("ioc");
             ingAlm.setOrdenCompra(ordenSelect);
-            if(this.chkAtencionCompleta.isSelected()){
+            if (this.chkAtencionCompleta.isSelected()) {
                 ingAlm.setAtenderCompleto("S");
-            }else{
+            } else {
                 ingAlm.setAtenderCompleto("N");
             }
             ingAlm.setProveedor(new Proveedor());
@@ -2017,80 +2068,118 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             ingAlm.setMoneda(new Moneda());
             ingAlm.setComprobante(new Comprobante());
             ingAlm.setTipoComprobante(new TipoComprobante());
-            int msg=gestionIng.registrar(ingAlm);
-            System.out.println("msg: "+msg);
+            int idregistrado = gestionIng.registrar(ingAlm);
+            System.out.println("msg: " + idregistrado);
+            ingAlm.setId(idregistrado);
+            for (int i = 0; i < listaDetalle1.size(); i++) {
+                int atendidos=Integer.parseInt((this.tblProductosPedidos1.getValueAt(i,6).toString()));
+                int poratender=Integer.parseInt((this.tblProductosPedidos1.getValueAt(i,7).toString()));
+                listaDetalle1.get(i).setAtendidos(atendidos);
+                listaDetalle1.get(i).setPorAtender(poratender);
+                listaDetalle1.get(i).setIngresoAlmacen(ingAlm);
+                listaDetalle1.get(i).setTipoOperacion("ioc");
+            }
+            GestionIngresoAlmacenInsumo giai=new GestionIngresoAlmacenInsumo();
+            for (int i = 0; i < listaDetalle1.size(); i++) {
+                giai.registrar(listaDetalle1.get(i));
+            }
+            JOptionPane.showMessageDialog(this,"Registrado correctamente!!");
+            
         }
         if (this.tab.equals("IRS")) {
             ingAlm.setTipoIngreso(tipoIngreso);
             ingAlm.setParteEntrada(this.lblParteEntrada.getText());
-            ingAlm.setAlmacen(this.modelCboAlmacen2.getElement(this.cboAlmacen2.getSelectedIndex())); 
+            ingAlm.setAlmacen(this.modelCboAlmacen2.getElement(this.cboAlmacen2.getSelectedIndex()));
             ingAlm.setEstado("I");
             ingAlm.setTipoOperacion("irs");
             ingAlm.setTipoComprobante(this.modelCboTipoDocumento2.getElement(this.cboTipoDocumento2.getSelectedIndex()));
             ingAlm.setNumeroComprobante(this.txtNumeroDoc2.getText());
             Date date = this.txtFechaEmisionDoc2.getDate();
             SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
-            ingAlm.setFechaEmisionComprobante(formato.format(date)+"");
+            ingAlm.setFechaEmisionComprobante(formato.format(date) + "");
             ingAlm.setComentario(this.txtComentario2.getText());
             ingAlm.setProveedor(new Proveedor());
             ingAlm.setFormaPago(new FormaPago());
             ingAlm.setMoneda(new Moneda());
             ingAlm.setComprobante(new Comprobante());
             ingAlm.setOrdenCompra(new OrdenCompra());
-            
-            int msg=gestionIng.registrar(ingAlm);
-            System.out.println("msg: "+msg);
-            
+
+            int idregistrado = gestionIng.registrar(ingAlm);
+            System.out.println("msg: " + idregistrado);
+            ingAlm.setId(idregistrado);
+            GestionIngresoAlmacenInsumo giai=new GestionIngresoAlmacenInsumo();
+            for (int i = 0; i < listaDetalle2.size(); i++) {
+                listaDetalle2.get(i).setIngresoAlmacen(ingAlm);
+                listaDetalle2.get(i).setTipoOperacion("irs");
+                giai.registrar(listaDetalle2.get(i));
+            }
+            JOptionPane.showMessageDialog(this,"Registrado correctamente!!");
+
         }
         if (this.tab.equals("IDEC")) {
             ingAlm.setTipoIngreso(tipoIngreso);
             ingAlm.setParteEntrada(this.lblParteEntrada.getText());
-            ingAlm.setAlmacen(this.modelCboAlmacen3.getElement(this.cboAlmacen3.getSelectedIndex())); 
+            ingAlm.setAlmacen(this.modelCboAlmacen3.getElement(this.cboAlmacen3.getSelectedIndex()));
             ingAlm.setEstado("I");
             ingAlm.setTipoOperacion("idec");
             ingAlm.setTipoComprobante(this.modelCboTipoDocumento3.getElement(this.cboTipoDocumento3.getSelectedIndex()));
             ingAlm.setNumeroComprobante(this.txtNumeroDoc3.getText());
             Date date = this.txtFechaEmisionDoc3.getDate();
             SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
-            ingAlm.setFechaEmisionComprobante(formato.format(date)+"");
+            ingAlm.setFechaEmisionComprobante(formato.format(date) + "");
             ingAlm.setComentario(this.txtComentario3.getText());
             ingAlm.setProveedor(proveedorselected3);
             ingAlm.setMoneda(this.modelCboMoneda.getElement(this.cboMoneda.getSelectedIndex()));
             ingAlm.setFormaPago(this.modelCboFormaPago.getElement(this.cboFormaPago.getSelectedIndex()));
             Date date2 = this.txtFechaLimiteCancel.getDate();
             SimpleDateFormat formato2 = new SimpleDateFormat("DD/MM/YY");
-            ingAlm.setFechaLimiteCancelacion(formato2.format(date2)+"");
+            ingAlm.setFechaLimiteCancelacion(formato2.format(date2) + "");
             ingAlm.setComprobante(new Comprobante());
             ingAlm.setOrdenCompra(new OrdenCompra());
-            
-            int msg=gestionIng.registrar(ingAlm);
-            System.out.println("msg: "+msg);
-            
+
+            int idregistrado = gestionIng.registrar(ingAlm);
+            System.out.println("msg: " + idregistrado);
+            ingAlm.setId(idregistrado);
+            GestionIngresoAlmacenInsumo giai=new GestionIngresoAlmacenInsumo();
+            for (int i = 0; i < listaDetalle3.size(); i++) {
+                listaDetalle3.get(i).setIngresoAlmacen(ingAlm);
+                listaDetalle3.get(i).setTipoOperacion("idec");
+                giai.registrar(listaDetalle3.get(i));
+            }
+            JOptionPane.showMessageDialog(this,"Registrado correctamente!!");
+
         }
         if (this.tab.equals("IDIC")) {
             ingAlm.setTipoIngreso(tipoIngreso);
             ingAlm.setParteEntrada(this.lblParteEntrada.getText());
-            ingAlm.setAlmacen(this.modelCboAlmacen4.getElement(this.cboAlmacen4.getSelectedIndex())); 
+            ingAlm.setAlmacen(this.modelCboAlmacen4.getElement(this.cboAlmacen4.getSelectedIndex()));
             ingAlm.setEstado("I");
             ingAlm.setTipoOperacion("idic");
             ingAlm.setTipoComprobante(this.modelCboTipoDocumento4.getElement(this.cboTipoDocumento4.getSelectedIndex()));
             ingAlm.setNumeroComprobante(this.txtNumeroDoc4.getText());
             Date date = this.txtFechaEmisionDoc4.getDate();
             SimpleDateFormat formato = new SimpleDateFormat("DD/MM/YY");
-            ingAlm.setFechaEmisionComprobante(formato.format(date)+"");
+            ingAlm.setFechaEmisionComprobante(formato.format(date) + "");
             ingAlm.setComentario(this.txtComentario4.getText());
             ingAlm.setProveedor(new Proveedor());
             ingAlm.setFormaPago(new FormaPago());
             ingAlm.setMoneda(new Moneda());
             ingAlm.setComprobante(new Comprobante());
             ingAlm.setOrdenCompra(new OrdenCompra());
-            
-            int msg=gestionIng.registrar(ingAlm);
-            System.out.println("msg: "+msg);
-            
+
+            int idregistrado = gestionIng.registrar(ingAlm);
+            System.out.println("msg: " + idregistrado);
+            ingAlm.setId(idregistrado);
+            GestionIngresoAlmacenInsumo giai=new GestionIngresoAlmacenInsumo();
+            for (int i = 0; i < listaDetalle4.size(); i++) {
+                listaDetalle4.get(i).setIngresoAlmacen(ingAlm);
+                listaDetalle4.get(i).setTipoOperacion("idic");
+                giai.registrar(listaDetalle4.get(i));
+            }
+            JOptionPane.showMessageDialog(this,"Registrado correctamente!!");
+
         }
     }//GEN-LAST:event_btnGuardarIngresoAlmacenActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddInsumo2;
     private javax.swing.JButton btnAddInsumo3;

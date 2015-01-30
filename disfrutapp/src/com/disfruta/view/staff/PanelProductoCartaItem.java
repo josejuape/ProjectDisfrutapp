@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -36,6 +37,7 @@ public class PanelProductoCartaItem extends JPanel {
     public JTextField cantidad;
     public JButton btnadd;
     public JLabel total;
+    public JButton agregarOtro;
     public JButton quitar;
     public ArrayList<PresentacionPrecioVenta> listapresentaciones = null;
     public ProductoCarta productoSelected = null;
@@ -186,6 +188,20 @@ public class PanelProductoCartaItem extends JPanel {
                 }
             }
         });
+        
+        this.agregarOtro=new JButton("+");
+        this.agregarOtro.setBounds(850,10,25,25);
+        this.agregarOtro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Point c=panel.getLocation();                
+                System.out.println("position: x "+c.x+" - y "+c.y);
+                PanelProductoCartaItem item=new PanelProductoCartaItem(producto,parent);
+                Point p=new Point(0,c.y+45);
+                parent.add(item);
+            }
+        });
+        
         //add components
         this.add(nombre);
         this.add(precio);
@@ -193,6 +209,7 @@ public class PanelProductoCartaItem extends JPanel {
         this.add(cantidad);
         this.add(btnadd);
         this.add(total);
+        this.add(agregarOtro);
         this.add(quitar);
     }
 
