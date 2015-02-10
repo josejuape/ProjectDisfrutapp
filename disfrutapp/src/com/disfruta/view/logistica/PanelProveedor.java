@@ -18,6 +18,7 @@ import com.disfruta.gestion.logistica.GestionTipoPersona;
 import com.disfruta.gestion.xtbc.GestionMoneda;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import java.awt.Color;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import resources.auxiliar.ListaUbigeo;
 import resources.auxiliar.PaddingLeft;
+import resources.auxiliar.toExcel;
 
 /**
  *
@@ -1541,6 +1543,7 @@ public class PanelProveedor extends javax.swing.JPanel {
             this.modelCuentaBancaria.fireTableDataChanged();
         }
     }//GEN-LAST:event_btnEliminarProveedorActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelCuentas;
     private javax.swing.JPanel PanelInformacion;

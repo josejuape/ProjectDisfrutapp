@@ -42,6 +42,7 @@ public class PanelProductoCartaItem extends JPanel {
     public ArrayList<PresentacionPrecioVenta> listapresentaciones = null;
     public ProductoCarta productoSelected = null;
     public PresentacionPrecioVenta presentacionSelect = null;
+    public JTextField comentario;
     public double subtotal = 0;
     public JPanel panel;
     public int band_cant = 0;
@@ -53,7 +54,7 @@ public class PanelProductoCartaItem extends JPanel {
         this.idproducto = producto.getIdproductocarta();
         this.listapresentaciones = producto.getPresentaciones();
         this.setLayout(null);
-        this.setPreferredSize(new Dimension(860, 45));
+        this.setPreferredSize(new Dimension(860,75));
         this.setBackground(new Color(252, 252, 252));
         //this.setBorder(null);        
         this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
@@ -109,6 +110,13 @@ public class PanelProductoCartaItem extends JPanel {
         total.setForeground(new Color(149, 149, 149));
         total.setFont(new Font("Arial", Font.BOLD, 12));
         total.setBounds(790, 10, 80, 25);
+        //comentario
+        this.comentario = new JTextField("Despacho normal");
+        this.comentario.setBounds(10, 40, 920, 25);
+        this.comentario.setBorder(new LineBorder(new Color(230, 230, 230), 1, true));
+        this.comentario.setForeground(new Color(149, 149, 149));
+        this.comentario.setFont(new Font("Arial", Font.BOLD, 12));
+        this.comentario.setHorizontalAlignment(JTextField.CENTER);
         //boton agregar
         this.btnadd = new JButton("");
         this.btnadd.setBounds(730, 8, 28, 28);
@@ -211,6 +219,7 @@ public class PanelProductoCartaItem extends JPanel {
         this.add(total);
         this.add(agregarOtro);
         this.add(quitar);
+        this.add(comentario);
     }
 
     public double redondear(double numero, int decimales) {

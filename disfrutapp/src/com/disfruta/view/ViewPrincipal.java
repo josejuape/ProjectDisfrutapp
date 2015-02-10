@@ -71,15 +71,15 @@ public final class ViewPrincipal extends javax.swing.JFrame {
             usuario.setIdUser(1);
             this.menuList = new GestionLogin().listarMenuLogin(usuario);
             setProgress(30,"Cargando modulos...");
-            this.btnMenuStaff.setEnabled(false);
-            this.btnMenuLogistica.setEnabled(false);
-            this.btnMenuCocina.setEnabled(false);
-            this.btnMenuCaja.setEnabled(false);
-            this.btnMenuAdmin.setEnabled(false);
-            this.btnActualizarPedidos.setVisible(false);
-            this.btnIngresoAlmacen.setVisible(false);
-            this.btnSalidaAlmacen.setVisible(false);
-            this.btnOrdenCompra.setVisible(false);
+            this.btnMenuStaff.setEnabled(true);
+            this.btnMenuLogistica.setEnabled(true);
+            this.btnMenuCocina.setEnabled(true);
+            this.btnMenuCaja.setEnabled(true);
+            this.btnMenuAdmin.setEnabled(true);
+            this.btnActualizarPedidos.setVisible(true);
+            this.btnIngresoAlmacen.setVisible(true);
+            this.btnSalidaAlmacen.setVisible(true);
+            this.btnOrdenCompra.setVisible(true);
             setProgress(40,"Cargando componentes...");
             init();
             setProgress(50,"Cargando información ...");
@@ -99,7 +99,9 @@ public final class ViewPrincipal extends javax.swing.JFrame {
             setProgress(90,"Cargando recursos extras...");
             setProgress(100,"Completado...");
         } else {
-            JOptionPane.showMessageDialog(this, "Debe iniciar sesión!");
+            FrmLogin fr=new FrmLogin();
+            fr.setVisible(true);
+            this.dispose();
         }
     }
 
@@ -374,7 +376,6 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         btnMenuCaja.setFocusPainted(false);
         btnMenuCaja.setMaximumSize(new java.awt.Dimension(32, 8));
         btnMenuCaja.setMinimumSize(new java.awt.Dimension(32, 8));
-        btnMenuCaja.setOpaque(false);
         btnMenuCaja.setPreferredSize(new java.awt.Dimension(32, 8));
         btnMenuCaja.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btncaja.png"))); // NOI18N
         btnMenuCaja.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/images/btncaja.png"))); // NOI18N

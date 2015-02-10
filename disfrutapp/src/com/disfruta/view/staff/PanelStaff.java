@@ -469,7 +469,7 @@ public class PanelStaff extends javax.swing.JPanel {
                         detalle.setCantidad(Double.parseDouble(panelProducto.cantidad.getText()));
                         detalle.setSubtotal(panelProducto.subtotal);
                         detalle.setEstado("EN");
-                        detalle.setComentario("Despacho normal");
+                        detalle.setComentario(panelProducto.comentario.getText());
                         PresentacionPrecioVenta presentacion = new PresentacionPrecioVenta();
                         presentacion.setPresentacion(panelProducto.presentacionSelect.getPresentacion());
                         presentacion.setProudcto(panelProducto.productoSelected);

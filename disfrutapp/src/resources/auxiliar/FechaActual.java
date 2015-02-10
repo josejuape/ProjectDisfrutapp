@@ -32,7 +32,7 @@ public class FechaActual {
     
     public static String formatoMysql(){
         Calendar fecha=Calendar.getInstance();
-        int dia=fecha.get(Calendar.DATE)-1;
+        int dia=fecha.get(Calendar.DATE);
         int mes=fecha.get(Calendar.MONTH)+1;
         String mescadena=mes+"";
         String diacadena=dia+"";

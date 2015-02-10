@@ -5,12 +5,9 @@
 package resources.MenuBar;
 
 import com.disfruta.bean.admin.Menu;
+import com.disfruta.gestion.logistica.GestionProveedor;
 import com.disfruta.view.admin.PanelPerfilUsuario;
 import com.disfruta.view.admin.PanelUsuarios;
-import com.disfruta.view.logistica.PanelAlmacen;
-import com.disfruta.view.logistica.PanelProductoCarta;
-import com.disfruta.view.logistica.PanelProductoInsumo;
-import com.disfruta.view.logistica.PanelProveedor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,6 +15,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +23,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import resources.auxiliar.toExcel;
+import resources.tablemodel.ModelTableProveedor;
 
 /**
  *
@@ -41,6 +41,7 @@ public class MenuAdmin extends JMenuBar implements ActionListener {
         lista = items;
         for (int i = 0; i < lista.size(); i++) {
             Menu m = lista.get(i);
+            System.out.println("tipo: "+m.getTipo());
             if (m.getTipo().equals("MENU")) {
                 this.menu = new JMenu(m.getDescripcion());
                 this.menu.setFont(new Font("Arial", Font.BOLD, 13));
@@ -89,6 +90,21 @@ public class MenuAdmin extends JMenuBar implements ActionListener {
                 panelctn.removeAll();
                 panelctn.add(pu);            
                 panelctn.updateUI();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(MenuAdmin.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(MenuAdmin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if(e.getActionCommand().equals("Ingresos de almacen")){
+                File file = new File("D:\\Desptok Disfrutapp\\IngresosAlmacen.xls");
+                toExcel.fillData(null,file);
+        }
+        else if(e.getActionCommand().equals("Proveedores")){
+            try {
+                File file = new File("D:\\Desptok Disfrutapp\\Proveedores.xls");
+                GestionProveedor gestionprov = new GestionProveedor();
+                ModelTableProveedor modelTableProveedor=new ModelTableProveedor(gestionprov.listar());
+                toExcel.fillData(modelTableProveedor,file);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(MenuAdmin.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
