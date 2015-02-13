@@ -92,15 +92,18 @@ public final class FrmLogin extends javax.swing.JFrame {
         
         try {
             user.setEmail(this.txtUsuario.getText());
+            user.setUsuario(this.txtUsuario.getText());
             user.setPassword(this.txtPassword.getText());
             GestionLogin gestionLogin = new GestionLogin();
+            System.out.println("User: "+user.getEmail());
             UsuarioDesktop useracc = gestionLogin.validarLogin(user);
-            if (useracc != null) {
+            System.out.println("Usuario: "+useracc.getEmail());
+            if (useracc.getEmail() != null || useracc.getUsuario() !=null) {
                 //JOptionPane.showMessageDialog(this,"mensaje de prueba "+useracc.getNombres()); 
                 //verificamos y obtenemos sus perfiles para los menus
                 ArrayList<MenuPerfil> listaMenu= gestionLogin.listarMenuLogin(useracc);
                 if(listaMenu.size()>0){
-                    startTrhead(user,listaMenu);
+                    startTrhead(useracc,listaMenu);
                 }else{
                     JOptionPane.showMessageDialog(this,"Acceso denegado. No tiene configurado permisos de menu.");
                 }

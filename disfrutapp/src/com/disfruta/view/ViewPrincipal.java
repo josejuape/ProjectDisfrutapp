@@ -67,19 +67,19 @@ public final class ViewPrincipal extends javax.swing.JFrame {
             this.btnOrdenCompra.setBounds(520,1,40,22);
             this.DesktopContainer.setBounds(0, 50, 960, 590);
             this.DesktopContainer.setLayout(null);
-            usuario = new UsuarioDesktop();
-            usuario.setIdUser(1);
+//            usuario = new UsuarioDesktop();
+//            usuario.setIdUser(1);
             this.menuList = new GestionLogin().listarMenuLogin(usuario);
             setProgress(30,"Cargando modulos...");
-            this.btnMenuStaff.setEnabled(true);
-            this.btnMenuLogistica.setEnabled(true);
-            this.btnMenuCocina.setEnabled(true);
-            this.btnMenuCaja.setEnabled(true);
-            this.btnMenuAdmin.setEnabled(true);
-            this.btnActualizarPedidos.setVisible(true);
-            this.btnIngresoAlmacen.setVisible(true);
-            this.btnSalidaAlmacen.setVisible(true);
-            this.btnOrdenCompra.setVisible(true);
+            this.btnMenuStaff.setEnabled(false);
+            this.btnMenuLogistica.setEnabled(false);
+            this.btnMenuCocina.setEnabled(false);
+            this.btnMenuCaja.setEnabled(false);
+            this.btnMenuAdmin.setEnabled(false);
+            this.btnActualizarPedidos.setVisible(false);
+            this.btnIngresoAlmacen.setVisible(false);
+            this.btnSalidaAlmacen.setVisible(false);
+            this.btnOrdenCompra.setVisible(false);
             setProgress(40,"Cargando componentes...");
             init();
             setProgress(50,"Cargando información ...");
@@ -110,8 +110,9 @@ public final class ViewPrincipal extends javax.swing.JFrame {
             System.out.println("size: " + menuList.size());
             for (int i = 0; i < menuList.size(); i++) {
                 Menu menu = menuList.get(i).getMenu();
+                System.out.println("Modulo: " + menu.getDescripcion());
                 if (menu.getNodo() == menu.getNodopadre()) {
-                    System.out.println("Modulo: " + menu.getDescripcion());
+                    
                     switch (menu.getDescripcion()) {
                         case "STAFF":
                             this.itemsStaff = new ArrayList();

@@ -32,9 +32,11 @@ public class LogicLogin {
         DaoLogin oDaoLogin = new DaoLogin();
         ArrayList<Parametro> param = new ArrayList();
         Parametro param1 = new Parametro("IN", user.getEmail());
-        Parametro param2 = new Parametro("IN", user.getPassword());
+        Parametro param2 = new Parametro("IN", user.getUsuario());
+        Parametro param3 = new Parametro("IN", user.getPassword());
         param.add(param1);
         param.add(param2);
+        param.add(param3);
         
         ArrayList objetos=oDaoLogin.validarLogin(param, objCnx);
         ResultSet rs=(ResultSet)objetos.get(0);

@@ -192,7 +192,9 @@ public class TreeCheckBoxJava extends JTree {
     //Seleccionar los checkbox-- se utiliza cuando se selcciona un perfil
     public void selectedCheckBox(){
         CheckTreeSelectionModel selectedModel=checkTreeManager.getSelectionModel();
-        //selectedModel.addSelectionPaths(paths); //Metodo para seleccionar los checkbox
+        System.out.println("selectedd");
+        TreePath path = new TreePath(new Object[] {"LOGISTICA", "Mantenimiento", "Proveedor"});
+        selectedModel.addSelectionPath(path); //Metodo para seleccionar los checkbox
     
     }
 

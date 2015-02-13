@@ -18,7 +18,7 @@ public class DaoLogin {
     public ArrayList validarLogin(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception{
         ArrayList result=new ArrayList();
         if(objCnx.conectarMysqlLocal()){            
-            String proc="{call validarlogin(?,?)}";//llamada a un procedimiento
+            String proc="{call validarlogin(?,?,?)}";//llamada a un procedimiento
             Consultas query=new Consultas(); 
             result=query.procedimiento(proc, param, objCnx.getMysql().getCnx());
             result.add(objCnx);
