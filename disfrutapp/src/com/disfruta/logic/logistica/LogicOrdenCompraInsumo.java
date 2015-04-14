@@ -42,7 +42,8 @@ public class LogicOrdenCompraInsumo {
         Parametro param6 = new Parametro("IN", beanOrdenCompraInsumo.getSubtotal());
         Parametro param7 = new Parametro("IN", beanOrdenCompraInsumo.getMoneda().getN_idmon());
         Parametro param8 = new Parametro("IN", beanOrdenCompraInsumo.getUnidad().getN_idum());
-        Parametro param9 = new Parametro("IN", beanOrdenCompraInsumo.getTipoOperacion());
+        Parametro param9 = new Parametro("IN", beanOrdenCompraInsumo.getPresentacion());
+        Parametro param10 = new Parametro("IN", beanOrdenCompraInsumo.getTipoOperacion());
 
         param.add(param1);
         param.add(param2);
@@ -53,6 +54,7 @@ public class LogicOrdenCompraInsumo {
         param.add(param7);
         param.add(param8);
         param.add(param9);
+        param.add(param10);
 
         ArrayList objetos = oDaoOrdenCompraInsumo.mantenimiento(param, objCnx);
         if (objetos.isEmpty()) {

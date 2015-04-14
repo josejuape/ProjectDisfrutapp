@@ -11,6 +11,7 @@ import com.disfruta.bean.logistica.IngresoAlmacenInsumo;
 import com.disfruta.bean.logistica.Insumo;
 import com.disfruta.bean.logistica.OrdenCompra;
 import com.disfruta.bean.logistica.OrdenCompraInsumo;
+import com.disfruta.bean.logistica.PresentacionInsumo;
 import com.disfruta.bean.logistica.Proveedor;
 import com.disfruta.bean.logistica.TipoIngresoAlmacen;
 import com.disfruta.bean.logistica.UnidadMedida;
@@ -1963,6 +1964,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             obj.setTipoOperacion("i");
             obj.setMoneda(this.modelCboMonedaInsumo2.getElement(posmoneda));
             obj.setUnidad(this.modelCboUnidad2.getElement(posunidad));
+            PresentacionInsumo pr=this.cboModelPresentacionInsumo2.getElement(this.cboPresentacion2.getSelectedIndex());
+            obj.setPresentacion(pr.getIdpresentacion_compra());
             this.listaDetalle2.add(obj);
             this.modelDetalle2.setData(listaDetalle2);
             this.modelDetalle2.fireTableDataChanged();
@@ -1987,6 +1990,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             obj.setTipoOperacion("i");
             obj.setMoneda(this.modelCboMonedaInsumo3.getElement(this.cboMonedaInsumo3.getSelectedIndex()));
             obj.setUnidad(this.modelCboUnidad3.getElement(this.cboUnidad3.getSelectedIndex()));
+            PresentacionInsumo pr=this.cboModelPresentacionInsumo2.getElement(this.cboPresentacion2.getSelectedIndex());
+            obj.setPresentacion(pr.getIdpresentacion_compra());
             this.listaDetalle3.add(obj);
             this.modelDetalle3.setData(listaDetalle3);
             this.modelDetalle3.fireTableDataChanged();
@@ -2011,6 +2016,8 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             obj.setTipoOperacion("i");
             obj.setMoneda(this.modelCboMonedaInsumo4.getElement(this.cboMonedaInsumo4.getSelectedIndex()));
             obj.setUnidad(this.modelCboUnidad4.getElement(this.cboUnidad4.getSelectedIndex()));
+            PresentacionInsumo pr=this.cboModelPresentacionInsumo2.getElement(this.cboPresentacion2.getSelectedIndex());
+            obj.setPresentacion(pr.getIdpresentacion_compra());
             this.listaDetalle4.add(obj);
             this.modelDetalle4.setData(listaDetalle4);
             this.modelDetalle4.fireTableDataChanged();
@@ -2082,6 +2089,7 @@ public class PanelIngresoAlmacen extends javax.swing.JPanel {
             GestionIngresoAlmacenInsumo giai=new GestionIngresoAlmacenInsumo();
             for (int i = 0; i < listaDetalle1.size(); i++) {
                 giai.registrar(listaDetalle1.get(i));
+                
             }
             JOptionPane.showMessageDialog(this,"Registrado correctamente!!");
             

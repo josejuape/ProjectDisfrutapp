@@ -18,7 +18,7 @@ public class DaoOrdenCompraInsumo {
     public ArrayList mantenimiento(ArrayList<Parametro> param, ObjConexion objCnx) throws ClassNotFoundException, ClassNotFoundException, InstantiationException, InstantiationException, IllegalAccessException, SQLException, Exception {
         ArrayList result = new ArrayList();
         if (objCnx.conectarMysqlLocal()) {
-            String fun = "{? = call mant_orden_compra_insumo(?,?,?,?,?,?,?,?)}";
+            String fun = "{? = call mant_orden_compra_insumo(?,?,?,?,?,?,?,?,?)}";
             Consultas query = new Consultas();
             result = query.funcion(fun, param, objCnx.getMysql().getCnx());
             result.add(objCnx);

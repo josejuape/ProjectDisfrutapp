@@ -40,7 +40,8 @@ public class LogicIngresoAlmacenInsumo {
         Parametro param9 = new Parametro("IN", beanInsumo.getUnidad().getN_idum());
         Parametro param10 = new Parametro("IN", beanInsumo.getAtendidos());
         Parametro param11 = new Parametro("IN", beanInsumo.getPorAtender());
-        Parametro param12 = new Parametro("IN", beanInsumo.getTipoOperacion());
+        Parametro param12 = new Parametro("IN", beanInsumo.getPresentacion());
+        Parametro param13 = new Parametro("IN", beanInsumo.getTipoOperacion());
 
         param.add(param1);
         param.add(param2);
@@ -54,6 +55,7 @@ public class LogicIngresoAlmacenInsumo {
         param.add(param10);
         param.add(param11);                
         param.add(param12);
+        param.add(param13);
 
         ArrayList objetos = oDaoInsumo.mantenimiento(param, objCnx);
         if (objetos.isEmpty()) {

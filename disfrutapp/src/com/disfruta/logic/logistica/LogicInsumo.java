@@ -88,7 +88,6 @@ public class LogicInsumo {
         rs.beforeFirst();
         while(rs.next()){
             Insumo objInsumo=new Insumo();
-            Almacen almacen=new Almacen();
             FamiliaProducto familia=new FamiliaProducto();
             UnidadMedida unidad=new UnidadMedida();
             Moneda monedaventa=new Moneda();
@@ -100,8 +99,6 @@ public class LogicInsumo {
             objInsumo.setVentadirecta(rs.getString("c_venta_directa"));
             objInsumo.setPreciocompra(rs.getDouble("n_preciocosto"));
             objInsumo.setPrecioventa(rs.getDouble("n_precioventa"));
-            almacen.setId(rs.getInt("n_idalmacen"));
-            almacen.setDescripcion(rs.getString("v_nombre"));
             familia.setN_idfamilia(rs.getInt("n_idfamilia"));
             familia.setV_familia(rs.getString("familia"));
             unidad.setN_idum(rs.getInt("n_idunidad_medida"));
@@ -112,7 +109,6 @@ public class LogicInsumo {
             monedacompra.setV_moneda(rs.getString("monedacompra"));
             objInsumo.setMonedacompra(monedacompra);
             objInsumo.setMonedaventa(monedaventa);
-            objInsumo.setAlmacen(almacen);
             objInsumo.setUnidad(unidad);
             objInsumo.setCategoria(familia);
             lista.add(objInsumo);
@@ -132,7 +128,6 @@ public class LogicInsumo {
         objCnx=(ObjConexion)objetos.get(2);
         rs.beforeFirst();
         while(rs.next()){            
-            Almacen almacen=new Almacen();
             FamiliaProducto familia=new FamiliaProducto();
             UnidadMedida unidad=new UnidadMedida();
             Moneda monedaventa=new Moneda();
@@ -144,8 +139,6 @@ public class LogicInsumo {
             objInsumo.setVentadirecta(rs.getString("c_venta_directa"));
             objInsumo.setPreciocompra(rs.getDouble("n_preciocosto"));
             objInsumo.setPrecioventa(rs.getDouble("n_precioventa"));
-            almacen.setId(rs.getInt("n_idalmacen"));
-            almacen.setDescripcion(rs.getString("v_nombre"));
             familia.setN_idfamilia(rs.getInt("n_idfamilia"));
             familia.setV_familia(rs.getString("familia"));
             unidad.setN_idum(rs.getInt("n_idunidad_medida"));
@@ -156,7 +149,6 @@ public class LogicInsumo {
             monedacompra.setV_moneda(rs.getString("monedacompra"));
             objInsumo.setMonedacompra(monedacompra);
             objInsumo.setMonedaventa(monedaventa);
-            objInsumo.setAlmacen(almacen);
             objInsumo.setUnidad(unidad);
             objInsumo.setCategoria(familia);
         }

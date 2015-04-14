@@ -9,7 +9,9 @@ import com.disfruta.bean.admin.MenuPerfil;
 import com.disfruta.bean.admin.UsuarioDesktop;
 import com.disfruta.gestion.login.GestionLogin;
 import com.disfruta.gestion.xtbc.GestionUbigeo;
+import com.disfruta.view.admin.PanelAdmin;
 import com.disfruta.view.logistica.PanelIngresoAlmacen;
+import com.disfruta.view.logistica.PanelLogistica;
 import com.disfruta.view.logistica.PanelOrdenDeCompra;
 import com.disfruta.view.staff.PanelStaff;
 import com.disruta.view.cocina.PanelCocina;
@@ -139,6 +141,10 @@ public final class ViewPrincipal extends javax.swing.JFrame {
                             this.btnMenuAdmin.setEnabled(true);
                             encontrarHijos(menu.getNodo(), "ADMINISTRACION");
                             break;
+                        case "REPORTERIA":
+                            this.btnMenuAdmin.setEnabled(true);
+                            encontrarHijos(menu.getNodo(), "REPORTERIA");
+                            break;
                         default:
                             System.out.println("no encontro modulo..!");
                             break;
@@ -178,6 +184,10 @@ public final class ViewPrincipal extends javax.swing.JFrame {
                     case "ADMINISTRACION":
                         this.itemsAdministracion.add(menu);
                         encontrarHijos(menu.getNodo(), "ADMINISTRACION");
+                        break;
+                    case "REPORTERIA":
+                        this.itemsAdministracion.add(menu);
+                        encontrarHijos(menu.getNodo(), "REPORTERIA");
                         break;
                     default:
                         System.out.println("no modulo..!");
@@ -564,7 +574,6 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here: 
         this.DesktopContainer.setBounds(0, 50, 960, 590);
         this.DesktopContainer.removeAll();
-        DesktopContainer.validate();
         btnMenuLogistica.setIcon(new ImageIcon(getClass().getResource("/images/btnlogistica.png")));
         btnMenuStaff.setIcon(null);
         btnMenuAdmin.setIcon(null);
@@ -579,6 +588,11 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         PanelMenu.setLayout(new BorderLayout());
         PanelMenu.add(new MenuLogistica(DesktopContainer, this.itemsLogistica), BorderLayout.NORTH);
         this.PanelBarrasIconos.setVisible(true);
+        PanelLogistica ps=new PanelLogistica();
+        ps.setBounds(0, 0, 960, 590);
+        this.DesktopContainer.add(ps);
+        this.DesktopContainer.updateUI();
+        DesktopContainer.validate();
 
     }//GEN-LAST:event_btnMenuLogisticaActionPerformed
 
@@ -604,7 +618,6 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here: 
         this.DesktopContainer.setBounds(0, 50, 960, 590);
         this.DesktopContainer.removeAll();
-        DesktopContainer.validate();
         btnMenuAdmin.setIcon(new ImageIcon(getClass().getResource("/images/btnadm.png")));
         btnMenuLogistica.setIcon(null);
         btnMenuStaff.setIcon(null);
@@ -620,6 +633,12 @@ public final class ViewPrincipal extends javax.swing.JFrame {
         PanelMenu.removeAll();
         PanelMenu.setLayout(new BorderLayout());
         PanelMenu.add(new MenuAdmin(DesktopContainer, this.itemsAdministracion), BorderLayout.NORTH);
+        PanelAdmin ps=new PanelAdmin();
+        ps.setBounds(0, 0, 960, 590);
+        this.DesktopContainer.add(ps);
+        this.DesktopContainer.updateUI();
+        DesktopContainer.validate();
+        
     }//GEN-LAST:event_btnMenuAdminActionPerformed
 
     private void btnSalidaAlmacenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalidaAlmacenActionPerformed

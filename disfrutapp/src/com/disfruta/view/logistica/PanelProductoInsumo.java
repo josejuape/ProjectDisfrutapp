@@ -982,7 +982,7 @@ public class PanelProductoInsumo extends javax.swing.JPanel {
             this.insumoSelected.setPrecioventa(Double.parseDouble(c4));
             if (this.chkcontrolstock.isSelected()) {
                 this.insumoSelected.setControlstock("S");
-            } else {
+            }else {
                 this.insumoSelected.setControlstock("N");
             }
             if (this.chkventadirecta.isSelected()) {

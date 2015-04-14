@@ -121,7 +121,6 @@ public class PanelProductoPedidoCocina extends JPanel {
                             parent.remove(panel);
                         }
                     } else {
-                        System.out.println("entro aquiiiiiiiiiii");
                         panel.setBorder(BorderFactory.createMatteBorder(0, 6, 1, 0, Color.red));
                         GestionDetallePedido gestion = new GestionDetallePedido();
                         pedido.setTipoOperacion("ee");

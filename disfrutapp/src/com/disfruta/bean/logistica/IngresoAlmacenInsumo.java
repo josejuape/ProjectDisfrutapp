@@ -14,6 +14,7 @@ public class IngresoAlmacenInsumo {
     protected int id;
     protected Insumo insumo;
     protected IngresoAlmacen ingresoAlmacen;
+    protected int presentacion;
     protected double cantidad;
     protected double precio;
     protected double subtotal;
@@ -109,6 +110,14 @@ public class IngresoAlmacenInsumo {
 
     public void setTipoOperacion(String tipoOperacion) {
         this.tipoOperacion = tipoOperacion;
+    }
+
+    public int getPresentacion() {
+        return presentacion;
+    }
+
+    public void setPresentacion(int presentacion) {
+        this.presentacion = presentacion;
     }
     
     

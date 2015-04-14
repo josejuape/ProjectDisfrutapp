@@ -6,6 +6,7 @@ package resources.MenuBar;
 
 import com.disfruta.bean.admin.Menu;
 import com.disfruta.view.logistica.PanelAlmacen;
+import com.disfruta.view.logistica.PanelControlStock;
 import com.disfruta.view.logistica.PanelProductoCarta;
 import com.disfruta.view.logistica.PanelProductoInsumo;
 import com.disfruta.view.logistica.PanelProveedor;
@@ -55,6 +56,7 @@ public class MenuLogistica extends JMenuBar implements ActionListener {
         for (int i = 0; i < this.lista.size(); i++) {
             Menu m = lista.get(i);
             if (m.getNodopadre() == padre && m.getTipo().equals("MENUITEM")) {
+                System.out.println("itemmmm: "+m.getDescripcion());
                 this.item = new JMenuItem(m.getDescripcion());
                 this.item.setActionCommand(m.getDescripcion());
                 this.item.addActionListener(this);
@@ -84,14 +86,21 @@ public class MenuLogistica extends JMenuBar implements ActionListener {
             panelctn.removeAll();
             panelctn.add(prov);
             panelctn.updateUI();
-        }
+        }else
         if (e.getActionCommand().equals("Producto carta")) {
             PanelProductoCarta form = new PanelProductoCarta();
             form.setBounds(0,0,960,590);
             panelctn.removeAll();
             panelctn.add(form);
             panelctn.updateUI();
+        }else if (e.getActionCommand().equals("Control stock")) {
+            PanelControlStock form = new PanelControlStock();
+            form.setBounds(0,0,960,590);
+            panelctn.removeAll();
+            panelctn.add(form);
+            panelctn.updateUI();
         }
+        
     }
     
     @Override

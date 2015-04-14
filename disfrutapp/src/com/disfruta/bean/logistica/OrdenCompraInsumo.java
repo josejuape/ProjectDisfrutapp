@@ -14,6 +14,7 @@ public class OrdenCompraInsumo {
     protected int id;
     protected Insumo insumo;
     protected OrdenCompra orden;
+    protected int presentacion;
     protected double cantidad;
     protected double precio;
     protected double subtotal;
@@ -93,6 +94,14 @@ public class OrdenCompraInsumo {
 
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public int getPresentacion() {
+        return presentacion;
+    }
+
+    public void setPresentacion(int presentacion) {
+        this.presentacion = presentacion;
     }
     
     

@@ -7,14 +7,11 @@ package resources.auxiliar;
 import java.awt.Desktop;
 import java.io.File;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
-import resources.tablemodel.ModelTableProveedor;
 
 /**
  *
@@ -40,10 +37,11 @@ public class toExcel {
             }
             workbook1.write();
             workbook1.close();
-            Desktop.getDesktop().open(file);
+            
             System.out.println("Escribiendo en disco....Listo");
+            Desktop.getDesktop().open(file);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error creating Excel file.");
+            JOptionPane.showMessageDialog(null, "Error creando archivo Excel.");
         }
     }
 }

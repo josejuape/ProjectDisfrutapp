@@ -23,6 +23,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import resources.auxiliar.FechaActual;
 import resources.auxiliar.toExcel;
 import resources.tablemodel.ModelTableProveedor;
 
@@ -96,12 +97,12 @@ public class MenuAdmin extends JMenuBar implements ActionListener {
                 Logger.getLogger(MenuAdmin.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else if(e.getActionCommand().equals("Ingresos de almacen")){
-                File file = new File("D:\\Desptok Disfrutapp\\IngresosAlmacen.xls");
+                File file = new File("C:\\Users\\user\\Documents\\GitHub\\ProjectDisfrutapp\\disfrutapp\\src\\Reportes\\IngresosAlmacen.xls");
                 toExcel.fillData(null,file);
         }
         else if(e.getActionCommand().equals("Proveedores")){
             try {
-                File file = new File("D:\\Desptok Disfrutapp\\Proveedores.xls");
+                File file = new File("C:\\Users\\user\\Documents\\GitHub\\ProjectDisfrutapp\\disfrutapp\\src\\Reportes\\Proveedores"+FechaActual.formatoMysql()+".xls");
                 GestionProveedor gestionprov = new GestionProveedor();
                 ModelTableProveedor modelTableProveedor=new ModelTableProveedor(gestionprov.listar());
                 toExcel.fillData(modelTableProveedor,file);

@@ -8,6 +8,7 @@ import com.disfruta.bean.logistica.Almacen;
 import com.disfruta.bean.logistica.Insumo;
 import com.disfruta.bean.logistica.OrdenCompra;
 import com.disfruta.bean.logistica.OrdenCompraInsumo;
+import com.disfruta.bean.logistica.PresentacionInsumo;
 import com.disfruta.gestion.logistica.GestionAlmacen;
 import com.disfruta.gestion.logistica.GestionFormaPago;
 import com.disfruta.gestion.logistica.GestionInsumo;
@@ -1237,6 +1238,8 @@ public class PanelOrdenDeCompra extends javax.swing.JPanel {
             detalle.setSubtotal(subtotal);
             detalle.setUnidad(this.modelCboUnidad.getElement(cboUnidad.getSelectedIndex()));
             detalle.setMoneda(this.modelCboMoneda.getElement(cboMonedaInsumo.getSelectedIndex()));
+            PresentacionInsumo pr=this.cboModelPresentacionInsumo.getElement(this.cboPresentacionInsumo.getSelectedIndex());
+            detalle.setPresentacion(pr.getIdpresentacion_compra());
             this.listaDetalle.add(detalle);
             this.tableModelDetalle.setData(listaDetalle);
             this.tableModelDetalle.fireTableDataChanged();

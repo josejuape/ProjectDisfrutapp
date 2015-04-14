@@ -28,7 +28,7 @@ public class ModelTableProveedor extends AbstractTableModel {
     
     private void crearCabeceras(){
         this.CabeceraTabla.add("DNI");
-        this.CabeceraTabla.add("NOMBREs");
+        this.CabeceraTabla.add("NOMBRES");
         this.CabeceraTabla.add("APELLIDOS");
         this.CabeceraTabla.add("CATEGORIA");
         this.CabeceraTabla.add("DIRECCIÓN");
